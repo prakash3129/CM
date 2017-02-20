@@ -103,8 +103,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutocompleteMenu">
-      <HintPath>..\..\AutocompleteMenu\AutocompleteMenu\AutocompleteMenu\bin\Debug\AutocompleteMenu.dll</HintPath>
+    <Reference Include="AutocompleteMenu, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CM PlugIns\Auto Complete\AutocompleteMenu.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
@@ -113,8 +114,9 @@
     <Reference Include="Connection">
       <HintPath>..\..\Connection\Connection\Connection\bin\Debug\Connection.dll</HintPath>
     </Reference>
-    <Reference Include="CustomText">
-      <HintPath>..\..\Campaign Manager Research\ControlLibrary\CustomText\CustomText\bin\Debug\CustomText.dll</HintPath>
+    <Reference Include="CustomText, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CM PlugIns\Library\CustomText.dll</HintPath>
     </Reference>
     <Reference Include="CustomUIControls">
       <HintPath>..\CM PlugIns\Notification\CustomUIControls.dll</HintPath>
@@ -157,12 +159,13 @@
     <Reference Include="DocumentFormat.OpenXml">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
-    <Reference Include="DragAndDropListView">
-      <HintPath>C:\Users\thangaprakashm\Downloads\DragDropListViewReorder_src\DragAndDropListView\DragAndDropListView.dll</HintPath>
-    </Reference>
-    <Reference Include="FerretLib.WinForms, Version=1.0.0.26422, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DragAndDropListView, Version=1.0.1409.28887, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\CM PlugIns\Tag Control\FerretLib.WinForms\bin\Debug\FerretLib.WinForms.dll</HintPath>
+      <HintPath>..\CM PlugIns\Library\DragAndDropListView.dll</HintPath>
+    </Reference>
+    <Reference Include="FerretLib.WinForms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CM PlugIns\Library\FerretLib.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis, Version=1.10.0.25332, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.10.0\lib\net40\Google.Apis.dll</HintPath>
@@ -188,8 +191,9 @@
       <HintPath>..\packages\Google.Apis.1.10.0\lib\net40\Google.Apis.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="i00SpellCheck">
-      <HintPath>..\..\..\My Data\i00_SpellCheck_20140111\i00SpellCheck\bin\Debug\i00SpellCheck.dll</HintPath>
+    <Reference Include="i00SpellCheck, Version=1.0.0.22244, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CM PlugIns\Library\i00SpellCheck.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -219,17 +223,15 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OSVersionInfo">
-      <HintPath>..\..\..\OSVersionInfoDLL\OSVersionInfo.dll</HintPath>
+    <Reference Include="OSVersionInfo, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CM PlugIns\Library\OSVersionInfo.dll</HintPath>
     </Reference>
     <Reference Include="RemoteViewing">
       <HintPath>..\CM PlugIns\Library\Remoting\RemoteViewing.dll</HintPath>
     </Reference>
     <Reference Include="RemoteViewing.Windows.Forms">
       <HintPath>..\CM PlugIns\Library\Remoting\RemoteViewing.Windows.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="SoftPhone">
-      <HintPath>..\CM PlugIns\Library\sipdotnet-master\bin\Debug\SoftPhone.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.DataSetExtensions" />
