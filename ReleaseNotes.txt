@@ -1,0 +1,30 @@
+Campaign Manager V1.0.0.0 (25-11-2013)
+	*Initial release.
+
+Campaign Manager V1.0.0.1 (26-11-2013)
+	*Next Record Loading Error Fixed.
+
+Campaign Manager V1.0.0.2 (29-11-2013)
+	*Dynamic Call Script.
+	*Country/County(USA) based TimeZone.
+	*Proper Casing for Name fields.
+	*Show/Hide Call Script.
+	*www prefixing for website and website format validation.
+	*Bug fix on saving records.
+	*CheckListBox checked list on top.
+	*Options for comments removed.
+	*Autocomplete menu added for comments.
+	*Proper Casing for Jobtitle.
+	*Bug fix -Date filter on ProcessedList
+	*Closing CM will close all opened window.
+	*Names field cannot have .(dots)
+	*Name in call script and status is replaced from Username to Actual Agent Name.
+	*Highlight Complete survey in processed list.
+	*Validation removed for freezed records.
+	*Bug Fix in User Control.
+	*Proper casing for Error text box removed. 
+	
+Campaign Manager V1.0.0.3 (27-01-2014)
+	*Bulk Email Update.
+	*Unlock bounced record.
+	

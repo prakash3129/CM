@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using DevComponents.DotNetBar;
+using DevComponents.DotNetBar.SuperGrid;
+using DevComponents.DotNetBar.SuperGrid.Style;
+
+namespace GCC
+{
+    public partial class frmCallLog : Office2007Form
+    {
+        public frmCallLog()
+        {
+            InitializeComponent();
+
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);//Gets the icon for current window            
+            ToastNotification.DefaultToastGlowColor = eToastGlowColor.None;
+            ToastNotification.DefaultTimeoutInterval = 2000;
+            ToastNotification.ToastFont = new Font(this.Font.FontFamily, 22);
+        }
+
+        DataTable _dtCallLog = null;
+        public DataTable dtCallLog
+        {
+            get { return _dtCallLog; }
+            set { _dtCallLog = value; }
+        }
+
+        string _sCompany_Name = string.Empty;
+        public string sCompany_Name
+        {
+            get { return _sCompany_Name; }
+            set { _sCompany_Name = value; }
+        }
+
+        string _sSwitchboard = string.Empty;
+        public string sSwitchboard
+        {
+            get { return _sSwitchboard; }
+            set { _sSwitchboard = value; }
+        }
+
+        private void frmCallLog_Load(object sender, EventArgs e)
+        {
+            lblInformation.Text = "Company : " + sCompany_Name + "  |  Total Dial(s) : " + dtCallLog.Select("RecordingID = '0'").Length;
+
+            if (dtCallLog.Select("RecordingID = '1'").Length > 0)
+            {
+                sdgvCallLog.PrimaryGrid.DataSource = dtCallLog.Select("RecordingID = '1'").CopyToDataTable();
+            }
+        }
+
+        private void sdgvCallLog_DataBindingComplete(object sender, DevComponents.DotNetBar.SuperGrid.GridDataBindingCompleteEventArgs e)
+        {
+            GridPanel GP = e.GridPanel;
+
+            foreach (GridColumn GC in GP.Columns)
+            {
+                GC.RenderType = typeof(GridLabelXEditControl);
+                switch (GC.HeaderText.ToUpper())
+                {
+                    case "LOGINID":
+                        GC.HeaderText = "Agent";
+                        break;
+                    case "STATIONID":
+                        GC.HeaderText = "Ext";
+                        break;
+                    case "DURATION":
+                        GC.HeaderText = "Duration";
+                        break;
+                    case "DATETIMESTAMP":
+                        GC.HeaderText = "Date";                        
+                        break;
+                    case "TELEPHONENUMBER":
+                        GC.HeaderText = "Number";
+                        break;
+                    default:
+                        GC.Visible = false;
+                        break;
+                }
+            }
+        }
+       
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
+}

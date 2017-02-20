@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+	var qs = (function(a) {
+		if (a == "") return {};
+		var b = {};
+		for (var i = 0; i < a.length; ++i)
+		{
+			var p=a[i].split('=');
+			if (p.length != 2) continue;
+			b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+		}
+		return b;
+	})(window.location.search.substr(1).split('&'));
+    //document.write("<h1>This is a heading</h1>"+ qs["id"]); 
+	var Error = ""
+	var Name = qs["Name"]
+	var Phone = qs["Phone"]
+	var Email = qs["Email"]
+	var OfficeType = qs["OfficeType"]
+	var Branch = qs["Branch"]
+	var NoEmp = qs["NoEmp"]
+    //alert(Name + Phone + Email + OfficeType + Branch + NoEmp);
+	//document.write(window.location.search);
+    if(Name.length == 0 )
+    {
+        Error = Error + "Name Cannot be Empty"+"<br/>";
+        //alert("Name Cannot be Empty");
+    }
+    
+    if(Phone.length == 0 )
+    {
+        Error = Error + "Phone Cannot be Empty" + "<br/>";
+        //alert("Phone Cannot be Empty");
+    }
+    else if(Phone.length > 10)
+    {
+        Error = Error + "Invalid Phone Number" + "<br/>";
+        //alert("Invalid Phone Number");
+    }
+    if(Email.length == 0 )
+    {
+        Error = Error + "Email Cannot be Empty" + "<br/>";
+        //alert("Email Cannot be Empty");
+    }
+    else
+    {
+        var atpos=Email.indexOf("@");
+        var dotpos=Email.lastIndexOf(".");
+        if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= Email.length) {
+            Error = Error + "Not a valid e-mail address" + "<br/>";
+            //alert("Not a valid e-mail address");
+        }
+        else {
+            if ((Email.indexOf("info") != -1) || (Email.indexOf("marketing") != -1) || (Email.indexOf("sales") != -1)) {
+                Error = Error + "Invalid Email Content" + "<br/>";
+                //alert("Invalid Content");
+            }
+        }
+    }
+    if (OfficeType == "RQ")
+    {
+        if (Branch != "No")
+        {
+            Error = Error + "Invalid RQ Branch" + "<br/>";
+           // alert("Invalid RQ Branch");
+        }
+        if (NoEmp > 5)
+        {
+            Error = Error + "Invalid Number of Employee for office type" + "<br/>";
+            //alert("Invalid Number of Employee");
+        }
+    }
+
+    if (OfficeType == "HQ")
+    {
+        if (Branch != "No")
+        {
+            Error = Error + "Invalid HQ Branch" + "<br/>";
+            //alert("Invalid HQ Branch");
+        }
+        if (NoEmp > 15)
+        {
+            Error = Error + "Invalid Number of Employee" + "<br/>";
+            //alert("Invalid Number of Employee");
+        }
+    }
+
+    if (OfficeType == "OT")
+    {
+        if (Branch != "Yes")
+        {
+            Error = Error + "Invalid OT Branch" + "<br/>";
+            //alert("Invalid OT Branch");
+        }
+        if (NoEmp < 50)
+        {
+            Error = Error + "Invalid Number of Employee" + "<br/>";
+            //alert("Invalid Number of Employee");
+        }
+    }
+    //document.write(Error);
+    document.write((Name));
+
+</script>
+</head>
+<body>
+</body>
+</html>

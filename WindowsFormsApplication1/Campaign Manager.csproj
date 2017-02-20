@@ -1,0 +1,1325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{14F1D639-EBCB-4887-8D6E-4B549CFB92CD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GCC</RootNamespace>
+    <AssemblyName>Campaign Manager</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>\\172.27.137.180\Merit Software Deployment\Voice\Campaign Manager\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>true</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>\\172.27.137.180\Merit Software Deployment\Voice\Campaign Manager\</InstallUrl>
+    <UpdateUrl>\\172.27.137.180\Merit Software Deployment\Voice\Campaign Manager\</UpdateUrl>
+    <SupportUrl>http://www.meritgroup.co.uk</SupportUrl>
+    <ProductName>Campaign Manager</ProductName>
+    <PublisherName>Merit Software</PublisherName>
+    <SuiteName>Campaign Manager</SuiteName>
+    <MinimumRequiredVersion>3.1.2.41</MinimumRequiredVersion>
+    <ApplicationRevision>42</ApplicationRevision>
+    <ApplicationVersion>3.1.2.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>GCC.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Businessman.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>3DABFC6242122AF313B4C6C45C0C56441193C582</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Campaign Manager_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutocompleteMenu">
+      <HintPath>..\..\AutocompleteMenu\AutocompleteMenu\AutocompleteMenu\bin\Debug\AutocompleteMenu.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Connection">
+      <HintPath>..\..\Connection\Connection\Connection\bin\Debug\Connection.dll</HintPath>
+    </Reference>
+    <Reference Include="CustomText">
+      <HintPath>..\..\Campaign Manager Research\ControlLibrary\CustomText\CustomText\bin\Debug\CustomText.dll</HintPath>
+    </Reference>
+    <Reference Include="CustomUIControls">
+      <HintPath>..\CM PlugIns\Notification\CustomUIControls.dll</HintPath>
+    </Reference>
+    <Reference Include="DevComponents.DotNetBar.Layout, Version=11.6.0.2, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL" />
+    <Reference Include="DevComponents.DotNetBar.Schedule, Version=11.6.0.2, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL" />
+    <Reference Include="DevComponents.DotNetBar.SuperGrid, Version=11.6.0.2, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL" />
+    <Reference Include="DevComponents.DotNetBar2, Version=11.6.0.2, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL" />
+    <Reference Include="DevComponents.Instrumentation, Version=11.6.0.2, Culture=neutral, PublicKeyToken=f90dc37c26666a67, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Charts.v12.1.Core">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.Charts.v12.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v12.1, Version=12.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.Data.v12.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v12.1, Version=12.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.Utils.v12.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v12.1, Version=12.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.XtraCharts.v12.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v12.1.UI, Version=12.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.XtraCharts.v12.1.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v12.1, Version=12.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.XtraEditors.v12.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v12.1, Version=12.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.XtraGrid.v12.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v12.1, Version=12.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.XtraLayout.v12.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v12.1, Version=12.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Campaign Manager\CM PlugIns\Library\DevExpress 12.1\DevExpress.XtraTreeList.v12.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DirectShowLib-2005">
+      <HintPath>..\CM PlugIns\DirectSound\DirectShowLib-2005.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DragAndDropListView">
+      <HintPath>C:\Users\thangaprakashm\Downloads\DragDropListViewReorder_src\DragAndDropListView\DragAndDropListView.dll</HintPath>
+    </Reference>
+    <Reference Include="FerretLib.WinForms, Version=1.0.0.26422, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CM PlugIns\Tag Control\FerretLib.WinForms\bin\Debug\FerretLib.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis, Version=1.10.0.25332, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.10.0\lib\net40\Google.Apis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.10.0.25333, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.10.0\lib\net40\Google.Apis.Auth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.10.0.25333, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.10.0\lib\net40\Google.Apis.Auth.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.CloudSpeechAPI.v1beta1, Version=1.16.0.607, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.CloudSpeechAPI.v1beta1.1.16.0.607\lib\portable-net40+sl50+netcore45+wpa81+wp8\Google.Apis.CloudSpeechAPI.v1beta1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.10.0.25331, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Core.1.10.0\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices, Version=1.10.0.25332, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.10.0\lib\net40\Google.Apis.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="i00SpellCheck">
+      <HintPath>..\..\..\My Data\i00_SpellCheck_20140111\i00SpellCheck\bin\Debug\i00SpellCheck.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="MySql.Data">
+      <HintPath>..\CM PlugIns\Library\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.0\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OSVersionInfo">
+      <HintPath>..\..\..\OSVersionInfoDLL\OSVersionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="RemoteViewing">
+      <HintPath>..\CM PlugIns\Library\Remoting\RemoteViewing.dll</HintPath>
+    </Reference>
+    <Reference Include="RemoteViewing.Windows.Forms">
+      <HintPath>..\CM PlugIns\Library\Remoting\RemoteViewing.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="SoftPhone">
+      <HintPath>..\CM PlugIns\Library\sipdotnet-master\bin\Debug\SoftPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Threading.Tasks, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="VortexDial, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CM PlugIns\Dialer Library\MeritDailer\MeritDailer\bin\x86\Debug\VortexDial.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CancellableQuery.cs" />
+    <Compile Include="ChromeConnect.cs" />
+    <Compile Include="CustomLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ELV.cs" />
+    <Compile Include="ESpeechServer.cs" />
+    <Compile Include="frmEmoniter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEmoniter.Designer.cs">
+      <DependentUpon>frmEmoniter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmArchive.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmArchive.Designer.cs">
+      <DependentUpon>frmArchive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmEmailManualChecks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEmailManualChecks.Designer.cs">
+      <DependentUpon>frmEmailManualChecks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmProjectSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProjectSettings.Designer.cs">
+      <DependentUpon>frmProjectSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmProjectUpdates.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProjectUpdates.Designer.cs">
+      <DependentUpon>frmProjectUpdates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRDPMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRDPMonitor.Designer.cs">
+      <DependentUpon>frmRDPMonitor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmScrapper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmScrapper.Designer.cs">
+      <DependentUpon>frmScrapper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmEmailChecks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEmailChecks.Designer.cs">
+      <DependentUpon>frmEmailChecks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmJobTitle_SelectionList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmJobTitle_SelectionList.Designer.cs">
+      <DependentUpon>frmJobTitle_SelectionList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EventsAndDelegates.cs" />
+    <Compile Include="frmScrapedContacts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmScrapedContacts.Designer.cs">
+      <DependentUpon>frmScrapedContacts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmScreen.Designer.cs">
+      <DependentUpon>frmScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSingleUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSingleUpdate.Designer.cs">
+      <DependentUpon>frmSingleUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUncertain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUncertain.Designer.cs">
+      <DependentUpon>frmUncertain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GridStateEditControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProcessWatch.cs" />
+    <Compile Include="BAL\BAL_GlobalMSSQL.cs" />
+    <Compile Include="BAL\BAL_GlobalMYSQL.cs" />
+    <Compile Include="CustomList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DAL\DAL_GlobalMSSQL.cs" />
+    <Compile Include="DAL\DAL_GlobalMySQL.cs" />
+    <Compile Include="EmailBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="frmAddNewCompany.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddNewCompany.Designer.cs">
+      <DependentUpon>frmAddNewCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmBulkEmailUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBulkEmailUpdate.Designer.cs">
+      <DependentUpon>frmBulkEmailUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCallLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCallLog.Designer.cs">
+      <DependentUpon>frmCallLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCallScript.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCallScript.Designer.cs">
+      <DependentUpon>frmCallScript.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCompanyList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCompanyList.Designer.cs">
+      <DependentUpon>frmCompanyList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmFilterAllocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFilterAllocation.Designer.cs">
+      <DependentUpon>frmFilterAllocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmHelp.Designer.cs">
+      <DependentUpon>frmHelp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmList_With_Header.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmList_With_Header.Designer.cs">
+      <DependentUpon>frmList_With_Header.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.Designer.cs">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmComboList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmComboList.Designer.cs">
+      <DependentUpon>frmComboList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmContactUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmContactUpdate.designer.cs">
+      <DependentUpon>frmContactUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmNewField.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNewField.Designer.cs">
+      <DependentUpon>frmNewField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmNewPickListCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNewPickListCategory.Designer.cs">
+      <DependentUpon>frmNewPickListCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmNotifier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNotifier.Designer.cs">
+      <DependentUpon>frmNotifier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPickList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPickList.Designer.cs">
+      <DependentUpon>frmPickList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmProjectControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProjectControl.Designer.cs">
+      <DependentUpon>frmProjectControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmQC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQC.Designer.cs">
+      <DependentUpon>frmQC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSearch.Designer.cs">
+      <DependentUpon>frmSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSendback.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSendback.Designer.cs">
+      <DependentUpon>frmSendback.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSplash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSplash.Designer.cs">
+      <DependentUpon>frmSplash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTarget.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTarget.Designer.cs">
+      <DependentUpon>frmTarget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTeleAllocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTeleAllocation.Designer.cs">
+      <DependentUpon>frmTeleAllocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUploadPicture.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUploadPicture.Designer.cs">
+      <DependentUpon>frmUploadPicture.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUserMaster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUserMaster.Designer.cs">
+      <DependentUpon>frmUserMaster.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmValidation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmValidation.Designer.cs">
+      <DependentUpon>frmValidation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmValidation_Step2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmValidation_Step2.Designer.cs">
+      <DependentUpon>frmValidation_Step2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmValidation_Step3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmValidation_Step3.Designer.cs">
+      <DependentUpon>frmValidation_Step3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWindowedNotes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWindowedNotes.Designer.cs">
+      <DependentUpon>frmWindowedNotes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GetQuery.cs" />
+    <Compile Include="GM.cs" />
+    <Compile Include="GV.cs" />
+    <Compile Include="JSTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JSTest.Designer.cs">
+      <DependentUpon>JSTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiColumnComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PreviewFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PreviewFilter.Designer.cs">
+      <DependentUpon>PreviewFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="ProperCaseHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="QueryColumn.cs" />
+    <Compile Include="QueryColumnCollection.cs" />
+    <Compile Include="RejectReason.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RejectReason.Designer.cs">
+      <DependentUpon>RejectReason.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTeamPerformance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTeamPerformance.Designer.cs">
+      <DependentUpon>frmTeamPerformance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Resolution.cs" />
+    <Compile Include="frmValidation_Step1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmValidation_Step1.Designer.cs">
+      <DependentUpon>frmValidation_Step1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Server.cs" />
+    <Compile Include="StateControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="StateControl.Designer.cs" />
+    <EmbeddedResource Include="frmEmoniter.resx">
+      <DependentUpon>frmEmoniter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmArchive.resx">
+      <DependentUpon>frmArchive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEmailManualChecks.resx">
+      <DependentUpon>frmEmailManualChecks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProjectSettings.resx">
+      <DependentUpon>frmProjectSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProjectUpdates.resx">
+      <DependentUpon>frmProjectUpdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRDPMonitor.resx">
+      <DependentUpon>frmRDPMonitor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmScrapper.resx">
+      <DependentUpon>frmScrapper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEmailChecks.resx">
+      <DependentUpon>frmEmailChecks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmJobTitle_SelectionList.resx">
+      <DependentUpon>frmJobTitle_SelectionList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddNewCompany.resx">
+      <DependentUpon>frmAddNewCompany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmBulkEmailUpdate.resx">
+      <DependentUpon>frmBulkEmailUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCallLog.resx">
+      <DependentUpon>frmCallLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCallScript.resx">
+      <DependentUpon>frmCallScript.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCompanyList.resx">
+      <DependentUpon>frmCompanyList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFilterAllocation.resx">
+      <DependentUpon>frmFilterAllocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmHelp.resx">
+      <DependentUpon>frmHelp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmList_With_Header.resx">
+      <DependentUpon>frmList_With_Header.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLogin.resx">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmComboList.resx">
+      <DependentUpon>frmComboList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmContactUpdate.resx">
+      <DependentUpon>frmContactUpdate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewField.resx">
+      <DependentUpon>frmNewField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewPickListCategory.resx">
+      <DependentUpon>frmNewPickListCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNotifier.resx">
+      <DependentUpon>frmNotifier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPickList.resx">
+      <DependentUpon>frmPickList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProjectControl.resx">
+      <DependentUpon>frmProjectControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmQC.resx">
+      <DependentUpon>frmQC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmScrapedContacts.resx">
+      <DependentUpon>frmScrapedContacts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmScreen.resx">
+      <DependentUpon>frmScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSearch.resx">
+      <DependentUpon>frmSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSendback.resx">
+      <DependentUpon>frmSendback.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSingleUpdate.resx">
+      <DependentUpon>frmSingleUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSplash.resx">
+      <DependentUpon>frmSplash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTarget.resx">
+      <DependentUpon>frmTarget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTeleAllocation.resx">
+      <DependentUpon>frmTeleAllocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUploadPicture.resx">
+      <DependentUpon>frmUploadPicture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUserMaster.resx">
+      <DependentUpon>frmUserMaster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmValidation.resx">
+      <DependentUpon>frmValidation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmValidation_Step2.resx">
+      <DependentUpon>frmValidation_Step2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmValidation_Step3.resx">
+      <DependentUpon>frmValidation_Step3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWindowedNotes.resx">
+      <DependentUpon>frmWindowedNotes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUncertain.resx">
+      <DependentUpon>frmUncertain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JSTest.resx">
+      <DependentUpon>JSTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PreviewFilter.resx">
+      <DependentUpon>PreviewFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RejectReason.resx">
+      <DependentUpon>RejectReason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTeamPerformance.resx">
+      <DependentUpon>frmTeamPerformance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmValidation_Step1.resx">
+      <DependentUpon>frmValidation_Step1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StateControl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StateControl1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Resources\send-icon Small1.png" />
+    <None Include="Resources\back-icon.png" />
+    <None Include="Resources\Yello.JPG" />
+    <None Include="Resources\Blue.JPG" />
+    <None Include="Resources\Red.JPG" />
+    <None Include="Resources\Green.JPG" />
+    <None Include="Resources\Handle.exe" />
+    <None Include="Resources\company.png" />
+    <None Include="Resources\apartment-icon.png" />
+    <None Include="Resources\Actions-application-exit-icon %281%29.png" />
+    <None Include="Resources\LoadingGif.gif" />
+    <None Include="Resources\LoadingGif1.gif" />
+    <None Include="Resources\loading_blue2.gif" />
+    <None Include="Resources\Exclamation-mark-icon.png" />
+    <None Include="Resources\user-icon Small.png" />
+    <None Include="Resources\user-group-icon Small.png" />
+    <None Include="Resources\Apps-preferences-desktop-user-password-icon.png" />
+    <None Include="Resources\folder-icon %281%29.png" />
+    <None Include="Resources\new-icon.png" />
+    <None Include="Resources\contacts-3-icon.png" />
+    <None Include="Resources\Arrow-reload-4-icon.png" />
+    <None Include="Resources\apartment-icon %281%29.png" />
+    <None Include="Resources\User-Group-icon %281%29.png" />
+    <None Include="Resources\Downloads-Black-Folder-icon.png" />
+    <None Include="Resources\Apps-Download-icon.png" />
+    <None Include="Resources\Apps-Download-icon %281%29.png" />
+    <None Include="Resources\Apps-Download-icon %282%29.png" />
+    <None Include="Resources\Search-icon1.png" />
+    <None Include="Resources\telefono-icon big.png" />
+    <None Include="Resources\690903.png" />
+    <None Include="Resources\Calling.gif" />
+    <None Include="Resources\address-book-icon.png" />
+    <None Include="Resources\phone-folded-icon.png" />
+    <None Include="Resources\Phone-2-icon.png" />
+    <None Include="Resources\phone-folded-icon Small.png" />
+    <None Include="Resources\Phone-2-iconSmall.png" />
+    <None Include="Resources\Button-info-icon.png" />
+    <None Include="Resources\Button-info-icon %281%29.png" />
+    <None Include="Resources\move-icon %282%29.png" />
+    <None Include="Resources\Excel-icon %283%29.png" />
+    <None Include="Resources\move-icon %282%291.png" />
+    <None Include="Resources\Excel-icon %283%291.png" />
+    <None Include="Resources\Arrow-up-down-icon.png" />
+    <None Include="Resources\arrowrefresh3New.png" />
+    <None Include="Resources\Microsoft.Expression.Encoder.resources.dll" />
+    <None Include="Resources\Microsoft.Expression.Encoder.EEScreen.dll" />
+    <None Include="Resources\Help-icon.png" />
+    <None Include="Resources\chat-icon %281%29.png" />
+    <None Include="Resources\Grey-Ball-icon.png" />
+    <None Include="Resources\Grey-Ball-icon1.png" />
+    <None Include="Resources\Grey-Ball-icon %281%29.png" />
+    <None Include="Resources\Blue-Ball-icon.png" />
+    <None Include="Resources\Grey-Ball-icon %282%29.png" />
+    <None Include="Resources\Green-Ball-icon.png" />
+    <None Include="Resources\Red-Ball-icon.png" />
+    <None Include="Resources\Button-hint-icon.png" />
+    <None Include="Resources\Thumb-up-icon.png" />
+    <None Include="Resources\delete-icon.png" />
+    <None Include="Resources\Status-dialog-warning-icon.png" />
+    <None Include="Resources\ThumbsUpIcon1286x30032x32.png" />
+    <None Include="Resources\thumbsup32x32.png" />
+    <None Include="Resources\thumbsupbutton32x32 %281%29.png" />
+    <None Include="Resources\thumbsupbutton32x32ss %281%29.png" />
+    <None Include="Resources\duplicate32x32.png" />
+    <None Include="Resources\ezgif.com-crop.gif" />
+    <None Include="Resources\Perl520NH940.dll" />
+    <None Include="Resources\Perl520RT940.dll" />
+    <None Include="Resources\archive-icon.png" />
+    <None Include="Resources\Yellow.png" />
+    <None Include="Resources\Green.png" />
+    <None Include="Resources\Red.png" />
+    <None Include="Resources\linkedin-icon.png" />
+    <None Include="Resources\Sign-Info-icon.png" />
+    <None Include="Resources\info-icon.png" />
+    <None Include="Resources\sand-glass-icon.png" />
+    <None Include="Resources\Gray.png" />
+    <None Include="Resources\Global-Network-icon.png" />
+    <None Include="Resources\File-complete-icon.png" />
+    <None Include="Resources\database-add-icon.png" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Resources\CallScript.rtf" />
+    <None Include="Resources\dic.dic" />
+    <None Include="Resources\syn.syn" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Businessman.ico" />
+    <None Include="Resources\voice-search-icon.png" />
+    <None Include="Resources\voice-search-icon - idle.png" />
+    <None Include="Resources\foundation_microphone_flat-circle-white-on-silver_32x32 - Copy %282%29.png" />
+    <None Include="Resources\foundation_microphone_flat-circle-white-on-silver_32x32.png" />
+    <None Include="Resources\foundation_microphone_flat-circle-white-on-silver_32x32 - Copy.png" />
+    <None Include="Resources\foundation_microphone_flat-circle-white-on-red_32x32.png" />
+    <None Include="Resources\foundation_microphone_flat-circle-white-on-red_512x512.png" />
+    <None Include="Resources\search-icon %281%29.png" />
+    <None Include="Resources\ScreenAddon.exe" />
+    <None Include="Resources\reload-icon %281%29.png" />
+    <None Include="Resources\Green1.png" />
+    <None Include="Resources\ezgif-3008983895.gif" />
+    <None Include="Resources\audio16x16.png" />
+    <None Include="Resources\rsz_speaker.png" />
+    <None Include="Resources\Internet-chrome-icon.png" />
+    <None Include="Resources\loader.gif" />
+    <None Include="Resources\tag-alt-icon.png" />
+    <None Include="Resources\sign-warning-icon.png" />
+    <None Include="Resources\Info-Light-icon.png" />
+    <None Include="Resources\Info-icon_dash.png" />
+    <None Include="Resources\Apps-System-Monitor-icon.png" />
+    <None Include="Resources\simple_blue_background-wallpaper-2560x1440 %281%29.jpg" />
+    <None Include="Resources\Male-user-remove-icon.png" />
+    <None Include="Resources\addicon16x16_dash.png" />
+    <None Include="Resources\VeryBasicSettingsicon16x16.png" />
+    <None Include="Resources\Prod_new_dash.png" />
+    <None Include="Resources\Productiomn_ico.png" />
+    <None Include="Resources\HangupICO_24.png" />
+    <None Include="Resources\contact-center-badge-lg_24.png" />
+    <None Include="Resources\icon256_24.png" />
+    <None Include="Resources\conference-icon.png" />
+    <None Include="Resources\coffeeicon24x24.png" />
+    <None Include="Resources\callmeback24x24.png" />
+    <None Include="Resources\Calling_dash.png" />
+    <None Include="Resources\telefono-icon_new dash.png" />
+    <None Include="Resources\Phone-icon %282%29_new dash.png" />
+    <None Include="Resources\phone-icon %281%29.png" />
+    <None Include="Resources\phone-blue-glow-icon__Dash.png" />
+    <None Include="Resources\phone-green-glow-icon_dash.png" />
+    <None Include="Resources\phone-icon_dashboard.png" />
+    <None Include="Resources\Phone-icon _dash.png" />
+    <None Include="Resources\129396005132x3220x20_new.png" />
+    <None Include="Resources\129396005132x32.png" />
+    <None Include="Resources\Merrit Logo with claim final.png" />
+    <None Include="Resources\abstract-design - Copy.jpg" />
+    <None Include="Resources\Calling_Croped.gif" />
+    <None Include="Resources\Perl522RT951.dll" />
+    <None Include="Resources\Perl522NH951.dll" />
+    <None Include="Resources\Perl520RT951.dll" />
+    <None Include="Resources\Perl520NH951.dll" />
+    <None Include="Resources\logo.png" />
+    <None Include="Resources\GCNyjJY.gif" />
+    <None Include="Resources\9 %285%29.gif" />
+    <None Include="Resources\Businessman-icon %281%29.png" />
+    <None Include="Resources\Businessman-icon %282%29.png" />
+    <None Include="Resources\abstract-design.png" />
+    <None Include="Resources\Very-Basic-Filter-Filled-icon.png" />
+    <None Include="Resources\alphab-sort.png" />
+    <None Include="Resources\EmailUpdate1.png" />
+    <None Include="Resources\EmailUpdate.png" />
+    <None Include="Resources\sortascend %281%29.png" />
+    <None Include="Resources\1414168917_009.png" />
+    <None Include="Resources\1414168572_filter_delete.png" />
+    <None Include="Resources\1414168537_filter_add.png" />
+    <None Include="Resources\Button-Delete-icon2.png" />
+    <None Include="Resources\32x32.png" />
+    <None Include="Resources\Load-icon.png" />
+    <None Include="Resources\send-iconBig.png" />
+    <None Include="Resources\ok-icon Big.png" />
+    <None Include="Resources\Close-iconBig.png" />
+    <None Include="Resources\email-alert-iconBig.png" />
+    <None Include="Resources\ok-icon Small.png" />
+    <None Include="Resources\Close-iconSmall.png" />
+    <None Include="Resources\send-icon Small.png" />
+    <None Include="Resources\chart-icon %281%29.png" />
+    <None Include="Resources\stats-icon.png" />
+    <None Include="Resources\Numbers-icon.png" />
+    <None Include="Resources\Misc-Stats-icon.png" />
+    <None Include="Resources\email-not-validated-icon.png" />
+    <None Include="Resources\exclamation-mark-blue-icon.png" />
+    <None Include="Resources\Actions-view-filter-icon.png" />
+    <None Include="Resources\Excel-icon %282%29.png" />
+    <None Include="Resources\move-icon %281%29.png" />
+    <None Include="Resources\Data-Clear-Filters-icon.png" />
+    <None Include="Resources\Actions-view-refresh-icon %281%29.png" />
+    <None Include="Resources\taskbar-icon.png" />
+    <None Include="Resources\math-add-icon %281%29.png" />
+    <None Include="Resources\Misc-User-icon %281%29.png" />
+    <None Include="Resources\Button-Delete-icon.png" />
+    <None Include="Resources\Actions-stock-save-as-icon %281%29.png" />
+    <None Include="Resources\shape-rotate-clockwise-icon %281%29.png" />
+    <None Include="Resources\shape-rotate-clockwise-icon.png" />
+    <None Include="Resources\reload-icon.png" />
+    <None Include="Resources\Actions-transform-rotate-icon.png" />
+    <None Include="Resources\def.def" />
+    <None Include="Resources\telefono-icon.png" />
+    <None Include="Resources\phone-call-reject-icon.png" />
+    <None Include="Resources\Windows-Turn-Off-icon.png" />
+    <None Include="Resources\Windows-Turn-Off-icon %281%29.png" />
+    <None Include="Resources\chart-icon small.png" />
+    <None Include="Resources\Office-Customer-Male-Light-icon.png" />
+    <None Include="Resources\Search-icoaan.png" />
+    <None Include="Resources\search.png" />
+    <None Include="Resources\search-icon.png" />
+    <None Include="Resources\chart-icon.png" />
+    <None Include="Resources\email-alert-icon %281%29.png" />
+    <None Include="Resources\email-alert-icon.png" />
+    <None Include="Resources\Export-To-File-icon24.png" />
+    <None Include="Resources\Email_check.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\sort-columns1-icon.png" />
+    <None Include="Resources\Mail-aaicon.png" />
+    <None Include="Resources\Mail-icon1.png" />
+    <None Include="Resources\Actions-edit-find-mail-icon.png" />
+    <None Include="Resources\control-panel-2-icon.png" />
+    <None Include="Resources\Mail-icon.png" />
+    <None Include="Resources\Excel-icon %281%29.png" />
+    <None Include="Resources\move-icon.png" />
+    <None Include="Resources\sort-descending-icon.png" />
+    <None Include="Resources\sort-ascending-icon.png" />
+    <None Include="Resources\Excel-icon.png" />
+    <None Include="Resources\button-round-reload-icon.png" />
+    <None Include="Resources\Phone-iconbig1.png" />
+    <None Include="Resources\Phone-iconbig.png" />
+    <None Include="Resources\Add-icon %281%29.png" />
+    <None Include="Resources\forms-icon.png" />
+    <None Include="Resources\edit-copy-icon.png" />
+    <None Include="Resources\Office-Customer-Male-Dark-icon.png" />
+    <None Include="Resources\SendKeys.exe" />
+    <None Include="Resources\File-History-icon.png" />
+    <None Include="Resources\profile-check-iconbig.png" />
+    <None Include="Resources\Mimetypes-text-directory-icon.png" />
+    <None Include="Resources\1383133841_27-Edit Text.png" />
+    <None Include="Resources\1383133098_task_notes.png" />
+    <None Include="Resources\1383132998_task_notes.png" />
+    <None Include="Resources\1383132959_keyboard_layout.png" />
+    <None Include="Resources\1383132679_headphone.png" />
+    <None Include="Resources\1383132635_preferences-contact-list.png" />
+    <None Include="Resources\project-plan-icon.png" />
+    <None Include="Resources\Businessman-icon %289%29.png" />
+    <None Include="Resources\Actions-arrow-right-icon.png" />
+    <None Include="Resources\Button-Next-icon %281%29.png" />
+    <None Include="Resources\Button-Next-icon.png" />
+    <None Include="Resources\Chat-icon.png" />
+    <None Include="Resources\Actions-view-refresh-icon.png" />
+    <None Include="Resources\Actions-edit-clear-list-icon.png" />
+    <None Include="Resources\Filter-List-icon.png" />
+    <None Include="Resources\Actions-view-list-details-icon.png" />
+    <None Include="Resources\Window-Refresh-icon.png" />
+    <None Include="Resources\edit-user-icon.png" />
+    <None Include="Resources\Actions-view-list-text-icon.png" />
+    <None Include="Resources\edit-icon.png" />
+    <None Include="Resources\Files-New-File-icon.png" />
+    <None Include="Resources\Actions-application-exit-icon.png" />
+    <None Include="Resources\Actions-stock-save-as-icon.png" />
+    <None Include="Resources\Search-2-icon %281%29.png" />
+    <None Include="Resources\Search-2-icon.png" />
+    <None Include="Resources\Devices-audio-headset-icon.png" />
+    <None Include="Resources\Earth-icon.png" />
+    <None Include="Resources\Users-icon.png" />
+    <None Include="Resources\receptionist-icon.png" />
+    <None Include="Resources\profile-check-icon.png" />
+    <None Include="Resources\Manager-icon.png" />
+    <None Include="Resources\key-icon.png" />
+    <None Include="Resources\pencil-icon.png" />
+    <None Include="Resources\credit-cards-icon.png" />
+    <None Include="Resources\Actionsdialogcancelicon10x10.png" />
+    <None Include="Resources\mathaddicon10x10.png" />
+    <None Include="Resources\erase-icon1.png" />
+    <None Include="Resources\Actions-document-preview-icon.png" />
+    <None Include="Resources\math-add-icon.png" />
+    <None Include="Resources\Ok-icon.png" />
+    <None Include="Resources\Actions-dialog-cancel-icon.png" />
+    <None Include="Resources\add-icon.png" />
+    <None Include="Resources\Filesystems-folder-open-icon.png" />
+    <None Include="Resources\Actions-list-remove-user-icon.png" />
+    <None Include="Resources\Actions-list-add-user-icon.png" />
+    <None Include="Resources\user-add-icon.png" />
+    <None Include="Resources\Arrow-refresh-icon %282%29.png" />
+    <None Include="Resources\eraseicon10x10.png" />
+    <None Include="Resources\erase-icon.png" />
+    <None Include="Resources\Phone-icon.png" />
+    <None Include="Resources\rulers-icon.png" />
+    <None Include="Resources\identity-card-icon.png" />
+    <None Include="Resources\television-icon.png" />
+    <None Include="Resources\headphones-icon.png" />
+    <None Include="Resources\file-icon %2824%29.png" />
+    <None Include="Resources\file-icon.png" />
+    <None Include="Resources\user-group-icon.png" />
+    <None Include="Resources\user-icon.png" />
+    <None Include="Resources\load2-download-icon.png" />
+    <None Include="Resources\load2-upload-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="Backup.sdf">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="Campaign Manager.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="DevComponents.DotNetBar.Keyboard">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevComponents.DotNetBar.Layout">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevComponents.DotNetBar.Schedule">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevComponents.DotNetBar.SuperGrid">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevComponents.DotNetBar2">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevComponents.Instrumentation">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevComponents.SuperGrid.Design">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevComponents.TreeGX">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.Data.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.Printing.v12.1.Core">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.Utils.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.Xpo.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.XtraBars.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.XtraCharts.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.XtraCharts.v12.1.UI">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.XtraEditors.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.XtraGrid.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.XtraLayout.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.XtraNavBar.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="DevExpress.XtraTreeList.v12.1">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxWMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
