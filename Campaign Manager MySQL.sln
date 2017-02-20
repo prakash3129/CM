@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Campaign Manager", "WindowsFormsApplication1\Campaign Manager.csproj", "{14F1D639-EBCB-4887-8D6E-4B549CFB92CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Campaign Manager", "CampaignManager\Campaign Manager.csproj", "{14F1D639-EBCB-4887-8D6E-4B549CFB92CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenAddon", "CM PlugIns\Screen Addon\ScreenAddon\ScreenAddon\ScreenAddon.csproj", "{CE7AD88E-30B7-4683-BC1B-4DD2C48BED12}"
 EndProject
