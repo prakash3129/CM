@@ -178,7 +178,7 @@ namespace GCC
             //    //XDC.Validate(ValidationCallBack);
 
 
-            //    //SqlConnection con = new SqlConnection("Data Source=172.27.137.181;Initial Catalog=Merit_Validation_Tool;Persist Security Info=True;User ID=sa;Password='MeritGroup123'");
+            
             //    //con.Open();
             //    //SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.Personal_email_validation",con);
             //    //SqlDataAdapter da= new SqlDataAdapter(cmd);

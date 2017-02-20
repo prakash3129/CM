@@ -138,26 +138,23 @@ namespace GCC
         public static List<string> lstSortableContactColumn = new List<string>();
 
         public static string sMSSQL = Connection.Connection.Getstring("CM_MSSQL");
-        //public static string sMSSQL = "user id=user1;password=M3r1t1n6i#;data source=172.27.137.181;initial catalog=MVC;Application Name=Campaign Manager;";        
+        
 
         public static string sDialerExt = string.Empty;
-        //public static string sMySQLConstringTest = "server=172.27.137.235;User Id=root;password=admin;database=MVC;Application Name=Campaign Manager;";
-        //public static string sMySQL = "Server=10.56.175.29;Database=MVC;Uid=root;Pwd=MeritGroup123;Connection Timeout=100;Application Name=Campaign Manager;";
+        
 
 
         public static string sMySQL = Connection.Connection.Getstring("CM_MYSQL");
-        //public static string sMySQL = "Server=172.27.138.181;Database=MVC;Uid=root;Pwd=MeritGroup123;Connection Timeout=100;Allow User Variables=True;pooling=false;";
-
-        //public static string xsMySQL = "Server=172.27.138.181;Database=MVC;Uid=root;Pwd=MeritGroup123;";
+        
 
         public static SqlConnection conMSSQL = new SqlConnection(Connection.Connection.Getstring("CM_MSSQL"));
-        //public static SqlConnection conMSSQL = new SqlConnection("user id=user1;password=M3r1t1n6i#;data source=172.27.137.181;initial catalog=MVC;Application Name=Campaign Manager;");
+        
         
        // public static MySqlConnection conMYSQL = new MySqlConnection(Connection.Connection.Getstring("CM_MYSQL"));
 
         //public static MySqlConnection conMYSQLReader = new MySqlConnection(Connection.Connection.Getstring("CM_MYSQL"));
 
-        //public static MySqlConnection conMYSQL = new MySqlConnection("Server=172.27.138.181;Database=MVC;Uid=root;Pwd=MeritGroup123;Connection Timeout=100;default command timeout=1200;Allow User Variables=True;pooling=false;");
+        
         //public static SqlCeConnection conSQLCE = new SqlCeConnection("Data Source=" + AppDomain.CurrentDomain.BaseDirectory + "\\Backup.sdf;Persist Security Info=False;");
 
         public static BAL.BAL_GlobalMSSQL MSSQL = new BAL.BAL_GlobalMSSQL();

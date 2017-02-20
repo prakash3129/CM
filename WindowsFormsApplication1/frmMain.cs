@@ -166,16 +166,16 @@ namespace GCC
             GV.sScreenAddonPath = WriteFile("ScreenAddon.exe", Properties.Resources.ScreenAddon);
 
 
-            //SqlDependency.Stop("user id=mssuser;password=M3r!7db#uk$@9wd;data source=172.27.137.181;initial catalog=MVC;Application Name=Campaign Manager;");
-            //SqlDependency.Start("user id=mssuser;password=M3r!7db#uk$@9wd;data source=172.27.137.181;initial catalog=MVC;Application Name=Campaign Manager;");
-            //SqlConnection con = new SqlConnection("user id=mssuser;password=M3r!7db#uk$@9wd;data source=172.27.137.181;initial catalog=MVC;Application Name=Campaign Manager;");
+            //SqlDependency.Stop("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MVC;Application Name=Campaign Manager;");
+            //SqlDependency.Start("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MVC;Application Name=Campaign Manager;");
+            //SqlConnection con = new SqlConnection("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MVC;Application Name=Campaign Manager;");
             //SqlCommand cmd = new SqlCommand("SELECT * FROM EMoniter", con);
             //cmd.Notification = null;
             //con.Open();
             //SqlDependency dependency = new SqlDependency(cmd);
             //dependency.OnChange += OnChange;
             //return;
-            
+
             if (Environment.MachineName.ToUpper() != "MSSPLDET281")
                 Splash();
 
@@ -301,8 +301,7 @@ namespace GCC
 
             //MessageBoxEx.Show(Environment.StackTrace);
 
-            //MySqlConnection con = new MySqlConnection("server=localhost;User Id=sa;password=MeritGroup123;database=sakila");
-            ////SqlConnection con = new SqlConnection("Server = localhost; Database = sakila; Uid = sa; Pwd = MeritGroup123;");
+            
             //con.Open();
             //MySqlCommand cmd = new MySqlCommand("Select * from city", con);
             ////SqlCommand cmd = new SqlCommand("Select * from city", con);
