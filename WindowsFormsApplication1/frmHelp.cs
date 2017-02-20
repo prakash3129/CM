@@ -17,7 +17,7 @@ namespace GCC
             sHelp += "  Add New Company : Ctrl + N" + Environment.NewLine;
             sHelp += "  Processed List Screen : Ctrl + P" + Environment.NewLine;
             sHelp += "  Reload : F5" + Environment.NewLine;
-            sHelp += "  Filter : Ctrl + Shift + L (Toggle)" + Environment.NewLine;
+            sHelp += "  Filter : Ctrl + Shift + L (Toggle)." + Environment.NewLine;
             sHelp += "  Clear : Ctrl + Shift + L (Toggle)" + Environment.NewLine;
             sHelp += "  Enter ID : Ctrl + I" + Environment.NewLine;
             sHelp += "  Open Selected Company : Enter" + Environment.NewLine+Environment.NewLine;
