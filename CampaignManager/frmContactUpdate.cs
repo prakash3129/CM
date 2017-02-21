@@ -834,9 +834,9 @@ namespace GCC
                     #region Initialize EAF
                     GV.sPerformance += "EAF : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
                     //#if debug
-                    if (GV.sEmployeeName == "THANGAPRAKASH1" && Environment.MachineName.ToUpper() == "MSSPLDET281")
+                    if (GV.sEmployeeName == "THANGAPRAKASH" && Environment.MachineName.ToUpper() == "MSSPLDET281")
                     {
-                        string sEAFLibararyPath = @"E:\SVN\Campaign Manager\EAF\Dove Johns\CM\bin\Debug\CM.dll";
+                        string sEAFLibararyPath = @"D:\E\SVN\Campaign Manager\EAF\SHA256 Encryption\CM\bin\Debug\CM.dll";
                         EAF = Assembly.Load(File.ReadAllBytes(sEAFLibararyPath));
                         EAF_ClassInstance = EAF.CreateInstance("EAF.EAF");
                         EAF_MethodInstance = EAF.GetType("EAF.EAF");
