@@ -74,6 +74,11 @@
             this.lblFilterTRDate = new DevComponents.DotNetBar.LabelX();
             this.sdgvContacts = new DevComponents.DotNetBar.SuperGrid.SuperGridControl();
             this.tabControlContact = new DevComponents.DotNetBar.SuperTabControl();
+            this.sTabPanelContacts = new DevComponents.DotNetBar.SuperTabControlPanel();
+            this.btnNextContact = new DevComponents.DotNetBar.ButtonX();
+            this.btnPreviousContact = new DevComponents.DotNetBar.ButtonX();
+            this.btnAddNewContact = new DevComponents.DotNetBar.ButtonX();
+            this.tabContacts = new DevComponents.DotNetBar.SuperTabItem();
             this.sTabPanelTRDisposals = new DevComponents.DotNetBar.SuperTabControlPanel();
             this.splitTRDisposalMainParant = new System.Windows.Forms.SplitContainer();
             this.splitTRDisposals = new System.Windows.Forms.SplitContainer();
@@ -90,11 +95,20 @@
             this.btnenUS = new DevComponents.DotNetBar.ButtonItem();
             this.TR_Comments_Browser = new System.Windows.Forms.WebBrowser();
             this.tabTRDisposals = new DevComponents.DotNetBar.SuperTabItem();
-            this.sTabPanelContacts = new DevComponents.DotNetBar.SuperTabControlPanel();
-            this.btnNextContact = new DevComponents.DotNetBar.ButtonX();
-            this.btnPreviousContact = new DevComponents.DotNetBar.ButtonX();
-            this.btnAddNewContact = new DevComponents.DotNetBar.ButtonX();
-            this.tabContacts = new DevComponents.DotNetBar.SuperTabItem();
+            this.sTabPanelRecordHistory = new DevComponents.DotNetBar.SuperTabControlPanel();
+            this.advTreeRecordHistoryAgent = new DevComponents.AdvTree.AdvTree();
+            this.columnHeader4 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader5 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader6 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader7 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader1 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader2 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader3 = new DevComponents.AdvTree.ColumnHeader();
+            this.txtSearchHistory = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.elementStyle2 = new DevComponents.DotNetBar.ElementStyle();
+            this.elementStyle1 = new DevComponents.DotNetBar.ElementStyle();
+            this.BoldStyle = new DevComponents.DotNetBar.ElementStyle();
+            this.tabRecordHistory = new DevComponents.DotNetBar.SuperTabItem();
             this.sTabPanelQC = new DevComponents.DotNetBar.SuperTabControlPanel();
             this.switchButton1 = new DevComponents.DotNetBar.Controls.SwitchButton();
             this.labelX7 = new DevComponents.DotNetBar.LabelX();
@@ -115,20 +129,6 @@
             this.txtErrorReason = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.tabQC = new DevComponents.DotNetBar.SuperTabItem();
-            this.sTabPanelRecordHistory = new DevComponents.DotNetBar.SuperTabControlPanel();
-            this.advTreeRecordHistoryAgent = new DevComponents.AdvTree.AdvTree();
-            this.columnHeader4 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader5 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader6 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader7 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader1 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader2 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader3 = new DevComponents.AdvTree.ColumnHeader();
-            this.txtSearchHistory = new DevComponents.DotNetBar.Controls.TextBoxX();
-            this.elementStyle2 = new DevComponents.DotNetBar.ElementStyle();
-            this.elementStyle1 = new DevComponents.DotNetBar.ElementStyle();
-            this.BoldStyle = new DevComponents.DotNetBar.ElementStyle();
-            this.tabRecordHistory = new DevComponents.DotNetBar.SuperTabItem();
             this.sTabPanelAgentNotes = new DevComponents.DotNetBar.SuperTabControlPanel();
             this.btnWindowed = new DevComponents.DotNetBar.ButtonX();
             this.sliderNotesSize = new DevComponents.DotNetBar.Controls.Slider();
@@ -291,6 +291,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Filter_TR_UPDATED_DATE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabControlContact)).BeginInit();
             this.tabControlContact.SuspendLayout();
+            this.sTabPanelContacts.SuspendLayout();
             this.sTabPanelTRDisposals.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitTRDisposalMainParant)).BeginInit();
             this.splitTRDisposalMainParant.Panel1.SuspendLayout();
@@ -304,11 +305,10 @@
             this.splitTRComment.Panel1.SuspendLayout();
             this.splitTRComment.Panel2.SuspendLayout();
             this.splitTRComment.SuspendLayout();
-            this.sTabPanelContacts.SuspendLayout();
-            this.sTabPanelQC.SuspendLayout();
             this.sTabPanelRecordHistory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.advTreeRecordHistoryAgent)).BeginInit();
             this.advTreeRecordHistoryAgent.SuspendLayout();
+            this.sTabPanelQC.SuspendLayout();
             this.sTabPanelAgentNotes.SuspendLayout();
             this.sTabPanelCallScript.SuspendLayout();
             this.sTabPanelWRDisposals.SuspendLayout();
@@ -353,7 +353,7 @@
             // SplitMain.Panel2
             // 
             this.SplitMain.Panel2.Controls.Add(this.splitContactModernUI);
-            this.SplitMain.Size = new System.Drawing.Size(1148, 777);
+            this.SplitMain.Size = new System.Drawing.Size(1148, 741);
             this.SplitMain.SplitterDistance = 369;
             this.SplitMain.SplitterWidth = 8;
             this.SplitMain.TabIndex = 0;
@@ -387,7 +387,7 @@
             this.tabControlCompany.ReorderTabsEnabled = false;
             this.tabControlCompany.SelectedTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.tabControlCompany.SelectedTabIndex = -1;
-            this.tabControlCompany.Size = new System.Drawing.Size(337, 775);
+            this.tabControlCompany.Size = new System.Drawing.Size(337, 739);
             this.tabControlCompany.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.tabControlCompany.TabHorizontalSpacing = 2;
             this.tabControlCompany.TabIndex = 6;
@@ -406,7 +406,7 @@
             this.sTabPanelGroupCompany.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sTabPanelGroupCompany.Location = new System.Drawing.Point(0, 46);
             this.sTabPanelGroupCompany.Name = "sTabPanelGroupCompany";
-            this.sTabPanelGroupCompany.Size = new System.Drawing.Size(337, 729);
+            this.sTabPanelGroupCompany.Size = new System.Drawing.Size(337, 693);
             this.sTabPanelGroupCompany.TabIndex = 1;
             this.sTabPanelGroupCompany.TabItem = this.tabGroupCompany;
             // 
@@ -460,7 +460,7 @@
             this.sdgvCompany.PrimaryGrid.ShowColumnHeader = false;
             this.sdgvCompany.PrimaryGrid.SortLevel = ((DevComponents.DotNetBar.SuperGrid.SortLevel)((DevComponents.DotNetBar.SuperGrid.SortLevel.Root | DevComponents.DotNetBar.SuperGrid.SortLevel.Expanded)));
             this.sdgvCompany.PrimaryGrid.SortUsingHiddenColumns = true;
-            this.sdgvCompany.Size = new System.Drawing.Size(337, 729);
+            this.sdgvCompany.Size = new System.Drawing.Size(337, 693);
             this.sdgvCompany.TabIndex = 1;
             this.sdgvCompany.TabStop = false;
             this.sdgvCompany.TouchEnabled = false;
@@ -481,7 +481,7 @@
             this.sTabPanelCompanyInformation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sTabPanelCompanyInformation.Location = new System.Drawing.Point(0, 0);
             this.sTabPanelCompanyInformation.Name = "sTabPanelCompanyInformation";
-            this.sTabPanelCompanyInformation.Size = new System.Drawing.Size(337, 775);
+            this.sTabPanelCompanyInformation.Size = new System.Drawing.Size(337, 739);
             this.sTabPanelCompanyInformation.TabIndex = 0;
             this.sTabPanelCompanyInformation.TabItem = this.tabCompanyInfo;
             // 
@@ -524,7 +524,7 @@
             this.expandablePanelMessage.ExpandOnTitleClick = true;
             this.expandablePanelMessage.Location = new System.Drawing.Point(0, 0);
             this.expandablePanelMessage.Name = "expandablePanelMessage";
-            this.expandablePanelMessage.Size = new System.Drawing.Size(30, 775);
+            this.expandablePanelMessage.Size = new System.Drawing.Size(30, 739);
             this.expandablePanelMessage.Style.Alignment = System.Drawing.StringAlignment.Center;
             this.expandablePanelMessage.Style.BackColor1.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
             this.expandablePanelMessage.Style.Border = DevComponents.DotNetBar.eBorderType.SingleLine;
@@ -547,7 +547,7 @@
             this.webBrowserMessage.Location = new System.Drawing.Point(0, 26);
             this.webBrowserMessage.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserMessage.Name = "webBrowserMessage";
-            this.webBrowserMessage.Size = new System.Drawing.Size(30, 749);
+            this.webBrowserMessage.Size = new System.Drawing.Size(30, 713);
             this.webBrowserMessage.TabIndex = 1;
             this.webBrowserMessage.TabStop = false;
             this.webBrowserMessage.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowserMessage_Navigating);
@@ -569,7 +569,7 @@
             // 
             this.splitContactModernUI.Panel2.Controls.Add(this.tabControlContact);
             this.splitContactModernUI.Panel2MinSize = 200;
-            this.splitContactModernUI.Size = new System.Drawing.Size(769, 775);
+            this.splitContactModernUI.Size = new System.Drawing.Size(769, 739);
             this.splitContactModernUI.SplitterDistance = 332;
             this.splitContactModernUI.SplitterWidth = 8;
             this.splitContactModernUI.TabIndex = 9;
@@ -1048,7 +1048,7 @@
             this.sdgvContacts.PrimaryGrid.SelectionGranularity = DevComponents.DotNetBar.SuperGrid.SelectionGranularity.Row;
             this.sdgvContacts.PrimaryGrid.SortLevel = ((DevComponents.DotNetBar.SuperGrid.SortLevel)((DevComponents.DotNetBar.SuperGrid.SortLevel.Root | DevComponents.DotNetBar.SuperGrid.SortLevel.Expanded)));
             this.sdgvContacts.PrimaryGrid.SortUsingHiddenColumns = true;
-            this.sdgvContacts.Size = new System.Drawing.Size(459, 758);
+            this.sdgvContacts.Size = new System.Drawing.Size(459, 722);
             this.sdgvContacts.TabIndex = 0;
             this.sdgvContacts.TouchEnabled = false;
             this.sdgvContacts.CellClick += new System.EventHandler<DevComponents.DotNetBar.SuperGrid.GridCellClickEventArgs>(this.sdgvContacts_CellClick);
@@ -1075,9 +1075,9 @@
             this.tabControlContact.ControlBox.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
             this.tabControlContact.ControlBox.MenuBox,
             this.tabControlContact.ControlBox.CloseBox});
-            this.tabControlContact.Controls.Add(this.sTabPanelRecordHistory);
             this.tabControlContact.Controls.Add(this.sTabPanelContacts);
             this.tabControlContact.Controls.Add(this.sTabPanelTRDisposals);
+            this.tabControlContact.Controls.Add(this.sTabPanelRecordHistory);
             this.tabControlContact.Controls.Add(this.sTabPanelQC);
             this.tabControlContact.Controls.Add(this.sTabPanelAgentNotes);
             this.tabControlContact.Controls.Add(this.sTabPanelCallScript);
@@ -1090,7 +1090,7 @@
             this.tabControlContact.ReorderTabsEnabled = true;
             this.tabControlContact.SelectedTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.tabControlContact.SelectedTabIndex = 0;
-            this.tabControlContact.Size = new System.Drawing.Size(429, 775);
+            this.tabControlContact.Size = new System.Drawing.Size(429, 739);
             this.tabControlContact.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.tabControlContact.TabHorizontalSpacing = 3;
             this.tabControlContact.TabIndex = 8;
@@ -1106,6 +1106,68 @@
             this.tabControlContact.SelectedTabChanging += new System.EventHandler<DevComponents.DotNetBar.SuperTabStripSelectedTabChangingEventArgs>(this.tabControlContact_SelectedTabChanging);
             this.tabControlContact.SelectedTabChanged += new System.EventHandler<DevComponents.DotNetBar.SuperTabStripSelectedTabChangedEventArgs>(this.tabControlMain_SelectedTabChanged);
             // 
+            // sTabPanelContacts
+            // 
+            this.sTabPanelContacts.AutoScroll = true;
+            this.sTabPanelContacts.AutoSize = true;
+            this.sTabPanelContacts.Controls.Add(this.btnNextContact);
+            this.sTabPanelContacts.Controls.Add(this.btnPreviousContact);
+            this.sTabPanelContacts.Controls.Add(this.btnAddNewContact);
+            this.sTabPanelContacts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sTabPanelContacts.Location = new System.Drawing.Point(0, 74);
+            this.sTabPanelContacts.Name = "sTabPanelContacts";
+            this.sTabPanelContacts.Size = new System.Drawing.Size(429, 665);
+            this.sTabPanelContacts.TabIndex = 1;
+            this.sTabPanelContacts.TabItem = this.tabContacts;
+            // 
+            // btnNextContact
+            // 
+            this.btnNextContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnNextContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnNextContact.Location = new System.Drawing.Point(214, 11);
+            this.btnNextContact.Name = "btnNextContact";
+            this.btnNextContact.Size = new System.Drawing.Size(75, 23);
+            this.btnNextContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnNextContact.TabIndex = 2;
+            this.btnNextContact.TabStop = false;
+            this.btnNextContact.Text = "Next";
+            this.btnNextContact.Click += new System.EventHandler(this.btnNextContact_Click);
+            // 
+            // btnPreviousContact
+            // 
+            this.btnPreviousContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnPreviousContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnPreviousContact.Location = new System.Drawing.Point(11, 11);
+            this.btnPreviousContact.Name = "btnPreviousContact";
+            this.btnPreviousContact.Size = new System.Drawing.Size(75, 23);
+            this.btnPreviousContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnPreviousContact.TabIndex = 1;
+            this.btnPreviousContact.TabStop = false;
+            this.btnPreviousContact.Text = "Previous";
+            // 
+            // btnAddNewContact
+            // 
+            this.btnAddNewContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnAddNewContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnAddNewContact.Location = new System.Drawing.Point(92, 10);
+            this.btnAddNewContact.Name = "btnAddNewContact";
+            this.btnAddNewContact.Size = new System.Drawing.Size(116, 24);
+            this.btnAddNewContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.superTooltipContactScreen.SetSuperTooltip(this.btnAddNewContact, new DevComponents.DotNetBar.SuperTooltipInfo("Add New Contact", "Alt + A", "", null, null, DevComponents.DotNetBar.eTooltipColor.Teal));
+            this.btnAddNewContact.TabIndex = 0;
+            this.btnAddNewContact.Text = "&Add New Contact";
+            this.btnAddNewContact.Click += new System.EventHandler(this.btnAddNewGridRow_Click);
+            // 
+            // tabContacts
+            // 
+            this.tabContacts.AttachedControl = this.sTabPanelContacts;
+            this.tabContacts.GlobalItem = false;
+            this.tabContacts.Image = ((System.Drawing.Image)(resources.GetObject("tabContacts.Image")));
+            this.tabContacts.Name = "tabContacts";
+            this.tabContacts.Text = "Contacts";
+            this.tabContacts.TextAlignment = DevComponents.DotNetBar.eItemAlignment.Near;
+            this.tabContacts.Tooltip = "Displayes the selected Contact\'s information";
+            // 
             // sTabPanelTRDisposals
             // 
             this.sTabPanelTRDisposals.AutoScroll = true;
@@ -1115,7 +1177,7 @@
             this.sTabPanelTRDisposals.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sTabPanelTRDisposals.Location = new System.Drawing.Point(0, 0);
             this.sTabPanelTRDisposals.Name = "sTabPanelTRDisposals";
-            this.sTabPanelTRDisposals.Size = new System.Drawing.Size(429, 775);
+            this.sTabPanelTRDisposals.Size = new System.Drawing.Size(429, 739);
             this.sTabPanelTRDisposals.TabIndex = 0;
             this.sTabPanelTRDisposals.TabItem = this.tabTRDisposals;
             // 
@@ -1135,8 +1197,8 @@
             // 
             this.splitTRDisposalMainParant.Panel2.AutoScroll = true;
             this.splitTRDisposalMainParant.Panel2.Controls.Add(this.splitTRComment);
-            this.splitTRDisposalMainParant.Size = new System.Drawing.Size(429, 775);
-            this.splitTRDisposalMainParant.SplitterDistance = 411;
+            this.splitTRDisposalMainParant.Size = new System.Drawing.Size(429, 739);
+            this.splitTRDisposalMainParant.SplitterDistance = 391;
             this.splitTRDisposalMainParant.TabIndex = 529;
             // 
             // splitTRDisposals
@@ -1155,7 +1217,7 @@
             // 
             this.splitTRDisposals.Panel2.Controls.Add(this.lblTRSecondaryDisposal);
             this.splitTRDisposals.Panel2.Controls.Add(this.TR_SECONDARY_DISPOSAL);
-            this.splitTRDisposals.Size = new System.Drawing.Size(429, 411);
+            this.splitTRDisposals.Size = new System.Drawing.Size(429, 391);
             this.splitTRDisposals.SplitterDistance = 228;
             this.splitTRDisposals.TabIndex = 536;
             this.splitTRDisposals.TabStop = false;
@@ -1228,8 +1290,8 @@
             // splitTRComment.Panel2
             // 
             this.splitTRComment.Panel2.Controls.Add(this.TR_Comments_Browser);
-            this.splitTRComment.Size = new System.Drawing.Size(429, 360);
-            this.splitTRComment.SplitterDistance = 94;
+            this.splitTRComment.Size = new System.Drawing.Size(429, 344);
+            this.splitTRComment.SplitterDistance = 89;
             this.splitTRComment.SplitterWidth = 5;
             this.splitTRComment.TabIndex = 525;
             // 
@@ -1244,7 +1306,7 @@
             this.circularProgressGSpeech.Location = new System.Drawing.Point(328, 0);
             this.circularProgressGSpeech.Name = "circularProgressGSpeech";
             this.circularProgressGSpeech.ProgressBarType = DevComponents.DotNetBar.eCircularProgressType.Donut;
-            this.circularProgressGSpeech.Size = new System.Drawing.Size(38, 92);
+            this.circularProgressGSpeech.Size = new System.Drawing.Size(38, 87);
             this.circularProgressGSpeech.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeXP;
             this.circularProgressGSpeech.TabIndex = 3;
             this.circularProgressGSpeech.Visible = false;
@@ -1264,7 +1326,7 @@
             this.TR_COMMENTS.MaxLength = 800;
             this.TR_COMMENTS.Multiline = true;
             this.TR_COMMENTS.Name = "TR_COMMENTS";
-            this.TR_COMMENTS.Size = new System.Drawing.Size(366, 92);
+            this.TR_COMMENTS.Size = new System.Drawing.Size(366, 87);
             this.TR_COMMENTS.TabIndex = 1;
             this.TR_COMMENTS.Tag = "Company";
             this.TR_COMMENTS.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty;
@@ -1283,7 +1345,7 @@
             this.btnGSpeechRecord.Name = "btnGSpeechRecord";
             this.btnGSpeechRecord.PressedImage = global::GCC.Properties.Resources.voice_search_icon;
             this.btnGSpeechRecord.Shape = new DevComponents.DotNetBar.RoundRectangleShapeDescriptor(4);
-            this.btnGSpeechRecord.Size = new System.Drawing.Size(61, 92);
+            this.btnGSpeechRecord.Size = new System.Drawing.Size(61, 87);
             this.btnGSpeechRecord.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.btnGSpeechRecord.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
             this.btnenIN,
@@ -1323,7 +1385,7 @@
             this.TR_Comments_Browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.TR_Comments_Browser.Name = "TR_Comments_Browser";
             this.TR_Comments_Browser.ScriptErrorsSuppressed = true;
-            this.TR_Comments_Browser.Size = new System.Drawing.Size(427, 259);
+            this.TR_Comments_Browser.Size = new System.Drawing.Size(427, 248);
             this.TR_Comments_Browser.TabIndex = 525;
             this.TR_Comments_Browser.TabStop = false;
             this.TR_Comments_Browser.WebBrowserShortcutsEnabled = false;
@@ -1336,67 +1398,177 @@
             this.tabTRDisposals.Name = "tabTRDisposals";
             this.tabTRDisposals.Text = "Disposals";
             // 
-            // sTabPanelContacts
+            // sTabPanelRecordHistory
             // 
-            this.sTabPanelContacts.AutoScroll = true;
-            this.sTabPanelContacts.AutoSize = true;
-            this.sTabPanelContacts.Controls.Add(this.btnNextContact);
-            this.sTabPanelContacts.Controls.Add(this.btnPreviousContact);
-            this.sTabPanelContacts.Controls.Add(this.btnAddNewContact);
-            this.sTabPanelContacts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sTabPanelContacts.Location = new System.Drawing.Point(0, 74);
-            this.sTabPanelContacts.Name = "sTabPanelContacts";
-            this.sTabPanelContacts.Size = new System.Drawing.Size(429, 701);
-            this.sTabPanelContacts.TabIndex = 1;
-            this.sTabPanelContacts.TabItem = this.tabContacts;
+            this.sTabPanelRecordHistory.AutoScroll = true;
+            this.sTabPanelRecordHistory.AutoSize = true;
+            this.sTabPanelRecordHistory.Controls.Add(this.advTreeRecordHistoryAgent);
+            this.sTabPanelRecordHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sTabPanelRecordHistory.Location = new System.Drawing.Point(0, 0);
+            this.sTabPanelRecordHistory.Name = "sTabPanelRecordHistory";
+            this.sTabPanelRecordHistory.Size = new System.Drawing.Size(429, 739);
+            this.sTabPanelRecordHistory.TabIndex = 2;
+            this.sTabPanelRecordHistory.TabItem = this.tabRecordHistory;
             // 
-            // btnNextContact
+            // advTreeRecordHistoryAgent
             // 
-            this.btnNextContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnNextContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnNextContact.Location = new System.Drawing.Point(214, 11);
-            this.btnNextContact.Name = "btnNextContact";
-            this.btnNextContact.Size = new System.Drawing.Size(75, 23);
-            this.btnNextContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnNextContact.TabIndex = 2;
-            this.btnNextContact.TabStop = false;
-            this.btnNextContact.Text = "Next";
-            this.btnNextContact.Click += new System.EventHandler(this.btnNextContact_Click);
+            this.advTreeRecordHistoryAgent.AllowDrop = true;
+            this.advTreeRecordHistoryAgent.AllowExternalDrop = false;
+            this.advTreeRecordHistoryAgent.BackColor = System.Drawing.SystemColors.Window;
             // 
-            // btnPreviousContact
             // 
-            this.btnPreviousContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnPreviousContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPreviousContact.Location = new System.Drawing.Point(11, 11);
-            this.btnPreviousContact.Name = "btnPreviousContact";
-            this.btnPreviousContact.Size = new System.Drawing.Size(75, 23);
-            this.btnPreviousContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnPreviousContact.TabIndex = 1;
-            this.btnPreviousContact.TabStop = false;
-            this.btnPreviousContact.Text = "Previous";
             // 
-            // btnAddNewContact
+            this.advTreeRecordHistoryAgent.BackgroundStyle.Class = "TreeBorderKey";
+            this.advTreeRecordHistoryAgent.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader4);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader5);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader6);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader7);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader1);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader2);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader3);
+            this.advTreeRecordHistoryAgent.Controls.Add(this.txtSearchHistory);
+            this.advTreeRecordHistoryAgent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.advTreeRecordHistoryAgent.DragDropEnabled = false;
+            this.advTreeRecordHistoryAgent.DragDropNodeCopyEnabled = false;
+            this.advTreeRecordHistoryAgent.ExpandButtonType = DevComponents.AdvTree.eExpandButtonType.Triangle;
+            this.advTreeRecordHistoryAgent.ExpandLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.advTreeRecordHistoryAgent.ExpandWidth = 14;
+            this.advTreeRecordHistoryAgent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.advTreeRecordHistoryAgent.GridColumnLines = false;
+            this.advTreeRecordHistoryAgent.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
+            this.advTreeRecordHistoryAgent.Location = new System.Drawing.Point(0, 0);
+            this.advTreeRecordHistoryAgent.MultiNodeDragCountVisible = false;
+            this.advTreeRecordHistoryAgent.MultiNodeDragDropAllowed = false;
+            this.advTreeRecordHistoryAgent.Name = "advTreeRecordHistoryAgent";
+            this.advTreeRecordHistoryAgent.NodeHorizontalSpacing = 6;
+            this.advTreeRecordHistoryAgent.NodeSpacing = 5;
+            this.advTreeRecordHistoryAgent.NodeStyle = this.elementStyle2;
+            this.advTreeRecordHistoryAgent.PathSeparator = ";";
+            this.advTreeRecordHistoryAgent.SelectionBoxStyle = DevComponents.AdvTree.eSelectionStyle.FullRowSelect;
+            this.advTreeRecordHistoryAgent.Size = new System.Drawing.Size(429, 739);
+            this.advTreeRecordHistoryAgent.Styles.Add(this.elementStyle2);
+            this.advTreeRecordHistoryAgent.Styles.Add(this.elementStyle1);
+            this.advTreeRecordHistoryAgent.Styles.Add(this.BoldStyle);
+            this.advTreeRecordHistoryAgent.TabIndex = 2;
+            this.advTreeRecordHistoryAgent.Text = "advTree2";
+            this.advTreeRecordHistoryAgent.TouchEnabled = false;
             // 
-            this.btnAddNewContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnAddNewContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnAddNewContact.Location = new System.Drawing.Point(92, 10);
-            this.btnAddNewContact.Name = "btnAddNewContact";
-            this.btnAddNewContact.Size = new System.Drawing.Size(116, 24);
-            this.btnAddNewContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.superTooltipContactScreen.SetSuperTooltip(this.btnAddNewContact, new DevComponents.DotNetBar.SuperTooltipInfo("Add New Contact", "Alt + A", "", null, null, DevComponents.DotNetBar.eTooltipColor.Teal));
-            this.btnAddNewContact.TabIndex = 0;
-            this.btnAddNewContact.Text = "&Add New Contact";
-            this.btnAddNewContact.Click += new System.EventHandler(this.btnAddNewGridRow_Click);
+            // columnHeader4
             // 
-            // tabContacts
+            this.columnHeader4.Editable = false;
+            this.columnHeader4.Name = "columnHeader4";
+            this.columnHeader4.SortingEnabled = false;
+            this.columnHeader4.Text = "User";
+            this.columnHeader4.Width.AutoSize = true;
+            this.columnHeader4.Width.AutoSizeMinHeader = true;
             // 
-            this.tabContacts.AttachedControl = this.sTabPanelContacts;
-            this.tabContacts.GlobalItem = false;
-            this.tabContacts.Image = ((System.Drawing.Image)(resources.GetObject("tabContacts.Image")));
-            this.tabContacts.Name = "tabContacts";
-            this.tabContacts.Text = "Contacts";
-            this.tabContacts.TextAlignment = DevComponents.DotNetBar.eItemAlignment.Near;
-            this.tabContacts.Tooltip = "Displayes the selected Contact\'s information";
+            // columnHeader5
+            // 
+            this.columnHeader5.Editable = false;
+            this.columnHeader5.Name = "columnHeader5";
+            this.columnHeader5.SortingEnabled = false;
+            this.columnHeader5.Text = "Open";
+            this.columnHeader5.Width.AutoSize = true;
+            this.columnHeader5.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Editable = false;
+            this.columnHeader6.Name = "columnHeader6";
+            this.columnHeader6.SortingEnabled = false;
+            this.columnHeader6.Text = "Close";
+            this.columnHeader6.Width.AutoSize = true;
+            this.columnHeader6.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Editable = false;
+            this.columnHeader7.Name = "columnHeader7";
+            this.columnHeader7.SortingEnabled = false;
+            this.columnHeader7.Text = "New Contacts";
+            this.columnHeader7.Width.AutoSize = true;
+            this.columnHeader7.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Editable = false;
+            this.columnHeader1.Name = "columnHeader1";
+            this.columnHeader1.SortingEnabled = false;
+            this.columnHeader1.Text = "Saved";
+            this.columnHeader1.Width.AutoSize = true;
+            this.columnHeader1.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Editable = false;
+            this.columnHeader2.Name = "columnHeader2";
+            this.columnHeader2.SortingEnabled = false;
+            this.columnHeader2.Text = "Level";
+            this.columnHeader2.Width.AutoSize = true;
+            this.columnHeader2.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Editable = false;
+            this.columnHeader3.Name = "columnHeader3";
+            this.columnHeader3.SortingEnabled = false;
+            this.columnHeader3.Text = "Machine";
+            this.columnHeader3.Width.AutoSize = true;
+            this.columnHeader3.Width.AutoSizeMinHeader = true;
+            // 
+            // txtSearchHistory
+            // 
+            this.txtSearchHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.autocompleteMenu.SetAutocompleteMenu(this.txtSearchHistory, null);
+            // 
+            // 
+            // 
+            this.txtSearchHistory.Border.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.txtSearchHistory.Border.BorderBottomWidth = 2;
+            this.txtSearchHistory.Border.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.txtSearchHistory.Border.BorderLeftWidth = 2;
+            this.txtSearchHistory.Border.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.txtSearchHistory.Border.BorderRightWidth = 2;
+            this.txtSearchHistory.Border.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.txtSearchHistory.Border.BorderTopWidth = 2;
+            this.txtSearchHistory.Border.Class = "TextBoxBorder";
+            this.txtSearchHistory.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtSearchHistory.Location = new System.Drawing.Point(308, 694);
+            this.txtSearchHistory.Name = "txtSearchHistory";
+            this.txtSearchHistory.PreventEnterBeep = true;
+            this.txtSearchHistory.Size = new System.Drawing.Size(91, 22);
+            this.txtSearchHistory.TabIndex = 1;
+            this.txtSearchHistory.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty;
+            this.txtSearchHistory.WatermarkText = "Search here";
+            this.txtSearchHistory.TextChanged += new System.EventHandler(this.txtSearchHistory_TextChanged);
+            // 
+            // elementStyle2
+            // 
+            this.elementStyle2.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.elementStyle2.Name = "elementStyle2";
+            this.elementStyle2.TextColor = System.Drawing.SystemColors.ControlText;
+            // 
+            // elementStyle1
+            // 
+            this.elementStyle1.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.elementStyle1.Name = "elementStyle1";
+            // 
+            // BoldStyle
+            // 
+            this.BoldStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.BoldStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BoldStyle.Name = "BoldStyle";
+            // 
+            // tabRecordHistory
+            // 
+            this.tabRecordHistory.AttachedControl = this.sTabPanelRecordHistory;
+            this.tabRecordHistory.GlobalItem = false;
+            this.tabRecordHistory.Image = ((System.Drawing.Image)(resources.GetObject("tabRecordHistory.Image")));
+            this.tabRecordHistory.Name = "tabRecordHistory";
+            this.tabRecordHistory.Text = "Record History";
+            this.tabRecordHistory.Click += new System.EventHandler(this.tabRecordHistory_Click);
+            this.tabRecordHistory.DoubleClick += new System.EventHandler(this.tabRecordHistory_DoubleClick);
             // 
             // sTabPanelQC
             // 
@@ -1423,7 +1595,7 @@
             this.sTabPanelQC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sTabPanelQC.Location = new System.Drawing.Point(0, 0);
             this.sTabPanelQC.Name = "sTabPanelQC";
-            this.sTabPanelQC.Size = new System.Drawing.Size(429, 775);
+            this.sTabPanelQC.Size = new System.Drawing.Size(429, 739);
             this.sTabPanelQC.TabIndex = 0;
             this.sTabPanelQC.TabItem = this.tabQC;
             // 
@@ -1726,178 +1898,6 @@
             this.tabQC.Name = "tabQC";
             this.tabQC.Text = "QC";
             // 
-            // sTabPanelRecordHistory
-            // 
-            this.sTabPanelRecordHistory.AutoScroll = true;
-            this.sTabPanelRecordHistory.AutoSize = true;
-            this.sTabPanelRecordHistory.Controls.Add(this.advTreeRecordHistoryAgent);
-            this.sTabPanelRecordHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sTabPanelRecordHistory.Location = new System.Drawing.Point(0, 74);
-            this.sTabPanelRecordHistory.Name = "sTabPanelRecordHistory";
-            this.sTabPanelRecordHistory.Size = new System.Drawing.Size(429, 701);
-            this.sTabPanelRecordHistory.TabIndex = 2;
-            this.sTabPanelRecordHistory.TabItem = this.tabRecordHistory;
-            // 
-            // advTreeRecordHistoryAgent
-            // 
-            this.advTreeRecordHistoryAgent.AllowDrop = true;
-            this.advTreeRecordHistoryAgent.AllowExternalDrop = false;
-            this.advTreeRecordHistoryAgent.BackColor = System.Drawing.SystemColors.Window;
-            // 
-            // 
-            // 
-            this.advTreeRecordHistoryAgent.BackgroundStyle.Class = "TreeBorderKey";
-            this.advTreeRecordHistoryAgent.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader4);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader5);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader6);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader7);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader1);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader2);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader3);
-            this.advTreeRecordHistoryAgent.Controls.Add(this.txtSearchHistory);
-            this.advTreeRecordHistoryAgent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.advTreeRecordHistoryAgent.DragDropEnabled = false;
-            this.advTreeRecordHistoryAgent.DragDropNodeCopyEnabled = false;
-            this.advTreeRecordHistoryAgent.ExpandButtonType = DevComponents.AdvTree.eExpandButtonType.Triangle;
-            this.advTreeRecordHistoryAgent.ExpandLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.advTreeRecordHistoryAgent.ExpandWidth = 14;
-            this.advTreeRecordHistoryAgent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.advTreeRecordHistoryAgent.GridColumnLines = false;
-            this.advTreeRecordHistoryAgent.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
-            this.advTreeRecordHistoryAgent.Location = new System.Drawing.Point(0, 0);
-            this.advTreeRecordHistoryAgent.MultiNodeDragCountVisible = false;
-            this.advTreeRecordHistoryAgent.MultiNodeDragDropAllowed = false;
-            this.advTreeRecordHistoryAgent.Name = "advTreeRecordHistoryAgent";
-            this.advTreeRecordHistoryAgent.NodeHorizontalSpacing = 6;
-            this.advTreeRecordHistoryAgent.NodeSpacing = 5;
-            this.advTreeRecordHistoryAgent.NodeStyle = this.elementStyle2;
-            this.advTreeRecordHistoryAgent.PathSeparator = ";";
-            this.advTreeRecordHistoryAgent.SelectionBoxStyle = DevComponents.AdvTree.eSelectionStyle.FullRowSelect;
-            this.advTreeRecordHistoryAgent.Size = new System.Drawing.Size(429, 701);
-            this.advTreeRecordHistoryAgent.Styles.Add(this.elementStyle2);
-            this.advTreeRecordHistoryAgent.Styles.Add(this.elementStyle1);
-            this.advTreeRecordHistoryAgent.Styles.Add(this.BoldStyle);
-            this.advTreeRecordHistoryAgent.TabIndex = 2;
-            this.advTreeRecordHistoryAgent.Text = "advTree2";
-            this.advTreeRecordHistoryAgent.TouchEnabled = false;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Editable = false;
-            this.columnHeader4.Name = "columnHeader4";
-            this.columnHeader4.SortingEnabled = false;
-            this.columnHeader4.Text = "User";
-            this.columnHeader4.Width.AutoSize = true;
-            this.columnHeader4.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Editable = false;
-            this.columnHeader5.Name = "columnHeader5";
-            this.columnHeader5.SortingEnabled = false;
-            this.columnHeader5.Text = "Open";
-            this.columnHeader5.Width.AutoSize = true;
-            this.columnHeader5.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Editable = false;
-            this.columnHeader6.Name = "columnHeader6";
-            this.columnHeader6.SortingEnabled = false;
-            this.columnHeader6.Text = "Close";
-            this.columnHeader6.Width.AutoSize = true;
-            this.columnHeader6.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Editable = false;
-            this.columnHeader7.Name = "columnHeader7";
-            this.columnHeader7.SortingEnabled = false;
-            this.columnHeader7.Text = "New Contacts";
-            this.columnHeader7.Width.AutoSize = true;
-            this.columnHeader7.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Editable = false;
-            this.columnHeader1.Name = "columnHeader1";
-            this.columnHeader1.SortingEnabled = false;
-            this.columnHeader1.Text = "Saved";
-            this.columnHeader1.Width.AutoSize = true;
-            this.columnHeader1.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Editable = false;
-            this.columnHeader2.Name = "columnHeader2";
-            this.columnHeader2.SortingEnabled = false;
-            this.columnHeader2.Text = "Level";
-            this.columnHeader2.Width.AutoSize = true;
-            this.columnHeader2.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Editable = false;
-            this.columnHeader3.Name = "columnHeader3";
-            this.columnHeader3.SortingEnabled = false;
-            this.columnHeader3.Text = "Machine";
-            this.columnHeader3.Width.AutoSize = true;
-            this.columnHeader3.Width.AutoSizeMinHeader = true;
-            // 
-            // txtSearchHistory
-            // 
-            this.txtSearchHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.autocompleteMenu.SetAutocompleteMenu(this.txtSearchHistory, null);
-            // 
-            // 
-            // 
-            this.txtSearchHistory.Border.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.txtSearchHistory.Border.BorderBottomWidth = 2;
-            this.txtSearchHistory.Border.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.txtSearchHistory.Border.BorderLeftWidth = 2;
-            this.txtSearchHistory.Border.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.txtSearchHistory.Border.BorderRightWidth = 2;
-            this.txtSearchHistory.Border.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.txtSearchHistory.Border.BorderTopWidth = 2;
-            this.txtSearchHistory.Border.Class = "TextBoxBorder";
-            this.txtSearchHistory.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSearchHistory.Location = new System.Drawing.Point(308, 656);
-            this.txtSearchHistory.Name = "txtSearchHistory";
-            this.txtSearchHistory.PreventEnterBeep = true;
-            this.txtSearchHistory.Size = new System.Drawing.Size(91, 22);
-            this.txtSearchHistory.TabIndex = 1;
-            this.txtSearchHistory.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty;
-            this.txtSearchHistory.WatermarkText = "Search here";
-            this.txtSearchHistory.TextChanged += new System.EventHandler(this.txtSearchHistory_TextChanged);
-            // 
-            // elementStyle2
-            // 
-            this.elementStyle2.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.elementStyle2.Name = "elementStyle2";
-            this.elementStyle2.TextColor = System.Drawing.SystemColors.ControlText;
-            // 
-            // elementStyle1
-            // 
-            this.elementStyle1.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.elementStyle1.Name = "elementStyle1";
-            // 
-            // BoldStyle
-            // 
-            this.BoldStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.BoldStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BoldStyle.Name = "BoldStyle";
-            // 
-            // tabRecordHistory
-            // 
-            this.tabRecordHistory.AttachedControl = this.sTabPanelRecordHistory;
-            this.tabRecordHistory.GlobalItem = false;
-            this.tabRecordHistory.Image = ((System.Drawing.Image)(resources.GetObject("tabRecordHistory.Image")));
-            this.tabRecordHistory.Name = "tabRecordHistory";
-            this.tabRecordHistory.Text = "Record History";
-            this.tabRecordHistory.Click += new System.EventHandler(this.tabRecordHistory_Click);
-            this.tabRecordHistory.DoubleClick += new System.EventHandler(this.tabRecordHistory_DoubleClick);
-            // 
             // sTabPanelAgentNotes
             // 
             this.sTabPanelAgentNotes.AutoScroll = true;
@@ -1907,7 +1907,7 @@
             this.sTabPanelAgentNotes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sTabPanelAgentNotes.Location = new System.Drawing.Point(0, 0);
             this.sTabPanelAgentNotes.Name = "sTabPanelAgentNotes";
-            this.sTabPanelAgentNotes.Size = new System.Drawing.Size(429, 775);
+            this.sTabPanelAgentNotes.Size = new System.Drawing.Size(429, 739);
             this.sTabPanelAgentNotes.TabIndex = 0;
             this.sTabPanelAgentNotes.TabItem = this.tabAgentsNotes;
             // 
@@ -1936,7 +1936,7 @@
             this.sliderNotesSize.DecreaseTooltip = "Zoom Out";
             this.sliderNotesSize.FocusCuesEnabled = false;
             this.sliderNotesSize.IncreaseTooltip = "Zoom In";
-            this.sliderNotesSize.Location = new System.Drawing.Point(387, 245);
+            this.sliderNotesSize.Location = new System.Drawing.Point(387, 227);
             this.sliderNotesSize.Maximum = 40;
             this.sliderNotesSize.Minimum = 7;
             this.sliderNotesSize.Name = "sliderNotesSize";
@@ -1962,7 +1962,7 @@
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1033{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
     "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs20\\par\r\n}\r\n";
-            this.txtNotes.Size = new System.Drawing.Size(370, 753);
+            this.txtNotes.Size = new System.Drawing.Size(370, 717);
             this.txtNotes.TabIndex = 0;
             this.txtNotes.Tag = "Company";
             this.txtNotes.TextChanged += new System.EventHandler(this.TextChanged_StaticControls);
@@ -1982,7 +1982,7 @@
             this.sTabPanelCallScript.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sTabPanelCallScript.Location = new System.Drawing.Point(0, 0);
             this.sTabPanelCallScript.Name = "sTabPanelCallScript";
-            this.sTabPanelCallScript.Size = new System.Drawing.Size(429, 775);
+            this.sTabPanelCallScript.Size = new System.Drawing.Size(429, 739);
             this.sTabPanelCallScript.TabIndex = 0;
             this.sTabPanelCallScript.TabItem = this.tabCallScript;
             // 
@@ -2017,7 +2017,7 @@
             this.rtxtCallScript.ReadOnly = true;
             this.rtxtCallScript.Rtf = "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft Sans Serif;}}\r\n\\viewkind4" +
     "\\uc1\\pard\\lang1033\\f0\\fs20 Call Script goes here.\\par\r\n}\r\n";
-            this.rtxtCallScript.Size = new System.Drawing.Size(429, 744);
+            this.rtxtCallScript.Size = new System.Drawing.Size(429, 708);
             this.rtxtCallScript.TabIndex = 0;
             this.rtxtCallScript.Text = "Call Script goes here.";
             // 
@@ -2038,7 +2038,7 @@
             this.sTabPanelWRDisposals.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sTabPanelWRDisposals.Location = new System.Drawing.Point(0, 0);
             this.sTabPanelWRDisposals.Name = "sTabPanelWRDisposals";
-            this.sTabPanelWRDisposals.Size = new System.Drawing.Size(429, 775);
+            this.sTabPanelWRDisposals.Size = new System.Drawing.Size(429, 739);
             this.sTabPanelWRDisposals.TabIndex = 0;
             this.sTabPanelWRDisposals.TabItem = this.tabWRDisposals;
             // 
@@ -2056,8 +2056,8 @@
             // splitWRDisposalMainParant.Panel2
             // 
             this.splitWRDisposalMainParant.Panel2.Controls.Add(this.splitWRComment);
-            this.splitWRDisposalMainParant.Size = new System.Drawing.Size(429, 775);
-            this.splitWRDisposalMainParant.SplitterDistance = 417;
+            this.splitWRDisposalMainParant.Size = new System.Drawing.Size(429, 739);
+            this.splitWRDisposalMainParant.SplitterDistance = 397;
             this.splitWRDisposalMainParant.TabIndex = 545;
             // 
             // splitWRDisposals
@@ -2076,7 +2076,7 @@
             // 
             this.splitWRDisposals.Panel2.Controls.Add(this.lblWRSeconderyDisposal);
             this.splitWRDisposals.Panel2.Controls.Add(this.WR_SECONDARY_DISPOSAL);
-            this.splitWRDisposals.Size = new System.Drawing.Size(429, 417);
+            this.splitWRDisposals.Size = new System.Drawing.Size(429, 397);
             this.splitWRDisposals.SplitterDistance = 222;
             this.splitWRDisposals.TabIndex = 544;
             // 
@@ -2089,7 +2089,7 @@
             this.WR_PRIMARY_DISPOSAL.ItemHeight = 15;
             this.WR_PRIMARY_DISPOSAL.Location = new System.Drawing.Point(3, 29);
             this.WR_PRIMARY_DISPOSAL.Name = "WR_PRIMARY_DISPOSAL";
-            this.WR_PRIMARY_DISPOSAL.Size = new System.Drawing.Size(216, 64);
+            this.WR_PRIMARY_DISPOSAL.Size = new System.Drawing.Size(216, 34);
             this.WR_PRIMARY_DISPOSAL.TabIndex = 2;
             this.WR_PRIMARY_DISPOSAL.Tag = "PRIMARY_DISPOSAL;";
             this.WR_PRIMARY_DISPOSAL.SelectedIndexChanged += new System.EventHandler(this.lstWRPrimaryDisposal_SelectedIndexChanged);
@@ -2126,7 +2126,7 @@
             this.WR_SECONDARY_DISPOSAL.ItemHeight = 15;
             this.WR_SECONDARY_DISPOSAL.Location = new System.Drawing.Point(3, 29);
             this.WR_SECONDARY_DISPOSAL.Name = "WR_SECONDARY_DISPOSAL";
-            this.WR_SECONDARY_DISPOSAL.Size = new System.Drawing.Size(197, 64);
+            this.WR_SECONDARY_DISPOSAL.Size = new System.Drawing.Size(197, 34);
             this.WR_SECONDARY_DISPOSAL.TabIndex = 3;
             this.WR_SECONDARY_DISPOSAL.Tag = "SECONDARY_DISPOSAL;";
             this.WR_SECONDARY_DISPOSAL.SelectedIndexChanged += new System.EventHandler(this.WR_SECONDARY_DISPOSAL_SelectedIndexChanged);
@@ -2146,8 +2146,8 @@
             // splitWRComment.Panel2
             // 
             this.splitWRComment.Panel2.Controls.Add(this.WR_Comments_Browser);
-            this.splitWRComment.Size = new System.Drawing.Size(429, 354);
-            this.splitWRComment.SplitterDistance = 90;
+            this.splitWRComment.Size = new System.Drawing.Size(429, 338);
+            this.splitWRComment.SplitterDistance = 85;
             this.splitWRComment.SplitterWidth = 5;
             this.splitWRComment.TabIndex = 526;
             // 
@@ -2166,7 +2166,7 @@
             this.WR_COMMENTS.MaxLength = 800;
             this.WR_COMMENTS.Multiline = true;
             this.WR_COMMENTS.Name = "WR_COMMENTS";
-            this.WR_COMMENTS.Size = new System.Drawing.Size(427, 88);
+            this.WR_COMMENTS.Size = new System.Drawing.Size(427, 83);
             this.WR_COMMENTS.TabIndex = 1;
             this.WR_COMMENTS.Tag = "Company";
             this.WR_COMMENTS.WatermarkText = "Enter your comments here";
@@ -2182,7 +2182,7 @@
             this.WR_Comments_Browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.WR_Comments_Browser.Name = "WR_Comments_Browser";
             this.WR_Comments_Browser.ScriptErrorsSuppressed = true;
-            this.WR_Comments_Browser.Size = new System.Drawing.Size(427, 257);
+            this.WR_Comments_Browser.Size = new System.Drawing.Size(427, 246);
             this.WR_Comments_Browser.TabIndex = 537;
             this.WR_Comments_Browser.TabStop = false;
             this.WR_Comments_Browser.WebBrowserShortcutsEnabled = false;
@@ -3738,7 +3738,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1148, 777);
+            this.ClientSize = new System.Drawing.Size(1148, 741);
             this.Controls.Add(this.MergeContacts);
             this.Controls.Add(this.SplitMain);
             this.DoubleBuffered = true;
@@ -3772,6 +3772,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tabControlContact)).EndInit();
             this.tabControlContact.ResumeLayout(false);
             this.tabControlContact.PerformLayout();
+            this.sTabPanelContacts.ResumeLayout(false);
             this.sTabPanelTRDisposals.ResumeLayout(false);
             this.splitTRDisposalMainParant.Panel1.ResumeLayout(false);
             this.splitTRDisposalMainParant.Panel2.ResumeLayout(false);
@@ -3787,12 +3788,11 @@
             this.splitTRComment.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitTRComment)).EndInit();
             this.splitTRComment.ResumeLayout(false);
-            this.sTabPanelContacts.ResumeLayout(false);
-            this.sTabPanelQC.ResumeLayout(false);
-            this.sTabPanelQC.PerformLayout();
             this.sTabPanelRecordHistory.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.advTreeRecordHistoryAgent)).EndInit();
             this.advTreeRecordHistoryAgent.ResumeLayout(false);
+            this.sTabPanelQC.ResumeLayout(false);
+            this.sTabPanelQC.PerformLayout();
             this.sTabPanelAgentNotes.ResumeLayout(false);
             this.sTabPanelCallScript.ResumeLayout(false);
             this.sTabPanelWRDisposals.ResumeLayout(false);

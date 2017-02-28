@@ -803,7 +803,6 @@ namespace GCC
                     dtValidationResultsDynamic.Columns.Add("Status", typeof(string));
                     #endregion
 
-                                      
 
                     sMaster_ID = dtMasterCompanies.Rows[0]["MASTER_ID"].ToString(); // if group is not the first record
                     sGroup_ID = dtMasterCompanies.Rows[0]["GROUP_ID"].ToString();
@@ -2468,7 +2467,7 @@ namespace GCC
                         tabTRDisposals.Visible = true;
                     else if (GV.sAccessTo == "WR")
                         tabWRDisposals.Visible = true;
-                    //tabQC.Visible = true;
+                    tabQC.Visible = true;
 
                     tabRecordHistory.Visible = true;
                 }
@@ -7972,11 +7971,13 @@ namespace GCC
                     dtMasterCompanies.Rows[i]["COMPANY_NAME_ALPHA"] = rAlphaNumeric.Replace(dtMasterCompanies.Rows[i]["COMPANY_NAME"].ToString(), string.Empty);
                     #endregion
 
+                    #region Update Switchboard DND in Blocking Table
+
                     if (GV.sAccessTo == "TR")
                     {
                         string sDNDPrimaryDisposal = dtMasterCompanies.Rows[i]["TR_PRIMARY_DISPOSAL"].ToString();
                         string sDNDSecondaryDisposal = dtMasterCompanies.Rows[i]["TR_SECONDARY_DISPOSAL"].ToString();
-                        if (dtRecordStatus.Select("Operation_Type LIKE '%DND%' AND Research_Type = 'TR' AND Primary_Status = '" + sDNDPrimaryDisposal + "' AND Secondary_Status = '"+ sDNDSecondaryDisposal + "'").Length > 0)
+                        if (dtRecordStatus.Select("Operation_Type LIKE '%DND%' AND Research_Type = 'TR' AND Primary_Status = '" + sDNDPrimaryDisposal + "' AND Secondary_Status = '" + sDNDSecondaryDisposal + "'").Length > 0)
                         {
                             string sDNDSwitchboard = Regex.Replace(dtMasterCompanies.Rows[i]["SWITCHBOARD"].ToString(), "[^0-9]", "");
                             if (sDNDSwitchboard.Length > 7)
@@ -7991,10 +7992,9 @@ namespace GCC
                                 }
                             }
                         }
-                    }
-                    //Track Do not call.                    
-
-
+                    } 
+                    #endregion
+                    
                 }
 
 
@@ -10837,7 +10837,7 @@ namespace GCC
         }
 
         //-----------------------------------------------------------------------------------------------------
-        private void Load_Next_Record()
+        public void Load_Next_Record()
         {
 
             if (sFormOpenType == "ButtonOpen" || sFormOpenType == "SendBack")
@@ -10997,6 +10997,8 @@ namespace GCC
                     tabAgentsNotes.Visible = false;
                     tabControlContact.SelectedTab = tabContacts;
                     objFrmWindowedNotes.Show();
+
+                    
                 }
             }
             catch (Exception ex)
@@ -11326,6 +11328,10 @@ namespace GCC
                             GV.sCompanySessionID = string.Empty;
                             GV.sCurrentCompanyName = string.Empty;
                             GV.sCurrentCompanyID = string.Empty;
+
+
+
+
                             this.FormClosing -= new FormClosingEventHandler(frmContactsUpdate_FormClosing);
                             this.Close();//When closing from main window
                             this.FormClosing += new FormClosingEventHandler(frmContactsUpdate_FormClosing);
@@ -11342,9 +11348,16 @@ namespace GCC
                         GV.sCompanySessionID = string.Empty;
                         GV.sCurrentCompanyName = string.Empty;
                         GV.sCurrentCompanyID = string.Empty;
+
+
+
+
                         this.FormClosing -= new FormClosingEventHandler(frmContactsUpdate_FormClosing);
                         this.Close();//When closing from main window
                         this.FormClosing += new FormClosingEventHandler(frmContactsUpdate_FormClosing);
+
+
+
                     }
                 }//for admins// Will only warn before saving// No changes are done here
                 else if (dtMasterCompanies.Rows.Count > 0 && DialogResult.Yes == MessageBoxEx.Show(String.Format("Are you sure to close?{0}Changes will not be saved.", Environment.NewLine), "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2))
@@ -12419,7 +12432,25 @@ namespace GCC
         //-----------------------------------------------------------------------------------------------------
         private void sdgvContacts_Click(object sender, EventArgs e)
         {
-            tabControlContact.SelectedPanel = sTabPanelContacts;
+
+            if (GV.sUserType == "QC")
+            {
+                if (tabControlContact.Tabs.Contains(tabContacts))
+                {
+                    tabControlContact.Tabs.Remove(tabContacts);
+                    tabControlCompany.Tabs.Add(tabContacts);
+                    tabControlContact.Controls.Remove(sTabPanelContacts);
+                    tabControlCompany.Controls.Add(sTabPanelContacts);
+
+                }
+
+                tabControlCompany.SelectedPanel = sTabPanelContacts;
+                tabControlContact.SelectedPanel = sTabPanelQC;
+            }
+            else
+                tabControlContact.SelectedPanel = sTabPanelContacts;
+
+            
         }
 
 

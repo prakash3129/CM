@@ -1505,8 +1505,13 @@ namespace GCC
                             }
 
                             GV.sPerformance += "Got record. Opening Contact Update : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
+
+
+
                             FrmContactsUpdate objfrmContactsUpdate = new FrmContactsUpdate(sID, frmCurrent.MdiParent, "ListOpen", false, Companylist);
                             objfrmContactsUpdate.Show();
+
+
                         }
                         else
                             ToastNotification.Show(frmCurrent.MdiParent, "ID does not exist.", eToastPosition.TopRight);
