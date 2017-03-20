@@ -108,8 +108,8 @@ namespace GCC
                                                                 {
                                                                     if (sLine.Trim().Length > 0)
                                                                         dtEmails.Rows[i]["DESCRIPTION"] = sLine.Trim();
-                                                                    else//Incase ELV doesn't respond any result
-                                                                        dtEmails.Rows[i]["DESCRIPTION"] = "NEW DESCRIPTION[Invalid Result]"; ;
+                                                                    //else//Incase ELV doesn't respond any result
+                                                                    //    dtEmails.Rows[i]["DESCRIPTION"] = "NEW DESCRIPTION[Invalid Result]";
                                                                 }
                                                             }
                                                             else
@@ -139,27 +139,30 @@ namespace GCC
                                         string sDescription = drEmails["DESCRIPTION"].ToString();
                                         string sDetails = drEmails["DETAIL"].ToString();
 
-                                        if (dtEmailStatus.Select("PicklistField = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) + "'").Length > 0)
+                                        if (sDescription.Trim().Length > 0)
                                         {
-                                            DataRow drEmailBounce_Names = dtEmailStatus.Select("PicklistField = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) + "'")[0];
-                                            string sBounceStatus = dtEmailStatus.Select("PicklistField = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) + "'")[0]["PicklistValue"].ToString();
-                                            if (sBounceStatus == "HARD")
-                                                sBounceStatus = "BOUNCED";
+                                            if (dtEmailStatus.Select("PicklistField = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) + "'").Length > 0)
+                                            {
+                                                DataRow drEmailBounce_Names = dtEmailStatus.Select("PicklistField = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) + "'")[0];
+                                                string sBounceStatus = dtEmailStatus.Select("PicklistField = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) + "'")[0]["PicklistValue"].ToString();
+                                                if (sBounceStatus == "HARD")
+                                                    sBounceStatus = "BOUNCED";
 
-                                            sProjectTables_Update += "UPDATE " + drEmails["PROJECT_ID"] + "_mastercontacts set EMAIL_VERIFIED = '" + sBounceStatus + "', BOUNCE_STATUS = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) +
-                                                            "', BOUNCE_LOADED_DATE = NOW(), BOUNCE_LOADED_BY = 'CM' WHERE CONTACT_ID_P=" + drEmails["CONTACT_ID"] + ";";
+                                                sProjectTables_Update += "UPDATE " + drEmails["PROJECT_ID"] + "_mastercontacts set EMAIL_VERIFIED = '" + sBounceStatus + "', BOUNCE_STATUS = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) +
+                                                                "', BOUNCE_LOADED_DATE = NOW(), BOUNCE_LOADED_BY = 'CM' WHERE CONTACT_ID_P=" + drEmails["CONTACT_ID"] + ";";
 
-                                            //drEmails["DESCRIPTION"] = sDescription;
-                                            //drEmails["DETAIL"] = sDetails;
-                                            //drEmails["PROCESSED_SERVER"] = GV.sSessionID;
-                                        }
-                                        else
-                                        {
-                                            drEmails["DESCRIPTION"] = "NEW DESCRIPTION[" + sDescription + "]";
-                                            //drEmails["DETAIL"] = sDetails;
-                                            //drEmails["PROCESSED_SERVER"] = GV.sSessionID;
-                                            //Trigger Email
-                                            //sTables_Update += "UPDATE " + drEmails["PROJECT_ID"] + "_mastercontacts set EMAIL_VERIFIED = 'Category not found', BOUNCE_STATUS = '" + drrEmail[0]["statusdescription"].ToString().Replace("'", "''") + "', BOUNCE_LOADED_DATE = NOW() WHERE CONTACT_ID_P=23;";
+                                                //drEmails["DESCRIPTION"] = sDescription;
+                                                //drEmails["DETAIL"] = sDetails;
+                                                //drEmails["PROCESSED_SERVER"] = GV.sSessionID;
+                                            }
+                                            else
+                                            {
+                                                drEmails["DESCRIPTION"] = "NEW DESCRIPTION[" + sDescription + "]";
+                                                //drEmails["DETAIL"] = sDetails;
+                                                //drEmails["PROCESSED_SERVER"] = GV.sSessionID;
+                                                //Trigger Email
+                                                //sTables_Update += "UPDATE " + drEmails["PROJECT_ID"] + "_mastercontacts set EMAIL_VERIFIED = 'Category not found', BOUNCE_STATUS = '" + drrEmail[0]["statusdescription"].ToString().Replace("'", "''") + "', BOUNCE_LOADED_DATE = NOW() WHERE CONTACT_ID_P=23;";
+                                            }
                                         }
                                     }
 
