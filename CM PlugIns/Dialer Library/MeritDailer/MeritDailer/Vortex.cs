@@ -25,28 +25,27 @@ namespace VortexDial
     public class LineInfo
     {
 
-        public LineInfo()
+        public LineInfo(int id)
         {
-            //m_id = id;
+            m_id = id;
             m_conn = new ConnectionsTbl();
             m_bCalling = false;
             m_bCallEstablished = false;
-            m_bCallHeld = false;
-            m_bCallPlayStarted = false;
+           // m_bCallHeld = false;
+           // m_bCallPlayStarted = false;
             m_usrInputStr = "";
         }
 
         public ConnectionsTbl m_conn;
-        //public int m_id;
+        public int m_id;
         public bool m_bCalling;
         public bool m_bCallEstablished;
-        public bool m_bCallHeld;
-        public bool m_bCallPlayStarted;
+      //  public bool m_bCallHeld;
+      //  public bool m_bCallPlayStarted;
         public string m_usrInputStr;
-
     }
 
-    public class ConnListBoxItem
+    class ConnListBoxItem
     {
         public int handle;
         public string connection;
@@ -111,6 +110,22 @@ namespace VortexDial
             set { _supportVox = value; }
         }
 
+        private int _iMaxConcurrentCalls;
+        [Description("Maximum Concurrent Calls in a session")]
+        [DefaultValue(true)]
+        public int MaxConcurrentCalls
+        {
+            get { return _iMaxConcurrentCalls; }
+        }
+
+        private bool _ConcurrentDial;
+        [Description("Enable/Diable Concurrent Dialing")]
+        [DefaultValue(false)]
+        public bool ConcurrentDial
+        {
+            get { return _ConcurrentDial; }
+            set { _ConcurrentDial = value; }
+        }
 
         private bool _SupportIDialer;
         
@@ -194,6 +209,13 @@ namespace VortexDial
             _bIsConnected = false;
             _IsHardPhoneAutheticated = false;
             tAuthTimeout.Interval = 1000;
+
+            int LineCount = 2;
+
+            for (int i = 1; i <= LineCount; ++i)
+                m_lineConnections.Add(new LineInfo(i));
+
+
             dtLog = new DataTable();
             dtLog.Columns.Add("Telephone");
             dtLog.Columns.Add("UniqueID");
@@ -377,11 +399,12 @@ namespace VortexDial
             { return Environment.MachineName; }
         }
 
-        public string Connect(string ClientIP, string ApplicationName, bool HardPhone)
+        public string Connect(string ClientIP, string ApplicationName, bool HardPhone, bool ConcurrentDialing)
         {
             try
             {
                 _bIsConnected = false;
+                ConcurrentDial = ConcurrentDialing;
                 if (sConString.Trim().Length == 0)
                     return "DB Connection failed.";
 
@@ -434,12 +457,13 @@ namespace VortexDial
                     if (dtConfig.Select("Name = 'RecordingFormat'").Length > 0 && dtConfig.Select("Name = 'RecordingFormat'")[0]["Value"].ToString().Trim().Length > 0)
                         sRecordingFormat = dtConfig.Select("Name = 'RecordingFormat'")[0]["Value"].ToString().Trim().ToUpper();
 
-
-                    
-
-
-
-
+                    if (ConcurrentDial)
+                    {
+                        if (dtConfig.Select("Name = 'ConcurrentDial'").Length > 0 && dtConfig.Select("Name = 'ConcurrentDial'")[0]["Value"].ToString().Trim().Length > 0)
+                            _iMaxConcurrentCalls = Convert.ToInt32(dtConfig.Select("Name = 'ConcurrentDial'")[0]["Value"].ToString().Trim());
+                    }
+                    else
+                        _iMaxConcurrentCalls = 1;
                 }
             }
             catch (Exception ex)
@@ -480,6 +504,8 @@ namespace VortexDial
                         //SPhone.OnTextMessageSentStatus += new _IVortexPhoneEvents_OnTextMessageSentStatusEventHandler(VortexPhone_OnTextMessageSentStatus);
                         SPhone.OnPhoneNotify += new _IVortexPhoneEvents_OnPhoneNotifyEventHandler(this.VortexPhone_OnPhoneNotify);
                         SPhone.OnRemoteAlerting += new _IVortexPhoneEvents_OnRemoteAlertingEventHandler(this.VortexPhone_OnRemoteAlerting);
+
+                        
 
                         //this.AbtoPhone.OnToneDetected += new _IAbtoPhoneEvents_OnToneDetectedEventHandler(AbtoPhone_OnToneDetected);
                         CConfig phoneCfg = SPhone.Config;
@@ -522,7 +548,7 @@ namespace VortexDial
                         {
                             IsSoftPhoneConnected = false;
                             Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, HardPhone, "Initialize Softphone");
-                            PhoneEvents("InitializeError", ex.Message);
+                            PhoneEvents("InitializeError", 1, ex.Message);
                             return ex.Message;
                         }
                     }
@@ -538,7 +564,7 @@ namespace VortexDial
             catch (Exception ex)
             {
                 Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, HardPhone);
-                PhoneEvents("InitializeError", ex.Message);
+                PhoneEvents("InitializeError",1, ex.Message);
                 _bIsConnected = false;
                 return "Dialer is not reachable";
             }            
@@ -547,14 +573,34 @@ namespace VortexDial
         #region Softphone Events
 
         #region SoftPhone Methods
-        private LineInfo GetCurLine()
+        public LineInfo GetCurrentLine()
         {
             return (LineInfo)m_lineConnections[m_curLineId - 1];
         }
 
-        private LineInfo GetLine(int lineId)
+        public LineInfo GetLine(int lineId)
         {
             return (LineInfo)m_lineConnections[lineId - 1];
+        }
+
+        public List<LineInfo> GetActiveLines()
+        {
+            List<LineInfo> lstLineInfo = new List<LineInfo>();
+            foreach(LineInfo lInfo in m_lineConnections)
+            {
+                if (lInfo.m_bCalling || lInfo.m_bCallEstablished)
+                    lstLineInfo.Add(lInfo);
+            }
+            return lstLineInfo;
+
+        }
+
+        public List<LineInfo> GetAllLines()
+        {
+            List<LineInfo> lstLineInfo = new List<LineInfo>();
+            foreach (LineInfo lInfo in m_lineConnections)
+                lstLineInfo.Add(lInfo);
+            return lstLineInfo;
         }
 
 
@@ -575,7 +621,7 @@ namespace VortexDial
             {
                 if(IsSoftPhoneConnected)
                 {
-                    if(GetCurLine().m_bCallEstablished)
+                    if(GetCurrentLine().m_bCallEstablished)
                     {
                         SPhone.SendTone(Tone.ToString());
                     }
@@ -585,10 +631,15 @@ namespace VortexDial
                 else
                     return "Softphone not connected";
             }
-
-
             return string.Empty;
         }
+
+        public void SetCurrentLine(int LineID)
+        {
+            SPhone.SetCurrentLine(LineID);
+        }
+
+       
 
         public void MuteMic(bool Mute)
         {
@@ -683,7 +734,7 @@ namespace VortexDial
         //    m_curLineId = lineId;
 
         //    //Display conections of cur line
-        //    LineInfo lnInfo = GetCurLine();
+        //    LineInfo lnInfo = GetCurrentLine();
         //    DisplayConnectionsAll(lnInfo);
 
         //    //Show/Hide call controls
@@ -735,10 +786,10 @@ namespace VortexDial
             if (Msg.Contains("expired") || Msg.Contains("Invalid"))
             {
                 IsSoftPhoneConnected = false;
-                PhoneEvents("InitializeError", Msg);
+                PhoneEvents("InitializeError",1, Msg);
             }
             else
-                PhoneEvents("Initialized", Msg);
+                PhoneEvents("Initialized",1, Msg);
             _SoftPhoneState = string.Empty;
         }
 
@@ -748,12 +799,12 @@ namespace VortexDial
             if (Msg.Contains("failure"))
             {
                 IsSoftPhoneConnected = false;
-                PhoneEvents("RegistrationFailed", Msg);                
+                PhoneEvents("RegistrationFailed", 1, Msg);                
             }
             else
             {
                 IsSoftPhoneConnected = true;
-                PhoneEvents("Registration", Msg);
+                PhoneEvents("Registration", 1, Msg);
 
 
 
@@ -782,7 +833,7 @@ namespace VortexDial
             LineInfo lnInfo = GetLine(lineId);
             string addr = lnInfo.m_bCalling ? addrTo : addrFrom;
             lnInfo.m_conn.Add(connectionId, addr);            
-            PhoneEvents("CallStarted", "");
+            PhoneEvents("CallStarted", lineId, "");
         }
 
         private void VortexPhone_OnEstablishedCall(string adress, int lineId)
@@ -797,7 +848,7 @@ namespace VortexDial
             //Update controls (only when it's cur line event)
             if (lineId == m_curLineId)
             {
-                PhoneEvents("CallAnswered", "");
+                PhoneEvents("CallAnswered", lineId, "");
             }
         }
 
@@ -820,7 +871,7 @@ namespace VortexDial
         private void VortexPhone_OnRemoteAlerting(int connectionId, int responseCode, string reasonMsg)
         {
             string str = responseCode.ToString() + "|" + reasonMsg;
-            PhoneEvents("OnCall", str);
+            PhoneEvents("OnCall", m_curLineId, str);
         }
 
         private void VortexPhone_OnPhoneNotify(string message)
@@ -847,7 +898,7 @@ namespace VortexDial
             //Update controls (only when it's cur line event)
             if (lineId == m_curLineId)
             {
-                PhoneEvents("CallHangup", "");
+                PhoneEvents("CallHangup", lineId, "");
             }
         }
 
@@ -861,10 +912,10 @@ namespace VortexDial
         private void VortexPhone_OnUnRegistered(string Msg)
         {
             IsSoftPhoneConnected = false;
-            PhoneEvents("UnRegister", Msg);
+            PhoneEvents("UnRegister", 1 , Msg);
         }
 
-        void PhoneEvents(string EventType, string sValue1 = "", string sValue2 = "", string sValue3 = "", string sValue4 = "")
+        void PhoneEvents(string EventType, int LineID, string sValue1 = "", string sValue2 = "", string sValue3 = "", string sValue4 = "")
         {            
             switch (EventType)
             {
@@ -874,12 +925,12 @@ namespace VortexDial
                 case "RegistrationFailed":
                 case "OnCall":
                 case "UnRegister":
-                    OnPhoneEventRecieved(EventType + "|" + sValue1);
+                    OnPhoneEventRecieved(EventType + "|" + sValue1, LineID);
                     break;
                 case "CallStarted":
                 case "CallAnswered":
                 case "CallHangup":
-                    OnPhoneEventRecieved(EventType);
+                    OnPhoneEventRecieved(EventType, LineID);
                     break;
             }
         }
@@ -979,19 +1030,30 @@ namespace VortexDial
                 }
                 else
                 {                    
-                    LineInfo lnInfo = GetCurLine();                    
+                    LineInfo lnInfo = GetCurrentLine();
                     if (lnInfo.m_bCallEstablished || lnInfo.m_bCalling)
                     {
-                        SPhone.HangUpCallLine(m_curLineId);                        
+                        SPhone.HangUpCallLine(lnInfo.m_id);
                     }
                     else
                         SPhone.HangUpLastCall();
-
                     return string.Empty;
                 }
             }
             else
                 return "Dialer not connected.";
+        }
+
+        public void HangUpAll()
+        {
+            List<LineInfo> lstlInfo = GetActiveLines();
+            foreach(LineInfo ln in lstlInfo)
+            {
+                if(ln.m_bCalling || ln.m_bCallEstablished)
+                {
+                    SPhone.HangUpCallLine(ln.m_id);
+                }
+            }
         }
 
         private void bAuth_DoWork(object sender, DoWorkEventArgs e)
@@ -1033,9 +1095,9 @@ namespace VortexDial
                             ExecuteQuery("INSERT INTO Call_Timesheet..AspectDialerLogger (AgentName, LoginID, StationID, TelephoneNumber, RecordingID, Duration, DateTimeStamp, ProjectName, CampaignID, Company_ID) VALUES ('" + EmployeeID + "','" + EmployeeID + "','" + sExtension + "','" + TelephoneNumber + "','0','00:00:00',GETDATE(),'" + ProjectID + "','" + Division + "','" + ReferenceID + "');", sConString);
                                                 
                         //SPhone.HangUpLastCall();
-                        GetCurLine().m_bCalling = true;
+                        GetCurrentLine().m_bCalling = true;
                         SPhone.StartCall2(TelephoneNumber);
-                        return string.Empty;
+                        return m_curLineId.ToString();
                     }
                     else
                         return "Softphone connection failed.";                
@@ -1337,13 +1399,14 @@ namespace VortexDial
         }
 
 
-        protected void OnPhoneEventRecieved(string message)
+        protected void OnPhoneEventRecieved(string message, int iLineID)
         {
             if (this.PhoneEventRecieved == null)
                 return;
             this.PhoneEventRecieved((object)this, new PhoneEventArgs()
             {
-                Data = message
+                Data = message,
+                LindID = iLineID
             });
         }
 
@@ -1359,6 +1422,7 @@ namespace VortexDial
         public class PhoneEventArgs : EventArgs
         {
             public string Data { get; set; }
+            public int LindID { get; set; }
         }
     }
 }
