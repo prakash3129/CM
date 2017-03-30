@@ -48,12 +48,14 @@ namespace GCC
         //-----------------------------------------------------------------------------------------------------
         public FrmContactsUpdate(string sID, Form frmMDIParant, string sOpenType, bool IsNewComp, frmCompanyList CompanyList)
         {
+
+
             GV.sPerformance += "Starting Component Initilize : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
             frmMDI = frmMDIParant;
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);//Gets the icon for current window
-            ToastNotification.DefaultToastGlowColor = eToastGlowColor.None;
-            ToastNotification.DefaultTimeoutInterval = 2000;
-            ToastNotification.ToastFont = new Font(this.Font.FontFamily, 22);
+            //ToastNotification.DefaultToastGlowColor = eToastGlowColor.None;
+            //ToastNotification.DefaultTimeoutInterval = 2000;
+            //ToastNotification.ToastFont = new Font(this.Font.FontFamily, 22);
             //this.MdiParent = frmMDIParant;
             this.Dock = DockStyle.Fill;
             this.sMaster_IDForAdminOpen = sID;
@@ -62,15 +64,7 @@ namespace GCC
             this.IsNewCompany = IsNewComp;
             this.MdiParent = frmMDIParant;
             CL = CompanyList;            
-
-            
-
-            dtPicklist_Insert.Columns.Add("PicklistCategory");
-            dtPicklist_Insert.Columns.Add("Value");
-
-            dtPicklist_Delete.Columns.Add("PicklistCategory");
-            dtPicklist_Delete.Columns.Add("Value");
-
+                       
             ToastNotification.DefaultToastGlowColor = eToastGlowColor.None;
             ToastNotification.DefaultTimeoutInterval = 2000;
             ToastNotification.ToastFont = new Font(this.Font.FontFamily, 22);
@@ -89,7 +83,11 @@ namespace GCC
             //dtUncertainFields.Columns.Add("PickList_Category");
 
             GV.sPerformance += "Ending Component Initilize : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
+            dtPicklist_Insert.Columns.Add("PicklistCategory");
+            dtPicklist_Insert.Columns.Add("Value");
 
+            dtPicklist_Delete.Columns.Add("PicklistCategory");
+            dtPicklist_Delete.Columns.Add("Value");
             InitializeCustomComponent();
             lblCallEvents.Text = string.Empty;
             txtTotalDials.TextBox.ShortcutsEnabled = false;
@@ -120,6 +118,7 @@ namespace GCC
 
 
 
+        #region ContactUpdate Properties
         private string _sFormOpenType;
         //-----------------------------------------------------------------------------------------------------
         public string sFormOpenType
@@ -158,11 +157,11 @@ namespace GCC
         //{
         //    get { return _objfrmCompanyList; }
         //    set { _objfrmCompanyList = value; }
-        //}
+        //} 
+        #endregion
 
+        #region Declarations
         bool IsShiftPressed = false;
-
-
         //WebReference.Service1 objWebServices = new WebReference.Service1();
         string sTab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;";
         private bool IsNewCompletesAdded = false;
@@ -271,7 +270,7 @@ namespace GCC
 
         public WaveIn waveSource;
         public WaveFileWriter waveFile = null;
-        
+
         public List<TextBox> lstCompanyControls;
         public List<TextBox> lstContactControls;
 
@@ -298,7 +297,8 @@ namespace GCC
 
         string sRecoveryPath = AppDomain.CurrentDomain.BaseDirectory + "\\Campaign Manager\\Logs\\Data\\" + GV.sEmployeeNo + "\\" + GV.sProjectID;
 
-        bool IsPreCall = true;
+        bool IsPreCall = true; 
+        #endregion
 
         //-----------------------------------------------------------------------------------------------------
         private bool IsRecordFetched()
@@ -312,6 +312,8 @@ namespace GCC
                 IsRecordFetchedFlag = false;
 
                 iCompanyRowIndex = 0;
+
+
                 ReloadChart();//Loads or reloads the performance charts and Images                
 
                 if (GV.sUserType == "Agent")
@@ -862,10 +864,10 @@ namespace GCC
                     #endregion
                     GV.sPerformance += "EAF : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
-
                     Load_NameSayer();
 
                     GV.sPerformance += "LoadTables : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
+                    #region Load Tables
                     dtFieldMasterAllColumns = CL.dtFieldMasterAllColumns;
                     dtFieldMaster_Active = CL.dtFieldMaster_Active;
                     dtFieldMasterCompany = CL.dtFieldMasterCompany;
@@ -882,11 +884,12 @@ namespace GCC
                     dtRecordStatusRevenue = CL.dtRecordStatusRevenue;
                     dtCountryInformation = CL.dtCountryInformation;
                     dtQCPicklist = CL.dtQCPicklist;
-                    dtBlock = CL.dtBlock;
+                    dtBlock = CL.dtBlock; 
+                    #endregion
                     GV.sPerformance += "LoadTables : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
                     //GV.sPerformance += "Starting Table Load : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
-                    //#region Load Other Tables
+                    #region Load Other Tables
 
                     //GV.sPerformance += "Field Master: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
@@ -973,11 +976,11 @@ namespace GCC
                     //    dtQCPicklist = GV.MSSQL.BAL_ExecuteQuery("SELECT Field,Data FROM Timesheet..PickLists WHERE  ProjectType = 'C' AND Department = '" + GV.sAccessTo + "'");
                     //    dtQCPicklist.TableName = "QCPickList";
                     //} 
-                    //#endregion
+                    #endregion
+
                     GV.sPerformance += "QC Picklist: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
                     lstSpellCheckIgnore = dtSpellIgnore.Rows.OfType<DataRow>().Select(dr => dr.Field<string>("PicklistValue")).ToList();
-
 
                     GV.sPerformance += "Freeze: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
                     ContactBounce_AND_CompanyContactFreeze();//Get bounce and freeze records
@@ -3202,7 +3205,7 @@ namespace GCC
                         else
                             txtBox.BackColor = Color.FromArgb(0xFF, 0xFF, 0x99);
 
-                        txtBox.Text = txtBox.Text.Replace(" ", string.Empty).Replace("\n", "").Replace("..",".");
+                        txtBox.Text = txtBox.Text.Replace(" ", string.Empty).Replace("\n", "").Replace("..",".").Replace("''","'").Replace("__","_").Replace("--","-");
                         txtBox.SelectionStart = i;
                         break;
 
@@ -5678,6 +5681,10 @@ namespace GCC
 
         string Block_Call(string sMatchValue)
         {
+            string sTollFreeBlock = Block_TollFree(sMatchValue);
+            if (sTollFreeBlock.Length > 0)
+                return sTollFreeBlock;
+
             CL.RefreshBlockTable(false);
             DataRow[] drrBlock = CL.dtBlock.Select("BLOCK_TYPE = 'CALL'");
             string sBlock_Message = string.Empty;
@@ -5688,6 +5695,23 @@ namespace GCC
                     sBlock_Message += s + "<br/>";
             }
             return sBlock_Message;
+        }
+
+        string Block_TollFree(string sNumber)
+        {
+            if (GV.TollFreeBlock)
+            {
+                if (Regex.Replace(sNumber, @"\D*", string.Empty).Length > 0)
+                {
+                    if (sNumber.Contains(" "))
+                        sNumber = sNumber.Substring(sNumber.IndexOf(" "));
+
+                    sNumber = Regex.Replace(sNumber, @"\D*", string.Empty);
+                    if (sNumber.StartsWith("800") || sNumber.StartsWith("0800") || sNumber.StartsWith("1800"))
+                        return "Access denied to call this number";
+                }
+            }
+            return string.Empty;
         }
 
         string Block_Match(string sMatchValue, DataRow drBlock)
@@ -5882,7 +5906,6 @@ namespace GCC
                         ToastNotification.Show(this, "iSystem not running." + Environment.NewLine + "Please start iSystem and redial.", 5000, eToastPosition.TopRight);
                         return;
                     }
-
                 }
                 else if (GV.sDialerType == "X-Lite")
                 {
@@ -5915,7 +5938,7 @@ namespace GCC
                             {
                                 GV.VorteX.SupportVox = true;
                                 GV.VorteX.SupportiDialer = false;
-                                string sVortexStatus = GV.VorteX.Connect(GV.IP, GV.sSoftwareVersion, false);
+                                string sVortexStatus = GV.VorteX.Connect(GV.IP, GV.sSoftwareVersion, false, false);
                                 if (sVortexStatus.Length == 0)
                                 {
                                     ToastNotification.Show(this, "Initializing Vortex..", eToastPosition.TopRight);
@@ -7210,7 +7233,7 @@ namespace GCC
 
                 if (RunASynch(e))
                 {
-
+                    DataRow[] drrTelephoneField = dtFieldMasterCompany.Select("CONTROL_TYPE = 'TELEPHONE'");
                     for (int i = 0; i < dtMasterCompanies.Rows.Count; i++)
                     {
                         if (dtRecordStatus.Select("TABLE_NAME = 'COMPANY' AND PRIMARY_STATUS = '" + dtMasterCompanies.Rows[i][GV.sAccessTo + "_PRIMARY_DISPOSAL"] + "' AND SECONDARY_STATUS = '" + dtMasterCompanies.Rows[i][GV.sAccessTo + "_SECONDARY_DISPOSAL"] + "' AND RESEARCH_TYPE = '" + GV.sAccessTo + "' AND  OPERATION_TYPE LIKE '%Delete%'").Length == 0)
@@ -7232,6 +7255,15 @@ namespace GCC
                                 {
                                     if (dtMasterCompanies.Rows[i]["SWITCHBOARD"].ToString().Trim().Length == 0)//Check valid Telephone
                                         AddValidationResults("Company", i, Convert.ToInt32(dtMasterCompanies.Rows[i]["MASTER_ID"]), 0, "", "EMPTY", "SWITCHBOARD", "", false, 0);
+                                }
+                                
+                                if (drrTelephoneField.Length > 0)
+                                {
+                                    foreach(DataRow drTelephoneField in drrTelephoneField)
+                                    {
+                                        if(Block_TollFree(dtMasterCompanies.Rows[i][drTelephoneField["FIELD_NAME_TABLE"].ToString()].ToString()).Length > 0)
+                                            AddValidationResults("Company", i, Convert.ToInt32(dtMasterCompanies.Rows[i]["MASTER_ID"]), 0, "", "INVALID", drTelephoneField["FIELD_NAME_TABLE"].ToString(), "", false, 0);
+                                    }
                                 }
                             }
                         }
@@ -7277,9 +7309,18 @@ namespace GCC
                 CONTACT_CheckSwitchBoardinContacts(sFreezedContatactIDs, e);
                 RecordTime("CONTACT_CheckSwitchBoardinContacts Stop");
 
+                RecordTime("CONTACT_TollFreeBlock Start");
+                CONTACT_TollFreeBlock(sFreezedContatactIDs, e);
+                RecordTime("CONTACT_TollFreeBlock Stop");
+
                 RecordTime("CONTACT_CheckDuplicateEmail Start");
                 CONTACT_CheckDuplicateEmail(sFreezedContatactIDs, e);
                 RecordTime("CONTACT_CheckDuplicateEmail Stop");
+
+               
+
+
+
             }
         }
 
@@ -7996,8 +8037,6 @@ namespace GCC
                     #endregion
                     
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -10292,6 +10331,53 @@ namespace GCC
             }
         }
 
+        private void CONTACT_TollFreeBlock(string sFreezedContatactIDs, DoWorkEventArgs e)
+        {
+            if (GV.TollFreeBlock)
+            {
+                try
+                {
+                    if (RunASynch(e))
+                    {
+                        GV.sValidationMessage = "Checking for Toll free numbers in contacts";
+                        DataRow[] drrTelephoneField = dtFieldMasterContact.Select("CONTROL_TYPE = 'TELEPHONE'");
+                        if (drrTelephoneField.Length > 0)
+                        {
+                            for (int i = 0; i < dtMasterCompanies.Rows.Count; i++)
+                            {
+                                if (!lstFreezedMasterIDs.Contains(Convert.ToInt32(dtMasterCompanies.Rows[i]["MASTER_ID"])))
+                                {
+                                    for (int j = 0; j < dtMasterContacts.Rows.Count; j++)
+                                    {
+                                        if (GV.sAccessTo == "TR" && GV.lstTR_DeleteStatus.Contains(dtMasterContacts.Rows[j]["TR_CONTACT_STATUS"].ToString(), StringComparer.OrdinalIgnoreCase))
+                                            continue;
+                                        else if (GV.sAccessTo == "WR" && GV.lstWR_DeleteStatus.Contains(dtMasterContacts.Rows[j]["WR_CONTACT_STATUS"].ToString(), StringComparer.OrdinalIgnoreCase))
+                                            continue;
+
+                                        int iConID = 0;
+                                        if (dtMasterContacts.Rows[j]["CONTACT_ID_P"].ToString().Length > 0)
+                                            iConID = Convert.ToInt32(dtMasterContacts.Rows[j]["CONTACT_ID_P"]);
+
+                                        foreach (DataRow drTelephoneField in drrTelephoneField)
+                                        {
+                                            if (Block_TollFree(dtMasterContacts.Rows[j][drTelephoneField["FIELD_NAME_TABLE"].ToString()].ToString()).Length > 0)
+                                                AddValidationResults("Contact", j, Convert.ToInt32(dtMasterCompanies.Rows[i]["MASTER_ID"]), iConID, "", "INVALID", drTelephoneField["FIELD_NAME_TABLE"].ToString(), "", false, 0);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lstApplicationError.Add("ContactTollFreeBlock : " + ex.Message);
+                    GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, false);
+                    return;
+                }
+            }
+        }
+
         //-----------------------------------------------------------------------------------------------------
         private void CONTACT_CheckContactsCount(DoWorkEventArgs e)
         {
@@ -10395,6 +10481,7 @@ namespace GCC
                                 sDupeType = "EMAILDUPEINCOMPANY";
 
 
+                            #region Comments
                             //RecordTime("Email linq Append Start");
                             //var lstDupeValues = (from row in dtEmailsToValidate.AsEnumerable()
                             //                       let Email = row.Field<string>("Email")
@@ -10416,6 +10503,7 @@ namespace GCC
                             //}
                             //RecordTime("Email linq Append Stop");
 
+                            #endregion
 
                             RecordTime("Email Dupe Within Company Start");
                             foreach (DataRow drEmailsToValidate in dtEmailsToValidate.Rows) //Check Dupe within company
@@ -13434,7 +13522,14 @@ namespace GCC
             {
                 sWatch = Stopwatch.StartNew();
                 IsNewCompletesAdded = false;
-                string sStaticName = Environment.MachineName + "_" + GV.sProjectID + "_" + sMaster_ID + ".txt";
+                string sStaticName = string.Empty;
+
+                if (GV.IP.Length > 0)
+                    sStaticName = GV.IP + "_" + GV.sProjectID + "_" + sMaster_ID + ".txt";
+                else
+                    sStaticName = Environment.MachineName + "_" + GV.sProjectID + "_" + sMaster_ID + ".txt";
+
+                
 
                 sStatistics.AppendLine(Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine);
                 sStatistics.AppendLine("Project Name: \t" + GV.sProjectName);
