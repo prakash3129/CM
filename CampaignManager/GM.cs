@@ -335,14 +335,16 @@ namespace GCC
         {
             try
             {
-                //Email Format Check
-                //Regex regex = new Regex(@"^(\w[\w\.\'\-]+)@([\w\-\.]+)((\.(\w){2,})+)$");
-                Regex regex = new Regex(@"^(\w[\w\'\-]*(?:\.?[\w\'\-]+){0,5})@(\w[\w\-\.]+)((\.(\w){2,})+)$");
-                //Regex regex = new Regex(@"^(\w[\w\'\-]*(?:\.?[\w\'\-]+)*)@(\w[\w\-\.]+)((\.(\w){2,})+)$");
-                //Regex regex = new Regex(@"^(\w[\w\'\-]*\.?[\w\'\-]+\.?[\w\'\-]*\.?[\w\'\-]*)@([\w\-\.]+)((\.(\w){2,})+)$");
+                //Email Format Check                
+                Regex regex = new Regex(@"^(\w[\w\'\-]*(?:\.?[\w\'\-]+){0,5})@(\w[\w\-\.]+)((\.(\w){2,})+)$"); // Syntax Check                
                 Match match = regex.Match(sEmail.Trim());
                 if (match.Success)
-                    return true;
+                {
+                    Regex regex1 = new Regex(@"^[a-zA-Z0-9_@.'-]+$");//Check for invalid chars
+                    Match m = regex1.Match(sEmail.Trim());
+                    return m.Success;
+                    //return true;
+                }
                 else
                     return false;
             }
