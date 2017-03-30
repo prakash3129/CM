@@ -1,0 +1,40 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+	"name":"Merit STT",
+	"version":"2.3.0",
+	"manifest_version" : 2,
+
+	"description":"Speech to text for SF",
+	"homepage_url" : "http://www.meritgroup.co.uk/",
+	"icons":{
+		"16":"icons/icon16.png",
+		"48":"icons/icon48.png",
+		"128":"icons/icon128.png"
+	},
+
+	
+	
+	"content_scripts": [{
+	"css": [ "src/inject/linkedin-button.css"],
+      "js": ["src/shared/jquery.min.js", "src/shared/jquery-ui.min.js", "src/inject/cs.js"],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+
+	"browser_action":{
+		"default_icon":"icons/icon19.png",
+		"default_title":"Merit SST"		
+	},
+
+
+	"permissions":[
+		"http://*.salesforce.com/*",
+		"https://*.salesforce.com/*",
+		"http://*.force.com/*",
+		"https://*.force.com/*",
+		"tts",
+		"ttsEngine"
+	],	
+
+	"web_accessible_resources": [ "icons/*"]
+}
