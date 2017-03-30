@@ -134,7 +134,7 @@ namespace GCC
                             foreach (DataRow drImport in dtEmailCSV.Rows)
                             {
                                 if (drImport["EMAIL"].ToString().Trim().Length > 0 && GM.Email_Check(drImport["EMAIL"].ToString().Trim()))
-                                    sInsertString += ",('0',0,'" + sBatchID + "', '" + drImport["EMAIL"].ToString().Trim().Replace("'", "''") + "','" + GV.sEmployeeName + "', NOW())";
+                                    sInsertString += ",('0',0,'" + sBatchID + "', '" + drImport["EMAIL"].ToString().Trim().Replace("'", "''").Replace("..", ".").Replace("__", "_").Replace("--", "-") + "','" + GV.sEmployeeName + "', NOW())";
                             }
                             
                             sInsertString = "INSERT INTO c_email_checks (PROJECT_ID, CONTACT_ID, EMAIL_SOURCE, EMAIL, CREATED_BY, CREATED_DATE) Values " + sInsertString.Substring(1);
