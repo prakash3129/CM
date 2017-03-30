@@ -77,6 +77,8 @@ namespace GCC
         public static bool Contact_AllowPopulateFromSearch = false;
         public static bool Company_AllowPopulateFromSearch = false;
 
+        public static bool TollFreeBlock = true;
+
         public static bool NameSayer = false;
 
         public static Dictionary Dic = Dictionary.DefaultDictionary;

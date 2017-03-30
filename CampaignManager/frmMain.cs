@@ -1172,6 +1172,7 @@ namespace GCC
                     GV.ExcludeEmailBounceInCompleteContactCount = (drProjectSettings[0]["EXCLUDE_EMAILBOUNCE_IN_COMPLETECONTACT_COUNT"].ToString() == "Y");
 
                     GV.NameSayer = (GV.sAccessTo == "TR" && drProjectSettings[0]["NAME_SAYER"].ToString() == "Y");
+                    GV.TollFreeBlock = (drProjectSettings[0]["ALLOW_TOLLFREE"].ToString() == "N");
 
                     //GV.Unfreeze_SameDay = (drProjectSettings[0]["SAME_DAY_UNFREEZE_"+GV.sAccessTo].ToString() == "Y");
 
@@ -1198,6 +1199,7 @@ namespace GCC
                     GV.sAllowTelephoneFormating = string.Empty;
                     GV.Contact_AllowPopulateFromSearch = false;
                     GV.Company_AllowPopulateFromSearch = false;
+                    GV.TollFreeBlock = true;
                     GV.AllowPopulateFromPAFSearch = false;
                     GV.sSpellCheckJobTitle = string.Empty;
                     GV.sAllowNewCompanyTR = string.Empty;
