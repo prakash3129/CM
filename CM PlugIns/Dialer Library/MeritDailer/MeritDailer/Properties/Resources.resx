@@ -119,76 +119,67 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="avcodec_53" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\avcodec-53.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\avcodec-53.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="avutil_51" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\avutil-51.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\avutil-51.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="codec_amr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\codec_amr.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\codec_amr.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="codec_g726" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\codec_g726.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\codec_g726.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="codec_g729" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\codec_g729.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\codec_g729.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="codec_gsm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\codec_gsm.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\codec_gsm.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="codec_ilbc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\codec_ilbc.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\codec_ilbc.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="codec_pcmapcmu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\codec_pcmapcmu.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\codec_pcmapcmu.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="codec_speex" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\codec_speex.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\codec_speex.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="codec_tones" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\codec_tones.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\codec_tones.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Interop_SIPVoipSDK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\Interop.SIPVoipSDK.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\Interop.SIPVoipSDK.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Interop_SpeechLib" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\Interop.SpeechLib.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\Interop.SpeechLib.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lame" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\lame.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\lame.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lame_enc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\lame_enc.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\lame_enc.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="libspandsp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\libspandsp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\libspandsp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Microsoft_VC80_CRT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\Microsoft.VC80.CRT.manifest;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="msvcp80" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\msvcp80.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="msvcr80" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\msvcr80.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Newtonsoft_Json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Newtonsoft.Json.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RestSharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\RestSharp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="SIPVoipSDK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\SIPVoipSDK.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="SIPVoipSDK64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\SIPVoipSDK64.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="swscale_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SoftPhone\swscale-2.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\SoftPhone_Bak\Microsoft.VC80.CRT.manifest;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="mozart" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\SoftPhone\mozart;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="msvcp80" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SoftPhone_Bak\msvcp80.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="msvcr80" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SoftPhone_Bak\msvcr80.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SIPVoipSDK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SIPVoipSDK.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swscale_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SoftPhone_Bak\swscale-2.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="telephone_ring" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\SoftPhone\telephone-ring;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

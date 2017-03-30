@@ -253,39 +253,9 @@ namespace VortexDial.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] Newtonsoft_Json {
-            get {
-                object obj = ResourceManager.GetObject("Newtonsoft_Json", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] RestSharp {
-            get {
-                object obj = ResourceManager.GetObject("RestSharp", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         public static byte[] SIPVoipSDK {
             get {
                 object obj = ResourceManager.GetObject("SIPVoipSDK", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] SIPVoipSDK64 {
-            get {
-                object obj = ResourceManager.GetObject("SIPVoipSDK64", resourceCulture);
                 return ((byte[])(obj));
             }
         }

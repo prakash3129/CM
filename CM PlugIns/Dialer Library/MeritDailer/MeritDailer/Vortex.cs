@@ -198,11 +198,13 @@ namespace VortexDial
         //}  
         
         StringBuilder sSystemLog = new StringBuilder();
-
+        static string sLogName = "Vortex.txt";
         public Vortex()
         {
-
             
+            if (IP.Length > 0)
+                sLogName = IP.Replace("'", "") + ".txt";
+
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             //bAuth.WorkerSupportsCancellation = true;
             bWorker.WorkerReportsProgress = true;
@@ -252,7 +254,7 @@ namespace VortexDial
             WriteFile("msvcp80.dll", VortexDial.Properties.Resources.msvcp80, "SoftPhone");
             WriteFile("msvcr80.dll", VortexDial.Properties.Resources.msvcr80, "SoftPhone");
             WriteFile("SIPVoipSDK.dll", VortexDial.Properties.Resources.SIPVoipSDK, "SoftPhone");
-            WriteFile("SIPVoipSDK64.dll", VortexDial.Properties.Resources.SIPVoipSDK64, "SoftPhone");
+            //WriteFile("SIPVoipSDK64.dll", VortexDial.Properties.Resources.SIPVoipSDK64, "SoftPhone");
             WriteFile("swscale-2.dll", VortexDial.Properties.Resources.swscale_2, "SoftPhone");
             WriteFile("telephone-ring.wav", VortexDial.Properties.Resources.telephone_ring, "SoftPhone");
             
@@ -329,20 +331,18 @@ namespace VortexDial
             if (sRowNumber.Length > 0)
                 sWriteError += "Row : " + sRowNumber + ":" + sColNumber;
 
-            string sFileName = "Vortex.txt";
-            if (IP.Length > 0)
-                sFileName = IP.Replace("'", "") + ".txt";
+           
             try
             {                                                                
                 if(sSystemLogPath.Length > 0)
-                    WriteLog(sSystemLogPath + "\\" + sFileName, sWriteError, true);
+                    WriteLog(sSystemLogPath + "\\" + sLogName, sWriteError, true);
                 else
-                    WriteLog(@"\\172.27.137.182\Campaign Manager\Vortex\" + sFileName, sWriteError, true);
+                    WriteLog(@"\\172.27.137.182\Campaign Manager\Vortex\" + sLogName, sWriteError, true);
                 
             }
             catch (Exception ex11)
             {
-                WriteLog(AppDomain.CurrentDomain.BaseDirectory + "\\" + sFileName, sWriteError, true);
+                WriteLog(AppDomain.CurrentDomain.BaseDirectory + "\\" + sLogName, sWriteError, true);
             }
         }
 
@@ -510,6 +510,9 @@ namespace VortexDial
                         //this.AbtoPhone.OnToneDetected += new _IAbtoPhoneEvents_OnToneDetectedEventHandler(AbtoPhone_OnToneDetected);
                         CConfig phoneCfg = SPhone.Config;
 
+
+                        
+
                         phoneCfg.RegDomain = sDialerIP;
                         phoneCfg.RegUser = sExtension;
                         phoneCfg.RegPass = sExtension;
@@ -519,6 +522,8 @@ namespace VortexDial
                         phoneCfg.NoiseReductionEnabled = 0;
                         phoneCfg.AutoGainControlEnabled = 0;
                         phoneCfg.DialToneEnabled = 0;
+                        string sVersion = SPhone.RetrieveVersion();
+                        string sPath = SPhone.SDKPath();
 
                         if(sRecordingFormat == "MP3")
                             phoneCfg.MP3RecordingEnabled = 1;
@@ -636,7 +641,7 @@ namespace VortexDial
 
         public void SetCurrentLine(int LineID)
         {
-            SPhone.SetCurrentLine(LineID);
+            SPhone.SetCurrentLine(LineID);            
         }
 
        
@@ -717,6 +722,11 @@ namespace VortexDial
             return string.Empty;
         }
 
+        public bool IsLineinUse(int LineID)
+        {
+            return SPhone.IsLineOccupied(LineID) != 0;            
+        }
+
         public void AudioConfig(bool EchoCancellation, bool NoiseReduction, bool AutoGainControl)
         {
             
@@ -778,7 +788,8 @@ namespace VortexDial
         private void VortexPhone_OnLineSwiched(int lineId)
         {           
             //Remember
-            m_curLineId = lineId;            
+            m_curLineId = lineId;
+            PhoneEvents("LineSwitched", lineId);
         }
 
         private void VortexPhone_OnInitialized(string Msg)
@@ -846,7 +857,7 @@ namespace VortexDial
             lnInfo.m_bCalling = false;
 
             //Update controls (only when it's cur line event)
-            if (lineId == m_curLineId)
+           // if (lineId == m_curLineId)
             {
                 PhoneEvents("CallAnswered", lineId, "");
             }
@@ -896,7 +907,7 @@ namespace VortexDial
             lnInfo.m_bCalling = false;
 
             //Update controls (only when it's cur line event)
-            if (lineId == m_curLineId)
+            //if (lineId == m_curLineId)
             {
                 PhoneEvents("CallHangup", lineId, "");
             }
@@ -930,6 +941,7 @@ namespace VortexDial
                 case "CallStarted":
                 case "CallAnswered":
                 case "CallHangup":
+                case "LineSwitched":
                     OnPhoneEventRecieved(EventType, LineID);
                     break;
             }
@@ -1012,7 +1024,7 @@ namespace VortexDial
         }
 
        
-       public string Hangup()
+       public string Hangup(int LineID)
         {
             if (IsConnected)
             {
@@ -1029,14 +1041,27 @@ namespace VortexDial
                     return string.Empty;
                 }
                 else
-                {                    
-                    LineInfo lnInfo = GetCurrentLine();
-                    if (lnInfo.m_bCallEstablished || lnInfo.m_bCalling)
+                {
+                    try
                     {
-                        SPhone.HangUpCallLine(lnInfo.m_id);
+
+                        SPhone.HangUpCallLine(LineID);
+
+                        //LineInfo lnInfo = GetCurrentLine();
+                        //if (lnInfo.m_bCallEstablished || lnInfo.m_bCalling)
+                        //{
+                        //    SPhone.HangUpCallLine(lnInfo.m_id);
+                        //}
+                        //else
+                        //    SPhone.HangUpLastCall();
                     }
-                    else
-                        SPhone.HangUpLastCall();
+                    catch(Exception ex)
+                    {
+                        if (sSystemLogPath.Length > 0)
+                            WriteLog(sSystemLogPath + "\\" + sLogName, ex.Message, true);
+                        else
+                            WriteLog(@"\\172.27.137.182\Campaign Manager\Vortex\" + sLogName, ex.Message, true);
+                    }
                     return string.Empty;
                 }
             }
@@ -1061,7 +1086,7 @@ namespace VortexDial
             _IsHardPhoneAutheticated = HardPhoneAuth();
         }
 
-        public string Call(string TelephoneNumber, string ProjectID, string Division, string EmployeeID, bool PrefixOverride, int ReferenceID)
+        public string Call(string TelephoneNumber, string ProjectID, string Division, string EmployeeID, bool PrefixOverride, int ReferenceID, int LineID)
         {
             try
             {
@@ -1093,10 +1118,17 @@ namespace VortexDial
                         dtLog.Rows.Add(TelephoneNumber, "", "", ProjectID, Division, ReferenceID, EmployeeID, sCallType, "");
                         if (SupportiDialer)
                             ExecuteQuery("INSERT INTO Call_Timesheet..AspectDialerLogger (AgentName, LoginID, StationID, TelephoneNumber, RecordingID, Duration, DateTimeStamp, ProjectName, CampaignID, Company_ID) VALUES ('" + EmployeeID + "','" + EmployeeID + "','" + sExtension + "','" + TelephoneNumber + "','0','00:00:00',GETDATE(),'" + ProjectID + "','" + Division + "','" + ReferenceID + "');", sConString);
-                                                
-                        //SPhone.HangUpLastCall();
+
+                        //SPhone.HangUpLastCall();     
+                        
+                        SPhone.StartCall(TelephoneNumber);
+                        
+                        //SPhone.StartCallExLine(0, TelephoneNumber, "");
+
+                        
+
                         GetCurrentLine().m_bCalling = true;
-                        SPhone.StartCall2(TelephoneNumber);
+
                         return m_curLineId.ToString();
                     }
                     else
