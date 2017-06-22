@@ -2,7 +2,7 @@
 "update_url": "https://clients2.google.com/service/update2/crx",
 
 	"name":"Merit STT",
-	"version":"2.3.0",
+	"version":"2.4.1",
 	"manifest_version" : 2,
 
 	"description":"Speech to text for SF",

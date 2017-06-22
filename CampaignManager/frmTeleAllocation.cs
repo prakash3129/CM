@@ -25,7 +25,7 @@ namespace GCC
         DataTable dtAllocationFilter = new DataTable();
         DataTable dtFilterAssignment_Log = new DataTable();        
         ComboBox cmbFilters = new ComboBox();
-        //BAL_GlobalMySQL objGlobalMySQL = new BAL_GlobalMySQL();
+        //BAL_GlobalMySfdQL objGlobalMySfdQL = new BAL_GlobalMySfdQL();
         int iCurrentRowIndex = -1;
 
         private void frmTeleAllocation_Load(object sender, EventArgs e)
@@ -55,8 +55,8 @@ namespace GCC
             try
             {
                 dgvFilterAllocation.Columns.Clear();
-                dtAllocationFilter = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER", "PROJECT_ID='" + GV.sProjectID + "' AND USERACCESS = '" + GV.sAccessTo + "'");//List of filters and their descriptions
-                dtFilterAssignment = GV.MYSQL.BAL_FetchTableMySQL("FILTER_ASSIGNMENT", "PROJECT_ID='" + GV.sProjectID + "' AND USERACCESS = '" + GV.sAccessTo + "'");//List of agents with filters assigned to them
+                dtAllocationFilter = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER", "PROJECT_ID='" + GV.sProjectID + "' AND USERACCESS = '" + GV.sAccessTo + "'");//List of filters and their descriptions
+                dtFilterAssignment = GV.MSSQL1.BAL_FetchTable("C_FILTER_ASSIGNMENT", "PROJECT_ID='" + GV.sProjectID + "' AND USERACCESS = '" + GV.sAccessTo + "'");//List of agents with filters assigned to them
                 dtFilterAssignment_Log = dtFilterAssignment.Copy();
                 dgvFilterAllocation.DataSource = dtFilterAssignment;
 
@@ -223,21 +223,21 @@ namespace GCC
             try
             {
                 this.BindingContext[dtFilterAssignment].EndCurrentEdit();
-                GM.Logging(dtFilterAssignment, dtFilterAssignment_Log, "FILTER_ASSIGNMENT", "ID");
+                GM.Logging(dtFilterAssignment, dtFilterAssignment_Log, "C_FILTER_ASSIGNMENT", "ID");
                 bool IsDBAffected = false;
                 if (dtFilterAssignment.GetChanges(DataRowState.Added) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtFilterAssignment.GetChanges(DataRowState.Added), "FILTER_ASSIGNMENT", "New", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtFilterAssignment.GetChanges(DataRowState.Added), "C_FILTER_ASSIGNMENT", "New", true);
                     IsDBAffected = true;
                 }
                 if (dtFilterAssignment.GetChanges(DataRowState.Modified) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtFilterAssignment.GetChanges(DataRowState.Modified), "FILTER_ASSIGNMENT", "Update", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtFilterAssignment.GetChanges(DataRowState.Modified), "C_FILTER_ASSIGNMENT", "Update", true);
                     IsDBAffected = true;
                 }
                 if (dtFilterAssignment.GetChanges(DataRowState.Deleted) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtFilterAssignment.GetChanges(DataRowState.Deleted), "FILTER_ASSIGNMENT", "Delete", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtFilterAssignment.GetChanges(DataRowState.Deleted), "C_FILTER_ASSIGNMENT", "Delete", true);
                     IsDBAffected = true;
                 }
                 if (IsDBAffected)                

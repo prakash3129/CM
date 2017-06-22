@@ -52,29 +52,44 @@ function injectLinkedinButton(AjaxDelay)
 	{
 	setTimeout(function()
 	{
-	
-		$(".profile-aux .profile-actions").prepend('<a href="javascript:;" id="AddNewCon" class="button-primary"><img src="' + icon + '">Add Contact</a>');
 		
+	
+		$(".inline-block.ember-view").prepend('<a href="javascript:;" id="AddNewCon" class="button-primary"><img src="' + icon + '">Add Contact</a>');		
+		
+		$("button.contact-see-more-less").click();		
+		//$('html,body').animate({scrollTop: $target.height()}, 1000);
+		$('html, body').scrollTop( $(document).height() );
+		//$('html, body').scrollTop(0);
 		AddSearchProfiles_Button();
+		
+		$("a").click(
+		function ()
+			{
+				//alert('Clickedddd');		
+				if ($(this).attr('class') == 'page-link')
+				{			
+					injectLinkedinButton(2000);			
+				}
+				else if ($(this).attr('class') == 'campaignManager primary-action-button')
+				{		
+					//GrabProfile_searchResults($(this).attr("id"));
+					GrabProfile_searchResults($(this));
+				}			
+			}
+		);
 		
 		$(".submit-advs").click(function (){
 			injectLinkedinButton(2000);
 		});
 		
 		$("#AddNewCon").click(function (){
+		//alert('Clicked');
 			GrabProfile_Page();			
 		});
 		
-		$("a").click(function (){
-		if ($(this).attr('class') == 'page-link')
-		{			
-			injectLinkedinButton(2000);			
-		}
-		else if ($(this).attr('class') == 'campaignManager primary-action-button')
-		{		
-			GrabProfile_searchResults($(this).attr("id"));		
-		}			
-		});
+		
+		
+		
 		},AjaxDelay);
 	}    
 	catch(err)
@@ -88,12 +103,28 @@ function injectLinkedinButton(AjaxDelay)
 function AddSearchProfiles_Button()
 {
 	//alert('button');
-	
-	if($('.campaignManager').length==0)
-	{
-		$("#results>li").each(function(index) {
-			var id = $(this).attr("data-li-entity-id");
-			$(this).children("div").children(".srp-actions").prepend('<a href="javascript:;" style="margin: 5px 5px 5px 0;" id="'+id+'" class="campaignManager primary-action-button"><img style="margin:0px 0px -5px 0px;" src="' + icon + '"></a>');
+	return;
+	if($('.campaignManager').length == 0)
+	{	
+		
+		$(".m5").each(function(index) {
+		console.log($(this).attr("aria-label"));
+		//var x = $(this).parent().parent().parent().parent().attr("class");
+		$(this).parent().prepend('<a href="javascript:;" style="margin: 5px 5px 5px 0;" class="campaignManager primary-action-button"><img style="margin:0px 0px -5px 0px;" src="' + icon + '"></a>');
+		//console.log(x);
+		});
+		
+		return;
+		
+		var i= 0;
+		$(".results-list>li .search-result").each(function(index) {
+		i++;
+		console.log("Search Count:" + i);
+		var ListID = $(this).attr("id");				
+		console.log("#" + ListID + " .search-result__actions div");
+		var divID = $("#" + ListID + " .search-result__actions div").attr("id");		
+		console.log("ID:" + divID);			
+			$("#" + divID).prepend('<a href="javascript:;" style="margin: 5px 5px 5px 0;" LiID = "'+ListID+'" id="'+divID+'" class="campaignManager primary-action-button"><img style="margin:0px 0px -5px 0px;" src="' + icon + '"></a>');
 		});
 	}		
 }
@@ -103,17 +134,25 @@ function GrabProfile_Page()
 {
 	try
 		{			
-			var Selector = ".full-name";
+			var Selector = ".pv-top-card-section__name";
 			var Name = $.trim($(Selector).text());
-			Selector = "#location .locality a";
+			
+			Selector = ".pv-top-card-section__location";
 			var Location = $.trim($(Selector).text());
-			Selector = "#location .industry a";
-			var Industry = $.trim($(Selector).text());
-			Selector = ".editable-item.section-item.current-position h4 a";
+			
+			//Selector = "#location .industry a";
+			var Industry = '';//$.trim($(Selector).text());
+			
+			Selector = ".pv-top-card-section__headline";
+			
+			Selector = ".experience-section .pv-entity__summary-info>h3";
+			
 			var Jobtitle = $.trim($(Selector).first().text());
-			Selector = ".profile-card-extras dd a";
-			var ContactLink = $.trim($(Selector).attr("href"));				
-			Selector = "#email li a";
+			
+			Selector = ".ci-vanity-url .pv-contact-info__ci-container .pv-contact-info__contact-item";
+			var ContactLink = $.trim($(Selector).text());				
+			
+			Selector = ".ci-email .pv-contact-info__ci-container .pv-contact-info__contact-item";
 			var Email = $.trim($(Selector).text());
 			
 			var FName = '';	
@@ -179,6 +218,8 @@ function GrabProfile_Page()
 				}
 			}
 			//console.log('cn_fn:~:' + FName + '|~|cn_ln:~:' + LName + '|~|cn_city:~:' + City + '|~|cn_state:~:' + State + '|~|cn_country:~:' + Country + '|~|cn_ind:~:' + Industry + '|~|cn_jt:~:' + Jobtitle + '|~|cn_lnk:~:' + ContactLink);
+			
+			 console.log('cn_fn:~:' + FName + '|~|cn_ln:~:' + LName + '|~|cn_city:~:' + City + '|~|cn_state:~:' + State + '|~|cn_country:~:' + Country + '|~|cn_ind:~:' + Industry + '|~|cn_jt:~:' + Jobtitle + '|~|cn_lnk:~:' + ContactLink);
 							
 			chrome.runtime.sendMessage({CMdata:'cn_fn:~:' + FName + '|~|cn_ln:~:' + LName + '|~|cn_city:~:' + City + '|~|cn_state:~:' + State + '|~|cn_country:~:' + Country + '|~|cn_ind:~:' + Industry + '|~|cn_jt:~:' + Jobtitle + '|~|cn_lnk:~:' + ContactLink});
 		}
@@ -193,7 +234,8 @@ function GrabProfile_Page()
 function GrabProfile_searchResults(ResultID)
 {
 		try
-		{			
+		{		
+			alert(ResultID.attr("class"));
 			var Selector = "li[data-li-entity-id='" + ResultID+ "'] a[class = 'title main-headline']";
 			var Name = $.trim($(Selector).text());
 			Selector = "li[data-li-entity-id='" + ResultID + "'] .bd .demographic bdi";
@@ -423,9 +465,9 @@ if(document.URL.indexOf('linkedin.com')>-1)
 {
 
 	injectLinkedinButton(100);
-	if(document.URL.indexOf('linkedin.com/vsearch/p?')>-1)
+	if(document.URL.indexOf('linkedin.com/search/results/index/')>-1)
 	{	
-		setInterval(function(){AddSearchProfiles_Button();}, 5000);
+		setInterval(function(){AddSearchProfiles_Button();}, 7000);
 	}
 }
 

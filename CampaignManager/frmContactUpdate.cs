@@ -18,10 +18,11 @@ using System.Text;
 using System.Management;
 using i00SpellCheck;
 using CustomText;
+using Google.Cloud.Speech.V1;
 using NAudio.Wave;
-using Google.Apis.CloudSpeechAPI.v1beta1;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
+using System.Threading.Tasks;
+using System.Threading;
+
 using DirectShowLib;
 
 namespace GCC
@@ -93,6 +94,7 @@ namespace GCC
             txtTotalDials.TextBox.ShortcutsEnabled = false;
             switchTRWR.Value = (GV.sAccessTo == "TR");
             btnGSpeechRecord.Visible = (GV.sAccessTo == "TR" && GV.AudioComments);
+//            btnGSpeechRecord.Visible = false;
         }
 
         void f_ResizeEnd(object sender, EventArgs e)
@@ -247,7 +249,7 @@ namespace GCC
 
         int iRequestWaitTime = 0;
 
-        string sRequestType = string.Empty;
+        string sRequestType = string.Empty;        
 
         string sNAudioPath = string.Empty;
 
@@ -255,7 +257,7 @@ namespace GCC
         //DataTable dtTelephoneFormat = new DataTable();
         DateTime tCurrentCountryTime;
         //DateTimePicker dtp = new DateTimePicker();
-        //BAL_GlobalMySQL objBAL_Global = new BAL_GlobalMySQL();
+        //BAL_GlobalMydsSQL objBAL_Global = new BAL_GlobalMysdSQL();
         frmCallScript objfrmCallScript;
         System.Windows.Forms.Timer t;
         string sMaster_ID = string.Empty;
@@ -265,16 +267,19 @@ namespace GCC
         DataTable dtPicklist_Delete = new DataTable();
         frmWindowedNotes objFrmWindowedNotes;
         private frmCompanyList CL;
-        bool bNAudioStarted = false;
 
 
-        public WaveIn waveSource;
-        public WaveFileWriter waveFile = null;
+        //bool bNAudioStarted = false;
+        //public WaveIn waveSource;
+        //public WaveFileWriter waveFile = null;
+
+        bool GRecording = false;
+        NAudio.Wave.WaveInEvent waveIn = null;
 
         public List<TextBox> lstCompanyControls;
         public List<TextBox> lstContactControls;
 
-        Timer tAutoSaveRecords;
+        System.Windows.Forms.Timer tAutoSaveRecords;
         int iContactRowIndex = -1;
         int iCompanyRowIndex = -1;
         int iNameSayerRowIndex = -1;
@@ -294,6 +299,8 @@ namespace GCC
         string sSwitchboard_Trimmed = string.Empty;
         int iPreCall = 0;
         int iPostCall = 0;
+        string sESpeechOrigin = "Name";
+        string sEspeechAddressField = string.Empty;
 
         string sRecoveryPath = AppDomain.CurrentDomain.BaseDirectory + "\\Campaign Manager\\Logs\\Data\\" + GV.sEmployeeNo + "\\" + GV.sProjectID;
 
@@ -343,7 +350,7 @@ namespace GCC
                         sDateColumn = "TR_DATECALLED";
                         if (GV.sFreezeWRCompanyCompletes == "Y")
                         {
-                            sEliminateCompanyCompletes = " AND IFNULL(WR_PRIMARY_DISPOSAL,'') NOT IN (SELECT cp.Primary_Status FROM " + GV.sProjectID + "_RecordStatus cp WHERE cp.Table_Name = 'Company'  AND cp.Research_Type='WR' AND cp.Operation_Type LIKE '%Validate%')";
+                            sEliminateCompanyCompletes = " AND ISNULL(WR_PRIMARY_DISPOSAL,'') NOT IN (SELECT cp.Primary_Status FROM " + GV.sProjectID + "_RecordStatus cp WHERE cp.Table_Name = 'Company'  AND cp.Research_Type='WR' AND cp.Operation_Type LIKE '%Validate%')";
                             sDisposalColumn = "WR_PRIMARY_DISPOSAL,";
                         }
                     }
@@ -353,7 +360,7 @@ namespace GCC
                         sDateColumn = "WR_DATE_OF_PROCESS";
                         if (GV.sFreezeTRCompanyCompletes == "Y")
                         {
-                            sEliminateCompanyCompletes = " AND IFNULL(TR_PRIMARY_DISPOSAL,'') NOT IN (SELECT cp.Primary_Status FROM " + GV.sProjectID + "_RecordStatus cp WHERE cp.Table_Name = 'Company' AND cp.Research_Type='TR' AND cp.Operation_Type LIKE '%Validate%')";
+                            sEliminateCompanyCompletes = " AND ISNULL(TR_PRIMARY_DISPOSAL,'') NOT IN (SELECT cp.Primary_Status FROM " + GV.sProjectID + "_RecordStatus cp WHERE cp.Table_Name = 'Company' AND cp.Research_Type='TR' AND cp.Operation_Type LIKE '%Validate%')";
                             sDisposalColumn = "TR_PRIMARY_DISPOSAL,";
                         }
                     }
@@ -362,30 +369,30 @@ namespace GCC
                     #region Sendback
                     if (sFormOpenType == "SendBack")
                     {
-                        string sQuery = "SELECT c.GROUP_ID FROM " + GV.sCompanyTable + " c";
+                        string sQuery = "SELECT TOP 1 c.GROUP_ID FROM " + GV.sCompanyTable + " c";
                         sQuery += " INNER JOIN " + GV.sContactTable + " a ON c.MASTER_ID = a.MASTER_ID";
                         sQuery += " INNER JOIN " + GV.sQCTable + " b ON ((b.TableName = 'Contact' AND a.CONTACT_ID_P = b.RecordID) OR (b.TableName='Company' AND c.MASTER_ID = b.RecordID))";
-                        sQuery += " WHERE ((b.TableName ='Company' AND c." + GV.sAccessTo + "_AGENTNAME ='" + GV.sEmployeeName + "') OR (b.TableName ='Contact' AND a." + GV.sAccessTo + "_AGENT_NAME ='" + GV.sEmployeeName + "'))  AND b.QC_Status = 'SendBack' AND b.ResearchType = '" + GV.sAccessTo + "' LIMIT 1;";
+                        sQuery += " WHERE ((b.TableName ='Company' AND c." + GV.sAccessTo + "_AGENTNAME ='" + GV.sEmployeeName + "') OR (b.TableName ='Contact' AND a." + GV.sAccessTo + "_AGENT_NAME ='" + GV.sEmployeeName + "'))  AND b.QC_Status = 'SendBack' AND b.ResearchType = '" + GV.sAccessTo + "';";
 
                         ((frmMain)frmMDI).txtQuery.Text = sQuery;
-                        DataTable dtSendBackID = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                        DataTable dtSendBackID = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
 
                         if (dtSendBackID.Rows.Count > 0)
                         {
                             sMaster_ID = dtSendBackID.Rows[0]["GROUP_ID"].ToString();
 
 
-                            GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE " + GV.sCompanyTable + " set " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' WHERE GROUP_ID=" + sMaster_ID);
+                            GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE " + GV.sCompanyTable + " set " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' WHERE GROUP_ID=" + sMaster_ID);
 
 
-                            dtMasterCompanies = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "GROUP_ID = " + sMaster_ID);
+                            dtMasterCompanies = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, "GROUP_ID = " + sMaster_ID);
                             dtMasterCompanies.TableName = "MasterCompanies";
 
                             LoadMasterIds();
                             string sMasterIDs = GM.ColumnToQString("MASTER_ID", dtMasterCompanies, "Int");
 
 
-                            dtMasterContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "MASTER_ID IN (" + sMasterIDs + ")"); //MasterContact Table
+                            dtMasterContacts = GV.MSSQL1.BAL_FetchTable(GV.sContactTable, "MASTER_ID IN (" + sMasterIDs + ")"); //MasterContact Table
                             dtMasterContacts.TableName = "MasterContact";
 
                             string sContactIDs = GM.ColumnToQString("CONTACT_ID_P", dtMasterContacts, "Int");
@@ -393,11 +400,11 @@ namespace GCC
                                 sContactIDs = "0";
 
 
-                            dtQCTable = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sQCTable + " WHERE (TableName='Contact' AND RecordID IN (" + sContactIDs + ")) OR (TableName='Company' AND RecordID IN (" + sMasterIDs + ")) AND ResearchType = '" + GV.sAccessTo + "';");
-                            //dtSendBack = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sQCTable + " WHERE QC_Status ='SendBack' AND ResearchType = '" + GV.sAccessTo + "' AND (TableName = 'Company' AND RecordID IN (SELECT MASTER_ID FROM " + GV.sCompanyTable + " WHERE GROUP_ID=112)) OR (TableName = 'Contact' AND RecordID IN (SELECT CONTACT_ID_P FROM " + GV.sContactTable + " WHERE MASTER_ID IN (SELECT MASTER_ID FROM " + GV.sCompanyTable + " WHERE GROUP_ID=112)));");
+                            dtQCTable = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + GV.sQCTable + " WHERE (TableName='Contact' AND RecordID IN (" + sContactIDs + ")) OR (TableName='Company' AND RecordID IN (" + sMasterIDs + ")) AND ResearchType = '" + GV.sAccessTo + "';");
+                            //dtSendBack = GV.MsdYSQL.BAL_ExecuteQueryMyfSQL("SELECT * FROM " + GV.sQCTable + " WHERE QC_Status ='SendBack' AND ResearchType = '" + GV.sAccessTo + "' AND (TableName = 'Company' AND RecordID IN (SELECT MASTER_ID FROM " + GV.sCompanyTable + " WHERE GROUP_ID=112)) OR (TableName = 'Contact' AND RecordID IN (SELECT CONTACT_ID_P FROM " + GV.sContactTable + " WHERE MASTER_ID IN (SELECT MASTER_ID FROM " + GV.sCompanyTable + " WHERE GROUP_ID=112)));");
                             dtQCTable.TableName = "QC";
 
-                            dtEmailChecks = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_email_checks WHERE PROJECT_ID = '" + GV.sProjectID + "' AND CONTACT_ID IN (" + sContactIDs + ") AND EMAIL_SOURCE = 0;");
+                            dtEmailChecks = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_email_checks WHERE PROJECT_ID = '" + GV.sProjectID + "' AND CONTACT_ID IN (" + sContactIDs + ") AND EMAIL_SOURCE = 0;");
                             dtEmailChecks.TableName = "EMAIL_CHECKS";
 
                             GetDialerHistory();
@@ -431,11 +438,12 @@ namespace GCC
                             sSQLTEXTConditionOnly = lstAllocation[3] + sEliminateCompanyCompletes + " AND Company.MASTER_ID = Company.GROUP_ID";
                             IsManualFilter = (lstAllocation[4] == "N");
                             if (!IsManualFilter)
-                                dtColumnsUsed = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT TABLE_NAME, FIELD FROM mvc.allocation_filter_condition WHERE FILTER_ID = " + sFilterID + ";");
+                                dtColumnsUsed = GV.MSSQL1.BAL_ExecuteQuery("SELECT TABLE_NAME, FIELD FROM c_allocation_filter_condition WHERE FILTER_ID = " + sFilterID + ";");
 
                             if (IsTimeZoneEnabled && GV.sAccessTo == "TR")
                             {
-                                sSQLTEXTConditionOnly += " AND (TIME(DATE_ADD(NOW(), INTERVAL HoursFromGMT HOUR)) BETWEEN '08:00' AND '17:00') AND CALLS_ALLOWED_FROM <= CURDATE()"; //Filter Based on TimeZone
+                                //sSQLTEXTConditionOnly += " AND (TIME(DATE_ADD(NOW(), INTERVAL HoursFromGMT HOUR)) BETWEEN '08:00' AND '17:00') AND CALLS_ALLOWED_FROM <= CURDATE()"; //Filter Based on TimeZone
+                                sSQLTEXTConditionOnly += " AND CONVERT(TIME,DATEADD(HOUR,HoursFromGMT,GETDATE())) between '08:00:00' and '17:00:00' AND CALLS_ALLOWED_FROM <= CAST(GETDATE() as DATE)"; //Filter Based on TimeZone
                             }
                         }
                         #endregion
@@ -446,7 +454,7 @@ namespace GCC
                             if (sMaster_ID.Length == 0)
                             {
 
-                                dtMasterCompanies = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT GROUP_ID FROM " + GV.sCompanyTable + " WHERE " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' LIMIT 1;");
+                                dtMasterCompanies = GV.MSSQL1.BAL_ExecuteQuery("SELECT TOP 1 GROUP_ID FROM " + GV.sCompanyTable + " WHERE " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "';");
                                 if (dtMasterCompanies.Rows.Count > 0)
                                 {
                                     sMaster_ID = dtMasterCompanies.Rows[0]["GROUP_ID"].ToString();
@@ -455,14 +463,14 @@ namespace GCC
 
                             if (sMaster_ID.Length > 0)
                             {
-                                dtMasterCompanies = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "GROUP_ID = " + sMaster_ID);
+                                dtMasterCompanies = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, "GROUP_ID = " + sMaster_ID);
                                 dtMasterCompanies.TableName = "MasterCompanies";
 
                                 LoadMasterIds();
                                 string sMasterIDs = GM.ColumnToQString("MASTER_ID", dtMasterCompanies, "Int");
 
 
-                                dtMasterContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "MASTER_ID IN (" + sMasterIDs + ")"); //MasterContact Table
+                                dtMasterContacts = GV.MSSQL1.BAL_FetchTable(GV.sContactTable, "MASTER_ID IN (" + sMasterIDs + ")"); //MasterContact Table
                                 dtMasterContacts.TableName = "MasterContact";
 
 
@@ -476,10 +484,10 @@ namespace GCC
                                 }
 
 
-                                dtQCTable = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sQCTable + " WHERE (TableName='Contact' AND RecordID IN (" + sContactIDs + ")) OR (TableName='Company' AND RecordID IN (" + sMasterIDs + ")) AND ResearchType = '" + GV.sAccessTo + "';");
+                                dtQCTable = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + GV.sQCTable + " WHERE (TableName='Contact' AND RecordID IN (" + sContactIDs + ")) OR (TableName='Company' AND RecordID IN (" + sMasterIDs + ")) AND ResearchType = '" + GV.sAccessTo + "';");
                                 dtQCTable.TableName = "QC";
 
-                                dtEmailChecks = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_email_checks WHERE PROJECT_ID = '" + GV.sProjectID + "' AND CONTACT_ID IN (" + sContactIDs + ") AND EMAIL_SOURCE = 0;");
+                                dtEmailChecks = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_email_checks WHERE PROJECT_ID = '" + GV.sProjectID + "' AND CONTACT_ID IN (" + sContactIDs + ") AND EMAIL_SOURCE = 0;");
                                 dtEmailChecks.TableName = "EMAIL_CHECKS";
 
                                 GetDialerHistory();
@@ -499,7 +507,8 @@ namespace GCC
                                     string sPrefix = string.Empty;
                                     if (IsManualFilter)
                                     {
-                                        sPrefix = "SELECT DISTINCT Company.Group_ID FROM " + GV.sCompanyTable + " Company ";
+                                        sPrefix = "SELECT TOP 1 Company.Group_ID FROM " + GV.sCompanyTable + " Company ";
+                                        //sPrefix = "SELECT Distinct Company.Group_ID FROM " + GV.sCompanyTable + " Company ";
                                         if (sSQLTEXTConditionOnly.ToLower().Contains("qc."))
                                             sPrefix += " INNER JOIN " + GV.sContactTable + " CONTACT ON COMPANY.MASTER_ID = CONTACT.MASTER_ID INNER JOIN " + GV.sProjectID + "_QC QC ON QC.RECORDID = CONTACT.CONTACT_ID_P AND QC.TABLENAME = 'CONTACT' AND QC.RESEARCHTYPE = '" + GV.sAccessTo + "'";
                                         else if (sSQLTEXTConditionOnly.ToLower().Contains("contact."))
@@ -529,7 +538,7 @@ namespace GCC
                                                 }
                                                 //if (sColumnsUsed.Trim().Length == 0)
                                                 Random rnd = new Random();
-                                                sPrefix = "SELECT DISTINCT Company.Group_ID  FROM (select Group_ID, MASTER_ID," + sDisposalColumn + "HoursFromGMT," + sDateColumn + "," + sUserTypeName + ",FLAG, REVERSE(RIGHT(UUID_SHORT()," + rnd.Next(2, 10) + "))+master_id as rn " + sColumnsUsed + " from " + GV.sCompanyTable + " order by rn)  Company LEFT OUTER JOIN " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
+                                                sPrefix = "SELECT TOP 1 Company.Group_ID  FROM (select Group_ID, MASTER_ID," + sDisposalColumn + "HoursFromGMT," + sDateColumn + "," + sUserTypeName + ",FLAG, REVERSE(RIGHT(UUID_SHORT()," + rnd.Next(2, 10) + "))+master_id as rn " + sColumnsUsed + " from " + GV.sCompanyTable + " order by rn)  Company LEFT OUTER JOIN " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
 
                                                 //else
                                                 //    sPrefix = "SELECT DISTINCT Company.Master_ID  FROM (select " + sDisposalColumn + "HoursFromGMT," + sDateColumn + "," + sUserType + ",FLAG," + sDisposalColumn + ", REVERSE(RIGHT(UUID_SHORT(),10))+master_id as rn from " + GlobalVariables.sCompanyTable + " order by rn)  Company LEFT OUTER JOIN " + GlobalVariables.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
@@ -538,8 +547,8 @@ namespace GCC
                                         }
                                         else
                                         {
-                                            // sPrefix = "SELECT DISTINCT Company.Group_ID FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID";
-                                            sPrefix = "SELECT DISTINCT Company.Group_ID FROM " + GV.sCompanyTable + " Company ";
+                                            
+                                            sPrefix = "SELECT TOP 1 Company.Group_ID FROM " + GV.sCompanyTable + " Company ";
                                             DataTable dtTable = dtColumnsUsed.DefaultView.ToTable(true, "TABLE_NAME");
                                             if (dtTable.Select("TABLE_NAME = 'QC'").Length > 0)
                                                 sPrefix += " INNER JOIN " + GV.sContactTable + " CONTACT ON COMPANY.MASTER_ID = CONTACT.MASTER_ID INNER JOIN " + GV.sProjectID + "_QC QC ON QC.RECORDID = CONTACT.CONTACT_ID_P AND QC.TABLENAME = 'CONTACT' AND QC.RESEARCHTYPE = '" + GV.sAccessTo + "'";
@@ -549,13 +558,28 @@ namespace GCC
                                     }
 
                                     if (GV.Override_UserAccess)
-                                        sSQLUpdateQuery = "UPDATE " + GV.sCompanyTable + " AS A INNER JOIN (" + sPrefix + " WHERE FLAG IN ('TR','WR') AND " + sSQLTEXTConditionOnly + " AND (IFNULL(TR_AGENTNAME,'') NOT LIKE 'Current_%' AND IFNULL(WR_AGENTNAME,'') NOT LIKE 'Current_%') LIMIT 1) AS B ON A.Group_ID = B.Group_ID SET A." + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' WHERE LENGTH(B.Group_ID) > 0; SELECT GROUP_ID FROM " + GV.sCompanyTable + " WHERE " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "';";
+                                        //sSQLUpdateQuery = "UPDATE " + GV.sCompanyTable + " AS A INNER JOIN (" + sPrefix + " WHERE FLAG IN ('TR','WR') AND " 
+                                        //    + sSQLTEXTConditionOnly + " AND (ISNULL(TR_AGENTNAME,'') NOT LIKE 'Current_%' AND IFNULL(WR_AGENTNAME,'') NOT LIKE 'Current_%') LIMIT 1) AS B ON A.Group_ID = B.Group_ID SET A." 
+                                        //    + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' WHERE LENGTH(B.Group_ID) > 0; SELECT GROUP_ID FROM " + GV.sCompanyTable + " WHERE " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "';";
+                                        sSQLUpdateQuery = "UPDATE A SET A." + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' FROM " + GV.sCompanyTable + " A INNER JOIN (" + sPrefix + " WHERE FLAG IN ('TR','WR') AND "
+                                        + sSQLTEXTConditionOnly + " AND (ISNULL(TR_AGENTNAME,'') NOT LIKE 'Current_%' AND ISNULL(WR_AGENTNAME,'') NOT LIKE 'Current_%')) B ON A.Group_ID = B.Group_ID WHERE LEN(B.Group_ID) > 0; SELECT TOP 1 GROUP_ID FROM " + GV.sCompanyTable + " WHERE "
+                                            + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "';";
+
                                     else
-                                        sSQLUpdateQuery = "UPDATE " + GV.sCompanyTable + " AS A INNER JOIN (" + sPrefix + " WHERE FLAG = '" + GV.sAccessTo + "' AND " + sSQLTEXTConditionOnly + " AND IFNULL(" + GV.sAccessTo + "_AGENTNAME,'') NOT LIKE 'Current_%' LIMIT 1) AS B ON A.Group_ID = B.Group_ID SET A." + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' WHERE LENGTH(B.Group_ID) > 0; SELECT GROUP_ID FROM " + GV.sCompanyTable + " WHERE " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "';";
+                                        //sSQLUpdateQuery = "UPDATE " + GV.sCompanyTable + " AS A INNER JOIN (" + sPrefix + " WHERE FLAG = '" + GV.sAccessTo + "' AND " 
+                                        //    + sSQLTEXTConditionOnly + " AND ISNULL(" + GV.sAccessTo + "_AGENTNAME,'') NOT LIKE 'Current_%' LIMIT 1) AS B ON A.Group_ID = B.Group_ID SET A." 
+                                        //    + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' WHERE LENGTH(B.Group_ID) > 0; SELECT GROUP_ID FROM " + GV.sCompanyTable + " WHERE " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "';";                                    
+
+                                    sSQLUpdateQuery = "UPDATE A SET A." + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' FROM " + GV.sCompanyTable + " A INNER JOIN (" + sPrefix + " WHERE FLAG = '" + GV.sAccessTo +
+                                            "' AND " + sSQLTEXTConditionOnly + " AND ISNULL(" + GV.sAccessTo + "_AGENTNAME,'') NOT LIKE 'Current_%') B ON A.Group_ID = B.Group_ID WHERE LEN(B.Group_ID) > 0; SELECT TOP 1 GROUP_ID FROM " + GV.sCompanyTable + " WHERE "
+                                            + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "';";
+
+
+
                                     //string sPrefix = "SELECT DISTINCT Company.* FROM " + GlobalVariables.sCompanyTable + " Company ";// LEFT OUTER JOIN " + GlobalVariables.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID";
                                     //sSQLUpdateQuery = "DECLARE @OUTPUT TABLE(MASTERID BIGINT,AGENTNAME VARCHAR(100)) UPDATE " + GlobalVariables.sCompanyTable + " SET " + sUserType + " ='Current_" + GlobalVariables.sEmployeeName + "' OUTPUT DELETED.MASTER_ID,DELETED."+sUserType+" INTO @OUTPUT WHERE MASTER_ID IN(SELECT TOP 1 ID FROM " + GlobalVariables.sFilterViewName + " Where " + sSQLTEXTConditionOnly + " AND ISNULL("+sUserType+",'') NOT LIKE 'Current_%' ORDER BY TR_DATECALLED) AND LEN(MASTER_ID)>0  SELECT * FROM @OUTPUT";
                                     ((frmMain)frmMDI).txtQuery.Text = sSQLUpdateQuery;
-                                    DataTable dtUpdateCheck = GV.MYSQL.BAL_ExecuteQueryMySQL(sSQLUpdateQuery);
+                                    DataTable dtUpdateCheck = GV.MSSQL1.BAL_ExecuteQuery(sSQLUpdateQuery);
                                     if (dtUpdateCheck.Rows.Count == 0)
                                     {
                                         sRecordFetchMessage = "No records available in current allocation.";
@@ -581,13 +605,13 @@ namespace GCC
                     //else if (IsNewCompany || sFormOpenType == "ListOpen")
                     //{
                     //    GV.sRecordFetchError += ",58";
-                    //    //DataTable dtCompTemp = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, sUserTypeName + " = 'Current_" + GV.sEmployeeName + "'");
-                    //    DataTable dtCompTemp = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT GROUP_ID FROM " + GV.sCompanyTable + " WHERE " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' LIMIT 1;");
+                    //    //DataTable dtCompTemp = GV.MYdsfSQL.BAL_FetchTableMySfQL(GV.sCompanyTable, sUserTypeName + " = 'Current_" + GV.sEmployeeName + "'");
+                    //    DataTable dtCompTemp = GV.MYfsdSQL.BAL_ExecuteQueryMyfSQL("SELECT GROUP_ID FROM " + GV.sCompanyTable + " WHERE " + sUserTypeName + " = 'Current_" + GV.sEmployeeName + "' LIMIT 1;");
                     //    GV.sRecordFetchError += ",59";
                     //    if (dtCompTemp.Rows.Count > 0)
                     //    {
                     //        GV.sRecordFetchError += ",60";
-                    //        dtMasterCompanies = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "GROUP_ID = " + dtCompTemp.Rows[0]["GROUP_ID"].ToString());
+                    //        dtMasterCompanies = GV.MYsSQL.BAL_FetchTableMySfQL(GV.sCompanyTable, "GROUP_ID = " + dtCompTemp.Rows[0]["GROUP_ID"].ToString());
                     //        dtMasterCompanies.TableName = "MasterCompanies";
 
                     //        GV.sRecordFetchError += ",61";
@@ -597,7 +621,7 @@ namespace GCC
                     //        string sMasterIDs = GM.ColumnToQString("MASTER_ID", dtMasterCompanies, "Int");
 
                     //        GV.sRecordFetchError += ",63";
-                    //        dtMasterContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "MASTER_ID IN (" + sMasterIDs + ")"); //MasterContact Table
+                    //        dtMasterContacts = GV.MdsYSQL.BAL_FetchTableMyfSQL(GV.sContactTable, "MASTER_ID IN (" + sMasterIDs + ")"); //MasterContact Table
                     //        dtMasterContacts.TableName = "MasterContact";
 
                     //        GV.sRecordFetchError += ",64";
@@ -611,7 +635,7 @@ namespace GCC
                     //        }
 
                     //        GV.sRecordFetchError += ",67";
-                    //        dtQCTable = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sQCTable + " WHERE (TableName='Contact' AND RecordID IN (" + sContactIDs + ")) OR (TableName='Company' AND RecordID IN (" + sMasterIDs + ")) AND ResearchType = '" + GV.sAccessTo + "';");
+                    //        dtQCTable = GV.MYsdSQL.BAL_ExecuteQueryMySfQL("SELECT * FROM " + GV.sQCTable + " WHERE (TableName='Contact' AND RecordID IN (" + sContactIDs + ")) OR (TableName='Company' AND RecordID IN (" + sMasterIDs + ")) AND ResearchType = '" + GV.sAccessTo + "';");
                     //        dtQCTable.TableName = "QC";
 
                     //        GV.sRecordFetchError += ",68";
@@ -626,7 +650,7 @@ namespace GCC
                 {
                     #region Non-Agent Open
 
-                    dtMasterCompanies = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT GROUP_ID,FLAG FROM " + GV.sCompanyTable + " WHERE MASTER_ID = " + sMaster_IDForAdminOpen);//Master Table                    
+                    dtMasterCompanies = GV.MSSQL1.BAL_ExecuteQuery("SELECT GROUP_ID,FLAG FROM " + GV.sCompanyTable + " WHERE MASTER_ID = " + sMaster_IDForAdminOpen);//Master Table                    
 
                     if (dtMasterCompanies.Rows.Count > 0)
                     {
@@ -669,7 +693,7 @@ namespace GCC
 
                         GV.sPerformance += "Company Record : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
-                        dtMasterCompanies = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "GROUP_ID = " + dtMasterCompanies.Rows[0]["GROUP_ID"]);
+                        dtMasterCompanies = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, "GROUP_ID = " + dtMasterCompanies.Rows[0]["GROUP_ID"]);
                         dtMasterCompanies.TableName = "MasterCompanies";
 
                         GV.sPerformance += "Company Record : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
@@ -679,7 +703,7 @@ namespace GCC
 
 
                         GV.sPerformance += "Contact Record : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
-                        dtMasterContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "MASTER_ID IN (" + sMasterIDs + ")"); //MasterContact Table
+                        dtMasterContacts = GV.MSSQL1.BAL_FetchTable(GV.sContactTable, "MASTER_ID IN (" + sMasterIDs + ")"); //MasterContact Table
                         dtMasterContacts.TableName = "MasterContact";
                         GV.sPerformance += "Contact Record : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
@@ -689,10 +713,10 @@ namespace GCC
                             sContactIDs = "0";
 
                         GV.sPerformance += "QC Record : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
-                        dtQCTable = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sQCTable + " WHERE (TableName='Contact' AND RecordID IN (" + sContactIDs + ")) OR (TableName='Company' AND RecordID IN (" + sMasterIDs + ")) AND ResearchType = '" + GV.sAccessTo + "';");
+                        dtQCTable = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + GV.sQCTable + " WHERE (TableName='Contact' AND RecordID IN (" + sContactIDs + ")) OR (TableName='Company' AND RecordID IN (" + sMasterIDs + ")) AND ResearchType = '" + GV.sAccessTo + "';");
                         dtQCTable.TableName = "QC";
 
-                        dtEmailChecks = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_email_checks WHERE PROJECT_ID = '" + GV.sProjectID + "' AND CONTACT_ID IN (" + sContactIDs + ") AND EMAIL_SOURCE = 0;");
+                        dtEmailChecks = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_email_checks WHERE PROJECT_ID = '" + GV.sProjectID + "' AND CONTACT_ID IN (" + sContactIDs + ") AND EMAIL_SOURCE = 0;");
                         dtEmailChecks.TableName = "EMAIL_CHECKS";
 
                         GV.sPerformance += "QC Record : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
@@ -737,11 +761,11 @@ namespace GCC
             DataTable dtAllocationFilter = null;
             List<string> lstReturn = new List<string>();
             string sFilterID = string.Empty;
-            dtFilterAssignment = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT FILTER_ID FROM FILTER_ASSIGNMENT WHERE PROJECT_ID = '" + GV.sProjectID + "' AND USERNAME = '" + GV.sEmployeeName + "' AND USERACCESS = '" + GV.sAccessTo + "'");
+            dtFilterAssignment = GV.MSSQL1.BAL_ExecuteQuery("SELECT FILTER_ID FROM C_FILTER_ASSIGNMENT WHERE PROJECT_ID = '" + GV.sProjectID + "' AND USERNAME = '" + GV.sEmployeeName + "' AND USERACCESS = '" + GV.sAccessTo + "'");
             if (dtFilterAssignment != null && dtFilterAssignment.Rows.Count > 0 && dtFilterAssignment.Rows[0]["FILTER_ID"].ToString().Length > 0)
             {
                 sFilterID = dtFilterAssignment.Rows[0]["FILTER_ID"].ToString();
-                dtAllocationFilter = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT SQLTEXT,RANDOMIZE,TIMEZONE_ENABLED,USERDEFINED FROM ALLOCATION_FILTER WHERE FILTER_ID = " + sFilterID);
+                dtAllocationFilter = GV.MSSQL1.BAL_ExecuteQuery("SELECT SQLTEXT,RANDOMIZE,TIMEZONE_ENABLED,USERDEFINED FROM c_allocation_filter WHERE FILTER_ID = " + sFilterID);
             }
 
             if ((dtAllocationFilter != null && dtAllocationFilter.Rows.Count > 0 && dtAllocationFilter.Rows[0]["SQLTEXT"].ToString().Length > 0))
@@ -770,7 +794,7 @@ namespace GCC
                     GV.sPerformance += "Ending Record Fetch : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;                    
 
                     //tAutoSaveRecords = new Timer() { Interval = GV.iAutoSave_Intervel };
-                    tAutoSaveRecords = new Timer(this.components) { Interval = GV.iAutoSave_Intervel };
+                    tAutoSaveRecords = new System.Windows.Forms.Timer(this.components) { Interval = GV.iAutoSave_Intervel };
 
                     GV.sCompanySessionID = GV.IP.Replace(".", string.Empty).Reverse() + GM.GetDateTime().ToString("yyMMddHHmmssff");
                     GM.Moniter("Pre Call");
@@ -893,7 +917,7 @@ namespace GCC
 
                     //GV.sPerformance += "Field Master: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
-                    //dtFieldMasterAllColumns = GV.MYSQL.BAL_FetchTableMySQL("C_FIELD_MASTER", String.Format("PROJECT_ID = '{0}' ORDER BY SEQUENCE_NO", GV.sProjectID)); //All Fields in Master and Master Contacts
+                    //dtFieldMasterAllColumns = GV.MYsdSQL.BAL_FetchTableMyfSQL("C_FIELD_MASTER", String.Format("PROJECT_ID = '{0}' ORDER BY SEQUENCE_NO", GV.sProjectID)); //All Fields in Master and Master Contacts
                     //dtFieldMasterAllColumns.TableName = "FieldMasterAllColumn";
 
                     //dtFieldMaster_Active = dtFieldMasterAllColumns.Select("ACTIVE_COLUMN= 'Y' AND Visibility Like '%" + GV.sAccessTo + "%'", "SEQUENCE_NO ASC").CopyToDataTable();
@@ -925,7 +949,7 @@ namespace GCC
                     //GV.sPerformance += "Field Master: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
                     //GV.sPerformance += "Validation: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
-                    //dtValidations = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sProjectID + "_VALIDATIONS_new WHERE RESEARCH_TYPE='" + GV.sAccessTo + "'"); //Validation Table
+                    //dtValidations = GV.MYsdSQL.BAL_ExecuteQueryMyfSQL("SELECT * FROM " + GV.sProjectID + "_VALIDATIONS WHERE RESEARCH_TYPE='" + GV.sAccessTo + "'"); //Validation Table
                     //dtValidations.TableName = "Validations";
 
                     //if (dtValidations.Select("OPERATION_TYPE = 'PreUpdate'").Length > 0)
@@ -936,10 +960,10 @@ namespace GCC
                     //GV.sPerformance += "Validation: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
                     //GV.sPerformance += "Picklist: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
-                    //dtPicklist = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_picklists WHERE PicklistCategory NOT IN (SELECT DISTINCT PicklistCategory FROM " + GV.sProjectID + "_picklists) UNION SELECT * FROM " + GV.sProjectID + "_picklists ORDER BY PicklistCategory,PicklistValue;"); //Picklist Table
+                    //dtPicklist = GV.MYSsdQL.BAL_ExecuteQueryMyfSQL("SELECT * FROM c_picklists WHERE PicklistCategory NOT IN (SELECT DISTINCT PicklistCategory FROM " + GV.sProjectID + "_picklists) UNION SELECT * FROM " + GV.sProjectID + "_picklists ORDER BY PicklistCategory,PicklistValue;"); //Picklist Table
 
-                    ////dtPicklist = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sProjectID + "_picklists ORDER BY PicklistCategory,PicklistValue;"); //Picklist Table
-                    ////dtPicklist = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_picklists");//WHERE PicklistCategory NOT IN (SELECT DISTINCT PicklistCategory FROM " + GV.sProjectID + "_picklists) UNION SELECT * FROM " + GV.sProjectID + "_picklists ORDER BY PicklistCategory,PicklistValue;"); //Picklist Table
+                    ////dtPicklist = GV.MYdsSQL.BAL_ExecuteQueryMyfSQL("SELECT * FROM " + GV.sProjectID + "_picklists ORDER BY PicklistCategory,PicklistValue;"); //Picklist Table
+                    ////dtPicklist = GV.MYsdSQL.BAL_ExecuteQueryMyfSQL("SELECT * FROM c_picklists");//WHERE PicklistCategory NOT IN (SELECT DISTINCT PicklistCategory FROM " + GV.sProjectID + "_picklists) UNION SELECT * FROM " + GV.sProjectID + "_picklists ORDER BY PicklistCategory,PicklistValue;"); //Picklist Table
 
                     //dtEmailSuggestion = dtPicklist.Select("PicklistCategory = 'EmailSuggestion'", "Remarks ASC").CopyToDataTable();
                     //dtEmailSuggestion.TableName = "EmailSuggestion";
@@ -952,20 +976,20 @@ namespace GCC
                     //GV.sPerformance += "Picklist: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
                     //GV.sPerformance += "RecordStatus: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
-                    //dtRecordStatus = GV.MYSQL.BAL_ExecuteQueryMySQL("select Distinct Table_Name,Primary_Status,Secondary_Status,Operation_Type,Research_Type,sort from " + GV.sProjectID + "_recordstatus;"); //Contact Status Table
+                    //dtRecordStatus = GV.MYSQsdL.BAL_ExecuteQueryMyfSQL("select Distinct Table_Name,Primary_Status,Secondary_Status,Operation_Type,Research_Type,sort from " + GV.sProjectID + "_recordstatus;"); //Contact Status Table
                     //dtRecordStatus.TableName = "RecordStatus";                    
 
-                    //dtSpellIgnore = GV.MYSQL.BAL_FetchTableMySQL("c_picklists", "PicklistCategory = 'SpellCheckIgnore'");
+                    //dtSpellIgnore = GV.MYdSQL.BAL_FetchTableMyfSQL("c_picklists", "PicklistCategory = 'SpellCheckIgnore'");
                     //lstSpellCheckIgnore = dtSpellIgnore.Rows.OfType<DataRow>().Select(dr => dr.Field<string>("PicklistValue")).ToList();
 
-                    //dtRecordStatusRevenue = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM "+ GV.sProjectID + "_RecordStatus"); //Contact Status Table
+                    //dtRecordStatusRevenue = GV.MdsYSQL.BAL_ExecuteQueryMyfSQL("SELECT * FROM "+ GV.sProjectID + "_RecordStatus"); //Contact Status Table
                     //dtRecordStatusRevenue.TableName = "RecordStatusRevenue";
 
                     //GV.sPerformance += "RecordStatus: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
                     //GV.sPerformance += "Country: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
 
-                    //dtCountryInformation = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM Country");//Time Zone Datatable
+                    //dtCountryInformation = GV.MdYSQL.BAL_ExecuteQueryMyfSQL("SELECT * FROM Country");//Time Zone Datatable
                     //dtCountryInformation.TableName = "Country";
 
                     //GV.sPerformance += "Country: " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
@@ -2470,7 +2494,7 @@ namespace GCC
                         tabTRDisposals.Visible = true;
                     else if (GV.sAccessTo == "WR")
                         tabWRDisposals.Visible = true;
-                    tabQC.Visible = true;
+                    tabQC.Visible = false;
 
                     tabRecordHistory.Visible = true;
                 }
@@ -3022,7 +3046,8 @@ namespace GCC
                             t.Interval = 500;
                             t.Start();
                             t.Tick += new EventHandler(TimerLabelTick);
-                            txtTimeZone.TextBox.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                            
+                            txtTimeZone.TextBox.BackColor = Color.LightPink;
                             txtTimeZone.TextBox.ForeColor = Color.White;
                             IsOutOfTimeZone = true;
                         }
@@ -3059,7 +3084,7 @@ namespace GCC
         //-----------------------------------------------------------------------------------------------------
         private void TimerLabelTick(object sender, EventArgs e)//Runtime event assigned to tErrorTextAutoClose object
         {
-            if (txtTimeZone.TextBox.BackColor == Color.FromArgb(0xFF, 0x99, 0x99))
+            if (txtTimeZone.TextBox.BackColor == Color.LightPink)
             {
                 txtTimeZone.TextBox.ForeColor = Color.White;
                 if (txtTimeZone.Text.Length > 0)
@@ -3203,7 +3228,7 @@ namespace GCC
                         if (GM.Email_Check(txtBox.Text.Trim()))//email syntax validation
                             txtBox.BackColor = Color.White;
                         else
-                            txtBox.BackColor = Color.FromArgb(0xFF, 0xFF, 0x99);
+                            txtBox.BackColor = Color.LightPink;
 
                         txtBox.Text = txtBox.Text.Replace(" ", string.Empty).Replace("\n", "").Replace("..",".").Replace("''","'").Replace("__","_").Replace("--","-");
                         txtBox.SelectionStart = i;
@@ -3241,7 +3266,7 @@ namespace GCC
                         if (GM.Web_Check(txtBox.Text.Trim()))//Website syntax validation
                             txtBox.BackColor = Color.White;
                         else
-                            txtBox.BackColor = Color.FromArgb(0xFF, 0xFF, 0xCC);
+                            txtBox.BackColor = Color.LightPink;
                         break;
 
 
@@ -3682,7 +3707,7 @@ namespace GCC
         //                                    if (sEmailContentCheck.Length > 0)
         //                                    {
         //                                        AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "COMPANYEMAIL", sFieldName, sValueToBeVerified, true, -1);
-        //                                        txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+        //                                        txt.BackColor = Color.LightPink;
         //                                        txt.Refresh();
         //                                    }
         //                                    else
@@ -3716,7 +3741,7 @@ namespace GCC
         //                                    {
         //                                        //sValidation.AppendLine(sEmailContentCheck);
         //                                        AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "PUBLICDOMAIN", sFieldName, sValueToBeVerified, true, -1);
-        //                                        txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+        //                                        txt.BackColor = Color.LightPink;
         //                                        txt.Refresh();
         //                                    }
         //                                    else
@@ -3765,7 +3790,7 @@ namespace GCC
         //                                        }
         //                                    }
         //                                    AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "EMAILDUPE", sFieldName, sValueToBeVerified, "", sIDs, true, -1);
-        //                                    txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+        //                                    txt.BackColor = Color.LightPink;
         //                                    txt.Refresh();
         //                                }
         //                                else
@@ -3792,7 +3817,7 @@ namespace GCC
         //                                    else
         //                                    {
         //                                        AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "INVALID", sFieldName, sValueToBeVerified, true, -1);
-        //                                        txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+        //                                        txt.BackColor = Color.LightPink;
         //                                        txt.Refresh();
         //                                    }
         //                                }
@@ -3813,7 +3838,7 @@ namespace GCC
         //                                else
         //                                {
         //                                    AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "INVALID", sFieldName, sValueToBeVerified, true, -1);
-        //                                    txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+        //                                    txt.BackColor = Color.LightPink;
         //                                    txt.Refresh();
         //                                }
         //                            }
@@ -3851,7 +3876,7 @@ namespace GCC
         //                                        }
         //                                    }
         //                                    AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "JOBTITLEDUPE", sFieldName, sValueToBeVerified, "", sDupeIDs, true, -1);
-        //                                    txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+        //                                    txt.BackColor = Color.LightPink;
         //                                    txt.Refresh();
         //                                }
         //                                else
@@ -3932,7 +3957,7 @@ namespace GCC
         //                                if (sValueToBeVerified.Trim().Length == 0)
         //                                {
         //                                    AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "EMPTY", sFieldName, sValueToBeVerified, drValidation["VALIDATION_FOR"].ToString(), drValidation["CONDITION"].ToString(), true, -1);
-        //                                    txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+        //                                    txt.BackColor = Color.LightPink;
         //                                    txt.Refresh();
         //                                }
         //                                else
@@ -3999,7 +4024,7 @@ namespace GCC
         //            {
         //                if (txt.Name.ToUpper() == GV.sAccessTo + "_CONTACT_STATUS")
         //                {
-        //                    txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+        //                    txt.BackColor = Color.LightPink;
         //                    txt.Refresh();
         //                }
         //                else
@@ -4134,7 +4159,7 @@ namespace GCC
             }
             else
             {
-                C.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                C.BackColor = Color.LightPink;
             }
         }
 
@@ -4201,7 +4226,7 @@ namespace GCC
                             //if (dr["FORMATTING"].ToString().Length > 0) //Common text Validations are defiend in 'txt_change'(Only display Validations)
                             //{
                             //    if (dr["FORMATTING"].ToString().Contains("MANDATORY")) //Assign txt_Change Event if the field is mandatory
-                            //        txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                            //        txt.BackColor = Color.LightPink;
                             //}
 
                             txt.KeyDown += new KeyEventHandler(txt_KeyDown);
@@ -4277,7 +4302,7 @@ namespace GCC
                             //if (dr["FORMATTING"].ToString().Length > 0) //Common text Validations are defiend in 'txt_change'(Only display Validations)
                             //{
                             //    if (dr["FORMATTING"].ToString().Contains("MANDATORY")) //Assign txt_Change Event if the field is mandatory
-                            //        txtName.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                            //        txtName.BackColor = Color.LightPink;
                             //}
 
                             txtName.KeyDown += new KeyEventHandler(txt_KeyDown);
@@ -4306,6 +4331,80 @@ namespace GCC
                             ctrl.Add(txtName);
                             break;
 
+
+                        case "CONTACTADDRESSTEXTBOX":
+                            ctrl = AddLabelControl(dr["FIELD_NAME_CAPTION"].ToString(), dr["FIELD_NAME_TABLE"].ToString(), ctrl);//Add label to Every Control
+                            DevComponents.DotNetBar.Controls.TextBoxX txtAddress = new DevComponents.DotNetBar.Controls.TextBoxX() { Name = dr["FIELD_NAME_TABLE"].ToString(), Tag = sTableName, TabIndex = Convert.ToInt32(dr["SEQUENCE_NO"].ToString()), Width = 200, Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top) };
+                            txtAddress.Font = new Font(txtAddress.Font.FontFamily, 10);
+                            //GM.SetDoubleBuffered(txtName);
+                            //txt.Border.Class = "TextBoxBorder";
+                            //txt.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+                            //txt.BorderStyle = BorderStyle.FixedSingle;
+
+                            if (dr["READONLY"].ToString() == "Y")
+                            {
+                                txtAddress.ReadOnly = true;
+                            }
+
+                            if (dr["FIELD_SIZE"].ToString().Length > 0)
+                                txtAddress.MaxLength = Convert.ToInt32(dr["FIELD_SIZE"].ToString());
+
+                            txtAddress.MouseDoubleClick += new MouseEventHandler(txt_Copy);//Copy text on double click
+                           
+                            if (sTableName == "Company" && GV.NameSayer && GV.sAccessTo == "TR")
+                            {
+                                txtAddress.ButtonCustom.Visible = true;
+                                txtAddress.ButtonCustomClick += new EventHandler(btn_AddressSayer_Single);
+                                txtAddress.ButtonCustom.Image = GCC.Properties.Resources.audio16x16___Copy;
+                                txtAddress.ButtonCustom.Shortcut = eShortcut.F2;
+                                
+                                txtAddress.ButtonCustom2.Visible = true;
+                                txtAddress.ButtonCustom2Click += new EventHandler(btn_AddressSayer_All);
+                                txtAddress.ButtonCustom2.Image = GCC.Properties.Resources.audio16x16;
+                                //txtName.ButtonCustom2.Image = GCC.Properties.Resources.ezgif_3008983895;
+                                txtAddress.ButtonCustom2.Shortcut = eShortcut.F7;
+                            }
+
+
+                            txtAddress.Border.Class = "TextBoxBorder";
+                            txtAddress.Border.CornerType = eCornerType.Square;
+                            txtAddress.BackColor = Color.White;
+
+                            txtAddress.TextChanged += new EventHandler(txt_Change);
+
+                            //if (dr["FORMATTING"].ToString().Length > 0) //Common text Validations are defiend in 'txt_change'(Only display Validations)
+                            //{
+                            //    if (dr["FORMATTING"].ToString().Contains("MANDATORY")) //Assign txt_Change Event if the field is mandatory
+                            //        txtName.BackColor = Color.LightPink;
+                            //}
+
+                            txtAddress.KeyDown += new KeyEventHandler(txt_KeyDown);
+
+                            if (dr["SPELLCHECK"].ToString() == "Y")
+                            {
+                                txtAddress.EnableSpellCheck();
+                                SpellCheckSettings s = new SpellCheckSettings();
+                                s.AllowAdditions = false;
+                                s.AllowChangeTo = true;
+                                s.AllowF7 = false;
+                                s.AllowIgnore = false;
+                                s.AllowInMenuDefs = true;
+                                s.AllowRemovals = false;
+                                txtAddress.SpellCheck().Settings = s;
+                                //NHunspellTextBoxExtender1.EnableTextBoxBase(txtName);
+                            }
+
+
+                            //If it is Master contacts control then data from control must synch with grid
+                            if (dtFormat.TableName == "MasterContactFormat")
+                            {
+                                txtAddress.Width = 250;
+                                //txtName.TextChanged += new EventHandler(TextChangeContact);//i.e. changes in textbox must affect the relevent grid cell
+                            }
+                            ctrl.Add(txtAddress);
+                            break;
+
+
                         case "COMBOBOX":
                             ctrl = AddLabelControl(dr["FIELD_NAME_CAPTION"].ToString(), dr["FIELD_NAME_TABLE"].ToString(), ctrl);//Add label to Every Control
                             ComboBox cmb = new ComboBox() { Name = dr["FIELD_NAME_TABLE"].ToString(), Tag = sTableName, TabIndex = Convert.ToInt32(dr["SEQUENCE_NO"].ToString()), Width = 200, Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top) };
@@ -4325,7 +4424,7 @@ namespace GCC
                             //{
                             //    //cmb.TextChanged += new EventHandler(txt_Change);
                             //    if (dr["FORMATTING"].ToString().Contains("MANDATORY")) //Assign txt_Change Event if the field is mandatory
-                            //        cmb.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                            //        cmb.BackColor = Color.LightPink;
                             //}
 
                             //If it is Master contacts control then data from control must synch with grid
@@ -4378,7 +4477,7 @@ namespace GCC
                             //if (dr["FORMATTING"].ToString().Length > 0) //Common text Validations are defiend in 'txt_change'(Only display Validations)
                             //{
                             //    if (dr["FORMATTING"].ToString().Contains("MANDATORY")) //Assign txt_Change Event if the field is mandatory
-                            //        txtCmbo.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                            //        txtCmbo.BackColor = Color.LightPink;
                             //}
 
                             if (dr["SPELLCHECK"].ToString() == "Y")
@@ -4440,7 +4539,7 @@ namespace GCC
                             //if (dr["FORMATTING"].ToString().Length > 0) //Common text Validations are defiend in 'txt_change'(Only display Validations)
                             //{
                             //    if (dr["FORMATTING"].ToString().Contains("MANDATORY")) //Assign txt_Change Event if the field is mandatory
-                            //        txtWebSite.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                            //        txtWebSite.BackColor = Color.LightPink;
                             //}
 
                             //if (dr["SPELLCHECK"].ToString() == "Y")
@@ -4493,7 +4592,7 @@ namespace GCC
                             //if (dr["FORMATTING"].ToString().Length > 0) //Common text Validations are defiend in 'txt_change'(Only display Validations)
                             //{
                             //    if (dr["FORMATTING"].ToString().Contains("MANDATORY")) //Assign txt_Change Event if the field is mandatory
-                            //        txtDial.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                            //        txtDial.BackColor = Color.LightPink;
                             //}
 
                             if (dtFormat.TableName == "MasterContactFormat")
@@ -4829,9 +4928,44 @@ namespace GCC
                 this.Invoke((MethodInvoker)delegate { ToastNotification.Show(this, "Busy processing previous request.", eToastPosition.TopRight); });
             else
             {
-                sRequestType = "ES";
+                sRequestType = "ES";                
                 iRequestWaitTime = 40;
-                iESPTimertick = 0;                
+                iESPTimertick = 0;
+                sESpeechOrigin = "Name";
+                timerESRequest.Start();                
+                bWorkerNameSayer.RunWorkerAsync();
+            }
+        }
+
+        private void btn_AddressSayer_Single(object sender, EventArgs e)//Runtime event..
+        {
+            if (bWorkerNameSayer.IsBusy)
+                this.Invoke((MethodInvoker)delegate { ToastNotification.Show(this, "Busy processing previous request.", eToastPosition.TopRight); });
+            else
+            {
+                sRequestType = "ES";                
+                iRequestWaitTime = 40;
+                iESPTimertick = 0;
+                sESpeechOrigin = "Address_Single";
+                TextBox txt = sender as TextBox;
+                sEspeechAddressField = txt.Name;
+                timerESRequest.Start();
+                bWorkerNameSayer.RunWorkerAsync();
+            }
+        }
+
+        private void btn_AddressSayer_All(object sender, EventArgs e)//Runtime event..
+        {
+            if (bWorkerNameSayer.IsBusy)
+                this.Invoke((MethodInvoker)delegate { ToastNotification.Show(this, "Busy processing previous request.", eToastPosition.TopRight); });
+            else
+            {
+                sRequestType = "ES";                
+                iRequestWaitTime = 40;
+                iESPTimertick = 0;
+                sESpeechOrigin = "Address_All";
+                TextBox txt = sender as TextBox;
+                sEspeechAddressField = txt.Name;
                 timerESRequest.Start();
                 bWorkerNameSayer.RunWorkerAsync();
             }
@@ -4839,19 +4973,19 @@ namespace GCC
 
         private void bWorkerNameSayer_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (sRequestType == "ES")
+            if (sRequestType == "ES" && sESpeechOrigin == "Name")
             {
                 if (iNameSayerRowIndex > -1)
                 {
                     RefreshContactGrid(iNameSayerRowIndex);
                 }                
             }
-            else if (sRequestType == "GS")
-            {
-                btnGSpeechRecord.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Visible = true; });
-                circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.IsRunning = false; });
-                circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.Visible = false; });
-            }
+            //else if (sRequestType == "GS")
+            //{
+            //    btnGSpeechRecord.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Visible = true; });
+            //    circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.IsRunning = false; });
+            //    circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.Visible = false; });
+            //}
 
             timerESRequest.Stop();
             iESPTimertick = 0;
@@ -4861,12 +4995,12 @@ namespace GCC
         {
             if(sRequestType == "ES")
                 NameSayer();
-            else if (sRequestType == "GS")
-            {
-                btnGSpeechRecord.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Visible = false; });
-                circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.Visible = true; });
-                GSpeechTranscribe();
-            }            
+            //else if (sRequestType == "GS")
+            //{
+            //    btnGSpeechRecord.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Visible = false; });
+            //    circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.Visible = true; });
+            //    GSpeechTranscribe();
+            //}            
         }
 
         void Load_NameSayer()
@@ -4904,26 +5038,102 @@ namespace GCC
             }
         }
 
+
+        List<string> SplitAddress(List<string> lstAddress)
+        {
+            List<string> lstReturn = new List<string>();
+            if (lstAddress.Count > 0)
+            {
+                foreach (string sAddress in lstAddress)
+                {
+                    List<string> lstSpaceSplit = sAddress.Split(' ').ToList();
+                    string sFullLengthWord = string.Empty;
+                    string sQString = GM.ListToQueryString(lstSpaceSplit, "String");
+                    bool IsFullWord = dtPicklist.Select("PicklistCategory = 'ESpeech' AND PickListField = 'FullAddress' AND PicklistValue IN (" + sQString + ")").Length > 0;
+
+                    if (IsFullWord)
+                    {
+                        foreach (string sWords in lstSpaceSplit)
+                        {
+                            string sAddr = Regex.Replace(sWords.Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+                            if (sFullLengthWord.Length > 0)
+                                sFullLengthWord += " " + sAddr;
+                            else
+                                sFullLengthWord = sAddr;
+                        }
+
+                        if (sFullLengthWord.Trim().Length > 0)
+                            lstReturn.Add(sFullLengthWord);
+                    }
+                    else
+                    {
+                        foreach (string sWords in lstSpaceSplit)
+                        {
+                            string sAddr = Regex.Replace(sWords.Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+                            if (sAddr.Length > 1)
+                                lstReturn.Add(sAddr);
+                        }
+                    }
+                }
+            }
+            return lstReturn;
+        }
+
         void NameSayer()
         {
             try
             {
-                iNameSayerRowIndex = iContactRowIndex;
-                string sFName = dtMasterContacts.Rows[iContactRowIndex]["FIRST_NAME"].ToString().Trim();
-                string sLname = dtMasterContacts.Rows[iContactRowIndex]["LAST_NAME"].ToString().Trim();
                 List<string> lstWords = new List<string>();
-                if (sFName.Length > 0)
-                    lstWords.AddRange(sFName.Split(' ').ToList());
 
-                if (sLname.Length > 0)
-                    lstWords.AddRange(sLname.Split(' ').ToList());
+                if (sESpeechOrigin == "Name")
+                {
+                    iNameSayerRowIndex = iContactRowIndex;
+                    string sFName = Regex.Replace(dtMasterContacts.Rows[iContactRowIndex]["FIRST_NAME"].ToString().Replace("  ", " ").Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+                    string sLname = Regex.Replace(dtMasterContacts.Rows[iContactRowIndex]["LAST_NAME"].ToString().Replace("  ", " ").Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+
+                    if (sFName.Length > 0)
+                        lstWords.AddRange(sFName.Split(' ').ToList());
+
+                    if (sLname.Length > 0)
+                        lstWords.AddRange(sLname.Split(' ').ToList());
+                }
+                else
+                {
+                    iNameSayerRowIndex = iCompanyRowIndex;
+                    if (sESpeechOrigin == "Address_Single")
+                    {
+                        lstWords.AddRange(SplitAddress(dtMasterCompanies.Rows[iCompanyRowIndex][sEspeechAddressField].ToString().Split(',').ToList()));
+                    }
+                    else
+                    {
+                        List<string> lstAddr1Split = SplitAddress(dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_1"].ToString().Split(',').ToList());
+                        List<string> lstAddr2Split = SplitAddress(dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_2"].ToString().Split(',').ToList());
+                        List<string> lstAddr3Split = SplitAddress(dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_3"].ToString().Split(',').ToList());
+                        List<string> lstAddr4Split = SplitAddress(dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_4"].ToString().Split(',').ToList());
+                        string sCity = Regex.Replace(dtMasterCompanies.Rows[iCompanyRowIndex]["City"].ToString().Replace("  ", " ").Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+                        string sCounty = Regex.Replace(dtMasterCompanies.Rows[iCompanyRowIndex]["County"].ToString().Replace("  ", " ").Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+                        string sCountry = Regex.Replace(dtMasterCompanies.Rows[iCompanyRowIndex]["Country"].ToString().Replace("  ", " ").Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+                        lstWords.AddRange(lstAddr1Split);
+                        lstWords.AddRange(lstAddr2Split);
+                        lstWords.AddRange(lstAddr3Split);
+                        lstWords.AddRange(lstAddr4Split);
+                        if (sCity.Length > 0)
+                            lstWords.Add(sCity);
+                        if (sCounty.Length > 0)
+                            lstWords.Add(sCounty);
+                        if (sCountry.Length > 0)
+                            lstWords.Add(sCountry);
+                    }
+                }
 
                 if (lstWords.Count > 0)
                 {
                     foreach (string sWords in lstWords)
-                    {
-                        if (dtNameSayer.Select("Name = '" + sWords.Replace("'", "''") + "'").Length == 0)
-                            dtNameSayer.Rows.Add(-1, sWords, "");
+                    {                        
+                        string sWordToCheck = Regex.Replace(sWords.Replace("  ", " ").Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+
+                        if (dtNameSayer.Select("Name = '" + sWordToCheck.Replace("'", "''") + "'").Length == 0)
+                            dtNameSayer.Rows.Add(-1, sWordToCheck, "");
                     }
 
                     //string sQstring = GM.ListToQueryString(lstWords, "String");
@@ -4983,7 +5193,7 @@ namespace GCC
         List<string> GetMachine()
         {
             List<string> lstReturn = new List<string>();
-            using (DataTable dtMachine = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT IP,ESPort FROM c_machines WHERE STATUS = 'Online' AND LENGTH(IFNULL(ESPort,'')) > 0 AND ESState = 0 AND CMVersion NOT IN ('Campaign Manager v3.0.1 Build 95','Campaign Manager v3.1.2 Build 23','Campaign Manager v3.1.2 Build 35') ORDER BY RAND() LIMIT 1"))
+            using (DataTable dtMachine = GV.MSSQL1.BAL_ExecuteQuery("SELECT TOP 1 IP,ESPort FROM c_machines WHERE STATUS = 'Online' AND LEN(ISNULL(ESPort,'')) > 0 AND ESState = 0 ORDER BY RAND()"))
             {
                 if(dtMachine.Rows.Count > 0)
                 {                    
@@ -5052,7 +5262,12 @@ namespace GCC
                 }
                 else
                 {
-                    string sAPI = "http://espeech.com/namesayer_servertest?name=" + drNameSayer["Name"] + "&user=meritapi&tts=1";
+                    string sAPI = string.Empty;
+                    if(sESpeechOrigin == "Name")
+                        sAPI = "http://espeech.com/namesayer_servertest?name=" + drNameSayer["Name"] + "&user=meritapi&tts=1";
+                    else
+                        sAPI = "https://www.espeech.com/address_server.api?name=" + drNameSayer["Name"] + "&user=meritapi&tts=1";
+
                     sAdditionalInfo = "API:" + sAPI + "|";
                     using (WebClient wClient = new WebClient())
                     {
@@ -5069,12 +5284,14 @@ namespace GCC
                             }
                             else
                             {
-                                sInsertID = GV.MSSQL.BAL_InsertAndGetIdentity("INSERT INTO NameSayer (Name, Phonetics, HitCount, LastHitDate) VALUES ('" + GM.HandleBackSlash(drNameSayer["Name"].ToString().Replace("'", "''")) + "', '" + drNameSayer["Phonetics"].ToString().Replace("'", "''") + "', 1, GETDATE());");
+                                sInsertID = GV.MSSQL.BAL_InsertAndGetIdentity("INSERT INTO NameSayer (Name, Phonetics, HitCount, LastHitDate,Type) VALUES ('" + GM.HandleBackSlash(drNameSayer["Name"].ToString().Replace("'", "''")) + "', '" + drNameSayer["Phonetics"].ToString().Replace("'", "''") + "', 1, GETDATE(),'" + sESpeechOrigin + "');");
                                 drNameSayer["AudioID"] = sInsertID;
                             }
                             sAdditionalInfo += "AudioID:" + sInsertID + "|";
-                            if (sInsertID.Length > 0)                                                            
+                            if (sInsertID.Length > 0)
+                            {                                
                                 wClient.DownloadFile("https://www.espeech.com/" + sResponse.Substring(sResponse.IndexOf("ttsspeech")).Replace("</html>", string.Empty).Replace("\n", string.Empty), @"\\172.27.137.182\Campaign Manager\NameSayer\" + sInsertID + ".wav");
+                            }
                         }
                     }
                 }
@@ -5094,7 +5311,7 @@ namespace GCC
                     if (File.Exists(@"\\172.27.137.182\Campaign Manager\NameSayer\" + sAudioID + ".wav"))
                     {
                         using (System.Media.SoundPlayer sPlayer = new System.Media.SoundPlayer(@"\\172.27.137.182\Campaign Manager\NameSayer\" + sAudioID + ".wav"))
-                        {
+                        {                            
                             sPlayer.PlaySync();
                         }
                     }
@@ -5138,7 +5355,7 @@ namespace GCC
             // dtMasterContacts.Rows[iGridRowIndex]["Last_Name"].ToString()
             //string sSoundXQuery = string.Empty;
             //sSoundXQuery = "SELECT Company.Master_ID, Company.COMPANY_NAME, FIRST_NAME,LAST_NAME,CONTACT_EMAIL FROM " + GV.sContactTable + " Contact INNER JOIN " + GV.sCompanyTable + " Company ON Contact.MASTER_ID = Company.MASTER_ID WHERE Contact.First_Name_Soundx =  SOUNDEX('" + dtMasterContacts.Rows[iContactRowIndex]["First_Name"].ToString().Replace("'", "''").Replace("\\", "") + "') AND Contact.Last_Name_Soundx = SOUNDEX('" + dtMasterContacts.Rows[iContactRowIndex]["Last_Name"].ToString().Replace("'", "''").Replace("\\", "") + "') AND Company.MASTER_ID <> " + sMaster_ID + ";";
-            //DataTable dtSoundxResult = GV.MYSQL.BAL_ExecuteQueryMySQL(sSoundXQuery);
+            //DataTable dtSoundxResult = GV.MdYSQL.BAL_ExecuteQueryMyfSQL(sSoundXQuery);
             using (frmSearch objfrmSearch = new frmSearch())
             {
                 TextBox txt = sender as TextBox;
@@ -5384,7 +5601,7 @@ namespace GCC
 
         void Reload_PickList()
         {
-            DateTime Picklist_DB_UpdateDate = Convert.ToDateTime(GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT PICKLIST_LASTUPDATE FROM c_project_settings WHERE PROJECT_ID='" + GV.sProjectID + "';").Rows[0][0]);
+            DateTime Picklist_DB_UpdateDate = Convert.ToDateTime(GV.MSSQL1.BAL_ExecuteQuery("SELECT PICKLIST_LASTUPDATE FROM c_project_settings WHERE PROJECT_ID='" + GV.sProjectID + "';").Rows[0][0]);
             if (Picklist_DB_UpdateDate > GV.PickList_LastUpdate)//Refresh Picklist data from DB based on Picklist last update date from ProjectSetting
             {
                 DataRow[] drrPckListToRemove = dtPicklist.Select("remarks IN ('Accepted','Pending','Rejected')");
@@ -5392,7 +5609,7 @@ namespace GCC
                 foreach (DataRow drPckListToRemove in drrPckListToRemove)
                     drPckListToRemove.Delete();
                 dtPicklist.AcceptChanges();
-                DataTable dtPicklist_Updated = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_picklists", "remarks IN ('Accepted','Pending','Rejected')");
+                DataTable dtPicklist_Updated = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_picklists", "remarks IN ('Accepted','Pending','Rejected')");
                 dtPicklist.Merge(dtPicklist_Updated);
                 GV.PickList_LastUpdate = GM.GetDateTime();
             }
@@ -5620,7 +5837,7 @@ namespace GCC
                 GM.HangUp();
                 //GV.MSSQL.BAL_ExecuteQuery("INSERT INTO Call_Timesheet..AspectDialerLogger (AgentName,LoginID,StationID,TelephoneNumber,RecordingID,Duration,DateTimeStamp,ClientName,ProjectName,CampaignID,Company_ID)VALUES('" + GV.sEmployeeName + " - " + GV.sEmployeeNo + "','" + GV.sEmployeeName + "','" + GV.sExtensionNumber + "','" + sCurrentCallingNo + "',1,'" + lblDialTimer.Text + "', GetDate(),'" + GV.sClientName + "','" + GV.sProjectName + "','GCC - 27'," + sMaster_ID + ");");
                 Insert_DialerLogger(1);
-                GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("INSERT INTO " + GV.sProjectID + "_log (RecordID, CompanySessionID, TableName, FieldName, OldValue, NewValue, `When`, Who, SystemName) VALUES (" + sMaster_ID + ",'" + GV.sCompanySessionID + "','CALL_HANGUP','" + GV.sDialerType + "', '" + GV.sExtensionNumber + "','" + sCurrentCallingNo + "',NOW(),'" + GV.sEmployeeName + "','" + Environment.MachineName + "');");
+                GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO " + GV.sProjectID + "_log (RecordID, CompanySessionID, TableName, FieldName, OldValue, NewValue, [When], [Who], SystemName) VALUES (" + sMaster_ID + ",'" + GV.sCompanySessionID + "','CALL_HANGUP','" + GV.sDialerType + "', '" + GV.sExtensionNumber + "','" + sCurrentCallingNo + "',getdate(),'" + GV.sEmployeeName + "','" + Environment.MachineName + "');");
                 lblDialTimer.Invoke((MethodInvoker)delegate { lblDialTimer.Text = "00:00:00"; });
                 lblPrePostDuration.Invoke((MethodInvoker)delegate { lblPrePostDuration.Text = "00:00:00"; });
                 //lblDialTimer.Text = "00:00:00";
@@ -5882,7 +6099,9 @@ namespace GCC
 
                 if (GV.sDialerType == "iSystem")
                 {
-                    Process[] iSystemProcess = Process.GetProcessesByName("iSystems 3.0");
+                    Process[] runningProcesses = Process.GetProcesses();
+                    var currentSessionID = Process.GetCurrentProcess().SessionId;
+                    Process[] iSystemProcess = (from c in runningProcesses where c.ProcessName.ToLower() == "isystems 3.0" && c.SessionId == currentSessionID select c).ToArray();
                     if (iSystemProcess.Length > 0)
                     {
                         //try
@@ -5909,7 +6128,9 @@ namespace GCC
                 }
                 else if (GV.sDialerType == "X-Lite")
                 {
-                    Process[] xLiteProcess = Process.GetProcessesByName("X-Lite");
+                    Process[] runningProcesses = Process.GetProcesses();
+                    var currentSessionID = Process.GetCurrentProcess().SessionId;
+                    Process[] xLiteProcess = (from c in runningProcesses where c.ProcessName.ToLower() == "x-lite" && c.SessionId == currentSessionID select c).ToArray();
                     if (xLiteProcess.Length == 0)
                     {
                         ToastNotification.Show(this, "X-Lite not running." + Environment.NewLine + "Starting X-Lite now. Please redial once X-Lite is initialized.", 5000, eToastPosition.TopRight);
@@ -5938,7 +6159,7 @@ namespace GCC
                             {
                                 GV.VorteX.SupportVox = true;
                                 GV.VorteX.SupportiDialer = false;
-                                string sVortexStatus = GV.VorteX.Connect(GV.IP, GV.sSoftwareVersion, false, false);
+                                string sVortexStatus = GV.VorteX.Connect(GV.IP, false, false);
                                 if (sVortexStatus.Length == 0)
                                 {
                                     ToastNotification.Show(this, "Initializing Vortex..", eToastPosition.TopRight);
@@ -5966,7 +6187,7 @@ namespace GCC
                     }
                 }
 
-                if (txtTimeZone.TextBox.BackColor == Color.FromArgb(0xFF, 0x99, 0x99))
+                if (txtTimeZone.TextBox.BackColor == Color.LightPink)
                 {
                     if (GV.TimeEnabled)
                     {
@@ -5993,11 +6214,11 @@ namespace GCC
                     //string sSQL = "INSERT INTO ASPECTDIALERLOGGER VALUES ('" + txtEmpName.Text + "', '" + EmployeeName + "', '" + Extension + "', '" + TelNo + "'," + Id.ToString() + " , '" + lblDuration.Text + "', GetDate(), '', '" + ClientName + "', '" + ProjectName + "', '" + cmbCampaignID.Text + "')";
                     //string sSQL = "INSERT INTO AspectDialerLogger (AgentName,LoginID,StationID,TelephoneNumber,RecordingID,Duration,DateTimeStamp,ClientName,ProjectName,CampaignID)VALUES('" + GV.sEmployeeName + " - " + GV.sEmployeeNo + "','" + GV.sEmployeeNo + "','" + GV.sExtensionNumber + "','" + sTeleno + "',0,'00:00:00','" + GM.GetDateTime() + "','Client','" + GV.sProjectName + "','GCC - 27');";
                     if (TimeZoneFail)
-                        GV.MYSQL.BAL_ExecuteQueryMySQL("INSERT INTO timezone_override_calls (PROJECT_ID, COMPANY_ID, WHO, `WHEN`, TELEPHONE, ADDRESS, CITY, STATE, COUNTRY) VALUES ('" + GV.sProjectID + "'," + sMaster_ID + ",'" + GV.sEmployeeName + "', '" + GM.GetDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "', '" + sCurrentCallingNo + "', '" + dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_1"].ToString().Replace("'", "''") + ", " + dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_2"].ToString().Replace("'", "''") + ", " + dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_3"].ToString().Replace("'", "''") + "' ,'" + dtMasterCompanies.Rows[iCompanyRowIndex]["CITY"].ToString().Replace("'", "''") + "','" + dtMasterCompanies.Rows[iCompanyRowIndex]["COUNTY"].ToString().Replace("'", "''") + "','" + dtMasterCompanies.Rows[iCompanyRowIndex]["COUNTRY"].ToString().Replace("'", "''") + "')");
+                        GV.MSSQL1.BAL_ExecuteQuery("INSERT INTO c_timezone_override_calls (PROJECT_ID, COMPANY_ID, [WHO], [WHEN], TELEPHONE, ADDRESS, CITY, STATE, COUNTRY) VALUES ('" + GV.sProjectID + "'," + sMaster_ID + ",'" + GV.sEmployeeName + "', '" + GM.GetDateTime().ToString("yyyy-MM-dd hh:mm:ss") + "', '" + sCurrentCallingNo + "', '" + dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_1"].ToString().Replace("'", "''") + ", " + dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_2"].ToString().Replace("'", "''") + ", " + dtMasterCompanies.Rows[iCompanyRowIndex]["ADDRESS_3"].ToString().Replace("'", "''") + "' ,'" + dtMasterCompanies.Rows[iCompanyRowIndex]["CITY"].ToString().Replace("'", "''") + "','" + dtMasterCompanies.Rows[iCompanyRowIndex]["COUNTY"].ToString().Replace("'", "''") + "','" + dtMasterCompanies.Rows[iCompanyRowIndex]["COUNTRY"].ToString().Replace("'", "''") + "')");
 
                     GM.Moniter("Call in Progress");
                     Insert_DialerLogger(0);
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("INSERT INTO " + GV.sProjectID + "_log (RecordID, CompanySessionID, TableName, FieldName, OldValue, NewValue, `When`, Who, SystemName) VALUES (" + sMaster_ID + ",'" + GV.sCompanySessionID + "','CALL_INITIATE','" + GV.sDialerType + "', '" + GV.sExtensionNumber + "','" + sCurrentCallingNo + "',NOW(),'" + GV.sEmployeeName + "','" + Environment.MachineName + "');");
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO " + GV.sProjectID + "_log (RecordID, CompanySessionID, TableName, FieldName, OldValue, NewValue, [When],[Who], SystemName) VALUES (" + sMaster_ID + ",'" + GV.sCompanySessionID + "','CALL_INITIATE','" + GV.sDialerType + "', '" + GV.sExtensionNumber + "','" + sCurrentCallingNo + "',getdate(),'" + GV.sEmployeeName + "','" + Environment.MachineName + "');");
                     pictureBoxDialImage.Enabled = true;
                     tCall.Enabled = true;
                     ToastNotification.Show(this, "Dialing " + sDialNumber, eToastPosition.TopRight);
@@ -6447,23 +6668,41 @@ namespace GCC
                         //For Company freeze
                         foreach (DataRow drCompany in dtMasterCompanies.Rows)
                         {
+                            
+
 
                             if (dtQCTable.Select("RecordID = " + drCompany["Master_ID"] + " AND TableName = 'Company' AND QC_Status = 'SendBack'").Length > 0)
                                 continue;
                             if (
                             (
-                            (GV.sAccessTo == "TR" && (GV.TR_lstDisposalsToBeFreezed.Contains(drCompany["TR_PRIMARY_DISPOSAL"].ToString(), StringComparer.OrdinalIgnoreCase)))
+                            (GV.sAccessTo == "TR" && dtRecordStatus.Select("Research_Type = 'TR' AND Table_Name = 'COMPANY' AND Primary_status = '" + drCompany["TR_PRIMARY_DISPOSAL"] + "' AND Secondary_status = '" + drCompany["TR_SECONDARY_DISPOSAL"] + "' AND OPERATION_TYPE LIKE '%Freeze%'").Length > 0)
                             ||
-                            (GV.sFreezeWRCompanyCompletes == "Y" && lstOppoResearchFreezedDisposals.Contains(drCompany["WR_PRIMARY_DISPOSAL"].ToString(), StringComparer.OrdinalIgnoreCase))
+                            (GV.sFreezeWRCompanyCompletes == "Y" && dtRecordStatus.Select("Research_Type = 'WR' AND Table_Name = 'COMPANY' AND Primary_status = '" + drCompany["WR_PRIMARY_DISPOSAL"] + "' AND Secondary_status = '" + drCompany["WR_SECONDARY_DISPOSAL"] + "' AND OPERATION_TYPE LIKE '%Freeze%'").Length > 0)
                             )
                             ||
                             (
-                            (GV.sAccessTo == "WR" && (GV.WR_lstDisposalsToBeFreezed.Contains(drCompany["WR_PRIMARY_DISPOSAL"].ToString(), StringComparer.OrdinalIgnoreCase)))
+                            (GV.sAccessTo == "WR" && dtRecordStatus.Select("Research_Type = 'WR' AND Table_Name = 'COMPANY' AND Primary_status = '" + drCompany["WR_PRIMARY_DISPOSAL"] + "' AND Secondary_status = '" + drCompany["WR_SECONDARY_DISPOSAL"] + "' AND OPERATION_TYPE LIKE '%Freeze%'").Length > 0)
                             ||
-                            (GV.sFreezeTRCompanyCompletes == "Y" && lstOppoResearchFreezedDisposals.Contains(drCompany["TR_PRIMARY_DISPOSAL"].ToString(), StringComparer.OrdinalIgnoreCase))
+                            (GV.sFreezeTRCompanyCompletes == "Y" && dtRecordStatus.Select("Research_Type = 'TR' AND Table_Name = 'COMPANY' AND Primary_status = '" + drCompany["TR_PRIMARY_DISPOSAL"] + "' AND Secondary_status = '" + drCompany["TR_SECONDARY_DISPOSAL"] + "' AND OPERATION_TYPE LIKE '%Freeze%'").Length > 0)
                             )
                             )
-                            {
+
+
+
+                                //if (
+                                //(
+                                //(GV.sAccessTo == "TR" && (GV.TR_lstDisposalsToBeFreezed.Contains(drCompany["TR_PRIMARY_DISPOSAL"].ToString(), StringComparer.OrdinalIgnoreCase)))
+                                //||
+                                //(GV.sFreezeWRCompanyCompletes == "Y" && lstOppoResearchFreezedDisposals.Contains(drCompany["WR_PRIMARY_DISPOSAL"].ToString(), StringComparer.OrdinalIgnoreCase))
+                                //)
+                                //||
+                                //(
+                                //(GV.sAccessTo == "WR" && (GV.WR_lstDisposalsToBeFreezed.Contains(drCompany["WR_PRIMARY_DISPOSAL"].ToString(), StringComparer.OrdinalIgnoreCase)))
+                                //||
+                                //(GV.sFreezeTRCompanyCompletes == "Y" && lstOppoResearchFreezedDisposals.Contains(drCompany["TR_PRIMARY_DISPOSAL"].ToString(), StringComparer.OrdinalIgnoreCase))
+                                //)
+                                //)
+                                {
                                 if (lstRecordsToUnlock.Count > 0)
                                 {
                                     if (dtMasterContacts.Select("MASTER_ID = " + drCompany["MASTER_ID"] + " AND CONTACT_ID_P IN (" + sContactIDsToUnlock + ")").Length == 0)
@@ -7326,7 +7565,7 @@ namespace GCC
 
         void Log_OpenClose(string sTransactionStatus)
         {
-            DataTable dtLog = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_log", "1=0");
+            DataTable dtLog = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_log", "1=0");
 
             string sInsertString = String.Empty;
 
@@ -7354,7 +7593,7 @@ namespace GCC
             }
             else
             {
-                sInsertString = "INSERT crucru005_log (RecordID, CompanySessionID, TableName, FieldName, OldValue, NewValue, `When`, Who, SystemName) VALUES " +
+                sInsertString = "INSERT crucru005_log (RecordID, CompanySessionID, TableName, FieldName, OldValue, NewValue, [When], [Who], SystemName) VALUES " +
                                 "(" + sMaster_ID + ", '" + GV.sCompanySessionID + "','RecordStatus','" + sTransactionStatus + "','" + dtMasterContacts.Rows.Count + "','" + GV.sUserType + "','" + GM.GetDateTime() + "','" + GV.sEmployeeName + "','" + Environment.MachineName + "')";
                 DataRow drNewRow = dtLog.NewRow();
                 drNewRow["RecordID"] = sMaster_ID;
@@ -7370,8 +7609,8 @@ namespace GCC
 
 
             }
-            //GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(sInsertString);
-            GV.MYSQL.BAL_SaveToTableMySQL(dtLog, GV.sProjectID + "_log", "New", false);
+            //GV.MdfYSQL.BAL_ExecuteNonReturnQueryMyfSQL(sInsertString);
+            GV.MSSQL1.BAL_SaveToTable(dtLog, GV.sProjectID + "_log", "New", false);
         }
 
         void Logging(DataTable dtNewTable, DataTable dtOldTable)
@@ -7392,7 +7631,7 @@ namespace GCC
                 }
 
                 DataTable dtChangedData = dtNewTable.GetChanges(DataRowState.Modified);
-                DataTable dtLog = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_log", "1=0");
+                DataTable dtLog = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_log", "1=0");
 
                 if (dtChangedData != null)
                 {
@@ -7423,7 +7662,7 @@ namespace GCC
                     }
 
 
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtLog, GV.sProjectID + "_log", "New", false);
+                    GV.MSSQL1.BAL_SaveToTable(dtLog, GV.sProjectID + "_log", "New", false);
                 }
             }
             catch (Exception ex)
@@ -7525,7 +7764,7 @@ namespace GCC
                     sValidation_For_Values = string.Empty;
                     sDelimiter = string.Empty;
 
-                    if (Regex.IsMatch(drValidation["VALIDATION_VALUE"].ToString(), @"\=\=|\*\=|\=\*|\*\*|\#\#"))
+                    if (Regex.IsMatch(drValidation["VALIDATION_VALUE"].ToString(), @"\=\=|\*\=|\=\*|\*\*|\#\#|\*\#"))
                     {
                         if (drValidation["VALIDATION_VALUE"].ToString().Contains("=="))
                         {
@@ -7554,6 +7793,12 @@ namespace GCC
                         else if (drValidation["VALIDATION_VALUE"].ToString().Contains("##"))
                         {
                             sDelimiter = "##";
+                            sValidation_Value_Primary = drValidation["VALIDATION_VALUE"].ToString().Split(new string[] { sDelimiter }, StringSplitOptions.None)[0].ToUpper();
+                            sValidation_Value_Sec = drValidation["VALIDATION_VALUE"].ToString().Split(new string[] { sDelimiter }, StringSplitOptions.None)[1].ToUpper();
+                        }
+                        else if (drValidation["VALIDATION_VALUE"].ToString().Contains("*#"))
+                        {
+                            sDelimiter = "*#";
                             sValidation_Value_Primary = drValidation["VALIDATION_VALUE"].ToString().Split(new string[] { sDelimiter }, StringSplitOptions.None)[0].ToUpper();
                             sValidation_Value_Sec = drValidation["VALIDATION_VALUE"].ToString().Split(new string[] { sDelimiter }, StringSplitOptions.None)[1].ToUpper();
                         }
@@ -7650,7 +7895,7 @@ namespace GCC
                     sValidation_For_Values = string.Empty;
                     sDelimiter = string.Empty;
 
-                    if (Regex.IsMatch(drValidation["VALIDATION_VALUE"].ToString(), @"\=\=|\*\=|\=\*|\*\*|\#\#"))
+                    if (Regex.IsMatch(drValidation["VALIDATION_VALUE"].ToString(), @"\=\=|\*\=|\=\*|\*\*|\#\#|\*\#"))
                     {
                         if (drValidation["VALIDATION_VALUE"].ToString().Contains("=="))
                         {
@@ -7679,6 +7924,12 @@ namespace GCC
                         else if (drValidation["VALIDATION_VALUE"].ToString().Contains("##"))
                         {
                             sDelimiter = "##";
+                            sValidation_Value_Primary = drValidation["VALIDATION_VALUE"].ToString().Split(new string[] { sDelimiter }, StringSplitOptions.None)[0].ToUpper();
+                            sValidation_Value_Sec = drValidation["VALIDATION_VALUE"].ToString().Split(new string[] { sDelimiter }, StringSplitOptions.None)[1].ToUpper();
+                        }
+                        else if (drValidation["VALIDATION_VALUE"].ToString().Contains("*#"))
+                        {
+                            sDelimiter = "*#";
                             sValidation_Value_Primary = drValidation["VALIDATION_VALUE"].ToString().Split(new string[] { sDelimiter }, StringSplitOptions.None)[0].ToUpper();
                             sValidation_Value_Sec = drValidation["VALIDATION_VALUE"].ToString().Split(new string[] { sDelimiter }, StringSplitOptions.None)[1].ToUpper();
                         }
@@ -7911,7 +8162,7 @@ namespace GCC
                         string sGMTCountryName = dtMasterCompanies.Rows[i]["Country"].ToString();
                         DataRow[] drCountryInformation = dtCountryInformation.Select("CountryName = '" + sGMTCountryName.Replace("'", "''") + "'");
                         if (drCountryInformation.Length > 0)
-                            dtMasterCompanies.Rows[i]["HoursFromGMT"] = drCountryInformation[0]["HoursFromGMT"].ToString();
+                            dtMasterCompanies.Rows[i]["HoursFromGMT"] = Convert.ToInt32(Convert.ToDouble(drCountryInformation[0]["HoursFromGMT"]));
                     }
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
                     #endregion
@@ -8025,13 +8276,14 @@ namespace GCC
                             {
                                 if (dtBlock.Select("TABLE = 'COMPANY' AND FIELD = 'SWITCHBOARD' AND BLOCK_TYPE = 'CALL' AND MATCH_TYPE = 'SWITCHBOARD' AND VALUE = '" + sDNDSwitchboard + "'").Length == 0)
                                 {
-                                    if (GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT 1 FROM c_block WHERE `VALUE` = '" + sDNDSwitchboard + "' AND BLOCK_TYPE = 'CALL' AND MATCH_TYPE = 'SWITCHBOARD' AND BLOCK_REQUEST_FROM = 'Campaign Manager' AND BLOCK_EXPIRY > CURDATE();").Rows.Count == 0)
+                                    if (GV.MSSQL1.BAL_ExecuteQuery("SELECT 1 FROM c_block WHERE [VALUE] = '" + sDNDSwitchboard + "' AND BLOCK_TYPE = 'CALL' AND MATCH_TYPE = 'SWITCHBOARD' AND BLOCK_REQUEST_FROM = 'Campaign Manager' AND BLOCK_EXPIRY > cast(GETDATE() as date);").Rows.Count == 0)
                                     {
-                                        GV.MYSQL.BAL_ExecuteQueryMySQL(@"INSERT INTO c_block (PROJECT_ID, `TABLE`, FIELD, VALUE, BLOCK_TYPE, MATCH_TYPE, BLOCK_TO, BLOCK_EXPIRY, BLOCK_REQUEST_FROM, BLOCK_DESCRIPTION, UPDATED_DATE, UPDATED_BY)
-                                                               VALUES('ALL', 'COMPANY', 'SWITCHBOARD', '" + sDNDSwitchboard + "', 'CALL', 'SWITCHBOARD', 'ALL', DATE_ADD(CURDATE(), INTERVAL 3 MONTH), 'Campaign Manager', 'Automated DND request raised from Campaign Manager. ProjectID:" + GV.sProjectID + "|CompanyID:" + dtMasterCompanies.Rows[i]["MASTER_ID"] + "', NOW(), '" + GV.sEmployeeName + "');");
+                                        GV.MSSQL1.BAL_ExecuteQuery(@"INSERT INTO c_block (PROJECT_ID, [TABLE], FIELD, VALUE, BLOCK_TYPE, MATCH_TYPE, BLOCK_TO, BLOCK_EXPIRY, BLOCK_REQUEST_FROM, BLOCK_DESCRIPTION, UPDATED_DATE, UPDATED_BY)
+                                                               VALUES('ALL', 'COMPANY', 'SWITCHBOARD', '" + sDNDSwitchboard + "', 'CALL', 'SWITCHBOARD', 'ALL', DATEADD(MM, 3, GETDATE()), 'Campaign Manager', 'Automated DND request raised from Campaign Manager. ProjectID:" + GV.sProjectID + "|CompanyID:" + dtMasterCompanies.Rows[i]["MASTER_ID"] + "', GETDATE(), '" + GV.sEmployeeName + "');");
                                     }
                                 }
                             }
+                            
                         }
                     } 
                     #endregion
@@ -8392,7 +8644,7 @@ namespace GCC
                             {
                                 if (C.Text.Length == 0)
                                 {
-                                    C.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                                    C.BackColor = Color.LightPink;
                                     C.Refresh();
                                     return;
                                 }
@@ -9194,8 +9446,8 @@ namespace GCC
                         string sTeleQuery = GM.ColumnToQString("SWITCHBOARD", dtDistinctTele, "Int");
 
                         RecordTime("Switchboard DB Operation Start");
-                        DataTable dtCompanySwitchboard = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT Master_ID,Company_Name,COUNTRY,SWITCHBOARD FROM " + GV.sCompanyTable + "  WHERE SWITCHBOARD_TRIMMED IN (" + sTeleQuery + ") AND GROUP_ID <> " + sGroup_ID + ";");
-                        //DataTable dtCompanySwitchboard = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT Master_ID,Company_Name,COUNTRY,SWITCHBOARD FROM " + GV.sCompanyTable + "  WHERE RIGHT(regex_replace('[^0-9]', '', SWITCHBOARD),8) IN (" + sTeleQuery + ") AND GROUP_ID <> " + sGroup_ID + ";");
+                        DataTable dtCompanySwitchboard = GV.MSSQL1.BAL_ExecuteQuery("SELECT Master_ID,Company_Name,COUNTRY,SWITCHBOARD FROM " + GV.sCompanyTable + "  WHERE SWITCHBOARD_TRIMMED IN (" + sTeleQuery + ") AND GROUP_ID <> " + sGroup_ID + ";");
+                        //DataTable dtCompanySwitchboard = GV.MdYSQL.BAL_ExecuteQueryMyfSQL("SELECT Master_ID,Company_Name,COUNTRY,SWITCHBOARD FROM " + GV.sCompanyTable + "  WHERE RIGHT(regex_replace('[^0-9]', '', SWITCHBOARD),8) IN (" + sTeleQuery + ") AND GROUP_ID <> " + sGroup_ID + ";");
                         RecordTime("Switchboard DB Operation Stop");
                         if (dtCompanySwitchboard.Rows.Count > 0)
                         {
@@ -9252,13 +9504,13 @@ namespace GCC
             {
                 if (GV.sUserType == "Agent")
                 {
-                    DataTable dtRevenueContacts = GV.MYSQL.BAL_ExecuteQueryMySQL("select MASTER_ID, contact_id_p, " + GV.sAccessTo + "_Contact_Status, " +
+                    DataTable dtRevenueContacts = GV.MSSQL1.BAL_ExecuteQuery("select MASTER_ID, contact_id_p, " + GV.sAccessTo + "_Contact_Status, " +
                     GV.sAccessTo + "_agent_Name, Contact_Location, Contact_Country, Contact_Region," + GV.sAccessTo + "_Updated_Date from " + GV.sContactTable + " where Master_ID = " + sMaster_ID + " AND " +
-                    GV.sAccessTo + "_contact_status IN (select Primary_Status from " + GV.sProjectID + "_RecordStatus where (Length(ifnull(Billing_revenue,'')) > 0 OR Length(ifnull(Agent_revenue,'')) > 0))");
+                    GV.sAccessTo + "_contact_status IN (select Primary_Status from " + GV.sProjectID + "_RecordStatus where (Len(isnull(Billing_revenue,'')) > 0 OR Len(isnull(Agent_revenue,'')) > 0))");
 
                     if (dtRevenueContacts.Rows.Count > 0)
                     {
-                        DataTable dtRevenue = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_REVENUE", "Master_ID IN (" + GM.ListToQueryString(lstMasterIDs, "Int") + ") AND User_Type = '" + GV.sAccessTo + "'");
+                        DataTable dtRevenue = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_REVENUE", "Master_ID IN (" + GM.ListToQueryString(lstMasterIDs, "Int") + ") AND User_Type = '" + GV.sAccessTo + "'");
                         foreach (DataRow drRevenueContacts in dtRevenueContacts.Rows)
                         {
                             DataRow[] drrRecordStatusRevenue;
@@ -9316,7 +9568,7 @@ namespace GCC
                         }
 
                         if (dtRevenue.GetChanges(DataRowState.Added) != null)
-                            GV.MYSQL.BAL_SaveToTableMySQL(dtRevenue.GetChanges(DataRowState.Added), GV.sProjectID + "_Revenue", "New", true);
+                            GV.MSSQL1.BAL_SaveToTable(dtRevenue.GetChanges(DataRowState.Added), GV.sProjectID + "_Revenue", "New", true);
                     }
                 }
             }
@@ -9753,7 +10005,7 @@ namespace GCC
                             sSoundexQuery += "SELECT '" + i + "' AS 'Index','" + GM.HandleBackSlash(dtChanged_and_New_Contact.Rows[i]["FIRST_NAME"].ToString().Replace("'", "''")) + "' AS'First_Name', SOUNDEX('" + GM.HandleBackSlash(dtChanged_and_New_Contact.Rows[i]["FIRST_NAME"].ToString().Replace("'", "''")) + "') AS 'First_Name_Soundx','" + GM.HandleBackSlash(dtChanged_and_New_Contact.Rows[i]["LAST_NAME"].ToString().Replace("'", "''")) + "' AS 'Last_Name', SOUNDEX('" + GM.HandleBackSlash(dtChanged_and_New_Contact.Rows[i]["LAST_NAME"].ToString().Replace("'", "''")) + "') AS 'Last_Name_Soundx'";
                     }
 
-                    DataTable dtSoundex = GV.MYSQL.BAL_ExecuteQueryMySQL(sSoundexQuery + ";");
+                    DataTable dtSoundex = GV.MSSQL1.BAL_ExecuteQuery(sSoundexQuery + ";");
 
                     for (int i = 0; i < dtMasterContacts.Rows.Count; i++)
                     {
@@ -10017,10 +10269,12 @@ namespace GCC
                         dtMasterContacts.Rows[i][GV.sAccessTo + "_UPDATED_DATE"] = GM.GetDateTime();
 
                         if (
-                            GV.lstTRContactStatusToBeValidated.Contains(dtMasterContacts.Rows[i]["TR_CONTACT_STATUS"].ToString(),
-                                StringComparer.OrdinalIgnoreCase) ||
-                            GV.lstWRContactStatusToBeValidated.Contains(dtMasterContacts.Rows[i]["WR_CONTACT_STATUS"].ToString(),
-                                StringComparer.OrdinalIgnoreCase))
+
+                            //GV.sTRContactstatusTobeMailChecked
+
+                            GV.lstTRContactstatusTobeMailChecked.Contains(dtMasterContacts.Rows[i]["TR_CONTACT_STATUS"].ToString(),StringComparer.OrdinalIgnoreCase) 
+                            ||
+                            GV.lstWRContactstatusTobeMailChecked.Contains(dtMasterContacts.Rows[i]["WR_CONTACT_STATUS"].ToString(),StringComparer.OrdinalIgnoreCase))
                         {
                             IsNewCompletesAdded = true;
                         }
@@ -10157,11 +10411,11 @@ namespace GCC
                         if (IsNewCompletesAdded)
                         {
                             if (GV.sTRContactstatusTobeMailChecked.Length > 0 && GV.sWRContactstatusTobeMailChecked.Length > 0)
-                                dtEmail_Contact = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT CONTACT_ID_P, CONTACT_EMAIL, EMAIL_VERIFIED FROM " + GV.sContactTable + " WHERE MASTER_ID = " + sMaster_ID + " AND (TR_CONTACT_STATUS IN (" + GV.sTRContactstatusTobeMailChecked + ") OR WR_CONTACT_STATUS IN (" + GV.sWRContactstatusTobeMailChecked + "));");
+                                dtEmail_Contact = GV.MSSQL1.BAL_ExecuteQuery("SELECT CONTACT_ID_P, CONTACT_EMAIL, EMAIL_VERIFIED FROM " + GV.sContactTable + " WHERE MASTER_ID = " + sMaster_ID + " AND (TR_CONTACT_STATUS IN (" + GV.sTRContactstatusTobeMailChecked + ") OR WR_CONTACT_STATUS IN (" + GV.sWRContactstatusTobeMailChecked + "));");
                             else if (GV.sTRContactstatusTobeMailChecked.Length > 0)
-                                dtEmail_Contact = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT CONTACT_ID_P, CONTACT_EMAIL, EMAIL_VERIFIED FROM " + GV.sContactTable + " WHERE MASTER_ID = " + sMaster_ID + " AND TR_CONTACT_STATUS IN (" + GV.sTRContactstatusTobeMailChecked + ");");
+                                dtEmail_Contact = GV.MSSQL1.BAL_ExecuteQuery("SELECT CONTACT_ID_P, CONTACT_EMAIL, EMAIL_VERIFIED FROM " + GV.sContactTable + " WHERE MASTER_ID = " + sMaster_ID + " AND TR_CONTACT_STATUS IN (" + GV.sTRContactstatusTobeMailChecked + ");");
                             else
-                                dtEmail_Contact = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT CONTACT_ID_P, CONTACT_EMAIL, EMAIL_VERIFIED FROM " + GV.sContactTable + " WHERE MASTER_ID = " + sMaster_ID + " AND WR_CONTACT_STATUS IN (" + GV.sWRContactstatusTobeMailChecked + ");");
+                                dtEmail_Contact = GV.MSSQL1.BAL_ExecuteQuery("SELECT CONTACT_ID_P, CONTACT_EMAIL, EMAIL_VERIFIED FROM " + GV.sContactTable + " WHERE MASTER_ID = " + sMaster_ID + " AND WR_CONTACT_STATUS IN (" + GV.sWRContactstatusTobeMailChecked + ");");
                         }
                         else
                             dtEmail_Contact = drrContactsToCheck.CopyToDataTable();
@@ -10520,12 +10774,12 @@ namespace GCC
 
                         if (GV.sAllowDuplicateEmailAcrossProject == "N")
                         {
-                            //dtMasterContactsEmail = GlobalVariables.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT Contact.MASTER_ID, Contact.CONTACT_EMAIL FROM " + GlobalVariables.sContactTable + " Contact WHERE Contact.CONTACT_EMAIL IN (" + sEmails + ") AND Contact.MASTER_ID <> " + sMaster_ID + ";");
+                            //dtMasterContactsEmail = GlobalVariables.MYfSQL.BAL_ExecuteQueryMyfSQL("SELECT DISTINCT Contact.MASTER_ID, Contact.CONTACT_EMAIL FROM " + GlobalVariables.sContactTable + " Contact WHERE Contact.CONTACT_EMAIL IN (" + sEmails + ") AND Contact.MASTER_ID <> " + sMaster_ID + ";");
                             RecordTime("EmailDupe DB Operation Start");
                             if (GV.sContact_View.Length > 0 && GV.bUseContactView_EmailDupe)
-                                dtContactEmailDupe = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT MASTER_ID, CONTACT_EMAIL, PROJECT_NAME, PROJECT_ID FROM " + GV.sContact_View + " WHERE CONTACT_EMAIL IN (" + sEmails + ");");
+                                dtContactEmailDupe = GV.MSSQL1.BAL_ExecuteQuery("SELECT MASTER_ID, CONTACT_EMAIL, PROJECT_NAME, PROJECT_ID FROM " + GV.sContact_View + " WHERE CONTACT_EMAIL IN (" + sEmails + ");");
                             else
-                                dtContactEmailDupe = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT Contact.MASTER_ID, Contact.CONTACT_EMAIL FROM " + GV.sContactTable + " Contact WHERE Contact.CONTACT_EMAIL IN (" + sEmails + ") AND (TR_CONTACT_STATUS IN (" + GV.sEmailCheckContactStatus + ") OR WR_CONTACT_STATUS IN (" + GV.sEmailCheckContactStatus + "));");
+                                dtContactEmailDupe = GV.MSSQL1.BAL_ExecuteQuery("SELECT Contact.MASTER_ID, Contact.CONTACT_EMAIL FROM " + GV.sContactTable + " Contact WHERE Contact.CONTACT_EMAIL IN (" + sEmails + ") AND (TR_CONTACT_STATUS IN (" + GV.sEmailCheckContactStatus + ") OR WR_CONTACT_STATUS IN (" + GV.sEmailCheckContactStatus + "));");
                             RecordTime("EmailDupe DB Operation Stop");
 
                             if (dtContactEmailDupe == null)// This ll be null if error occured on connection
@@ -11032,11 +11286,11 @@ namespace GCC
             {
                 bool IsSaveSucess = true;
                 if (dtSave.GetChanges(DataRowState.Added) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Added), sTableName, "New", false);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Added), sTableName, "New", false);
                 if (dtSave.GetChanges(DataRowState.Modified) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Modified), sTableName, "Update", false);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Modified), sTableName, "Update", false);
                 if (dtSave.GetChanges(DataRowState.Deleted) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Deleted), sTableName, "Delete", false);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Deleted), sTableName, "Delete", false);
                 return IsSaveSucess;
             }
             catch (Exception ex)
@@ -11338,7 +11592,7 @@ namespace GCC
         {
             IsRecordSaved = false;
             dtMasterCompanies.RejectChanges();
-            //dtMasterCompanies = GlobalVariables.MYSQL.BAL_FetchTable(GlobalVariables.sCompanyTable, "MASTER_ID = " + sRecordID);//Master Table
+            //dtMasterCompanies = GlobalVariables.MYfSQL.BAL_FetchTable(GlobalVariables.sCompanyTable, "MASTER_ID = " + sRecordID);//Master Table
             for (int i = 0; i < dtMasterCompanies.Rows.Count; i++)
             {
                 if (GV.sAccessTo == "TR")
@@ -11363,7 +11617,7 @@ namespace GCC
             //    if (!IsRecordSaved && dtMasterCompanies != null && dtMasterCompanies.Rows.Count > 0 && GlobalVariables.sUserType == "Agent")
             //    {
             //        dtMasterCompanies.RejectChanges();
-            //        //dtMasterCompanies = GlobalVariables.MYSQL.BAL_FetchTable(GlobalVariables.sCompanyTable, "MASTER_ID = " + sRecordID);//Master Table
+            //        //dtMasterCompanies = GlobalVariables.MYfSQL.BAL_FetchTable(GlobalVariables.sCompanyTable, "MASTER_ID = " + sRecordID);//Master Table
             //        if (GlobalVariables.sAccessTo == "TR")
             //            dtMasterCompanies.Rows[0]["TR_AGENTNAME"] = dtMasterCompanies.Rows[0]["TR_PREVIOUS_AGENTNAME"];
             //        else if (GlobalVariables.sAccessTo == "WR")
@@ -11419,9 +11673,10 @@ namespace GCC
 
 
 
-
+                            if (tPrePostCall.Enabled)
+                                tPrePostCall.Stop();
                             this.FormClosing -= new FormClosingEventHandler(frmContactsUpdate_FormClosing);
-                            this.Close();//When closing from main window
+                            this.Close();//When closing from main window                            
                             this.FormClosing += new FormClosingEventHandler(frmContactsUpdate_FormClosing);
                         }
                         else
@@ -12521,21 +12776,21 @@ namespace GCC
         private void sdgvContacts_Click(object sender, EventArgs e)
         {
 
-            if (GV.sUserType == "QC")
-            {
-                if (tabControlContact.Tabs.Contains(tabContacts))
-                {
-                    tabControlContact.Tabs.Remove(tabContacts);
-                    tabControlCompany.Tabs.Add(tabContacts);
-                    tabControlContact.Controls.Remove(sTabPanelContacts);
-                    tabControlCompany.Controls.Add(sTabPanelContacts);
+            //if (GV.sUserType == "QC")
+            //{
+            //    if (tabControlContact.Tabs.Contains(tabContacts))
+            //    {
+            //        tabControlContact.Tabs.Remove(tabContacts);
+            //        tabControlCompany.Tabs.Add(tabContacts);
+            //        tabControlContact.Controls.Remove(sTabPanelContacts);
+            //        tabControlCompany.Controls.Add(sTabPanelContacts);
 
-                }
+            //    }
 
-                tabControlCompany.SelectedPanel = sTabPanelContacts;
-                tabControlContact.SelectedPanel = sTabPanelQC;
-            }
-            else
+            //    tabControlCompany.SelectedPanel = sTabPanelContacts;
+            //    tabControlContact.SelectedPanel = sTabPanelQC;
+            //}
+            //else
                 tabControlContact.SelectedPanel = sTabPanelContacts;
 
             
@@ -12615,7 +12870,7 @@ namespace GCC
             dtProjectInfo.Rows.Add("WRContactstatusTobeValidated", GV.sWRContactstatusTobeValidated, "String");
             dtProjectInfo.Rows.Add("SortableContactColumn", string.Join("~", GV.lstSortableContactColumn.ToArray()), "List");
             dtProjectInfo.Rows.Add("MSSQLConString", GV.sMSSQL, "String");
-            dtProjectInfo.Rows.Add("MYSQLConString", GV.sMySQL, "String");
+            dtProjectInfo.Rows.Add("MSSQL1ConString", GV.sMSSQL1, "String");
             //dtProjectInfo.Rows.Add("ContactRowIndex", iContactRowIndex, "Int");
             dtProjectInfo.Rows.Add("FieldName", sFieldName, "String");
             dtProjectInfo.Rows.Add("FreezedContactIDs", string.Join("~", lstFreezedContactIDs.ToArray()), "List");
@@ -13205,7 +13460,7 @@ namespace GCC
             if (IsDynamic)
             {
                 dtValidateMessages = dtValidationResultsDynamic;
-                txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                txt.BackColor = Color.LightPink;
                 txt.Refresh();
             }
             else
@@ -13239,7 +13494,7 @@ namespace GCC
             if (IsDynamic)
             {
                 dtValidateMessages = dtValidationResultsDynamic;
-                txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                txt.BackColor = Color.LightPink;
                 txt.Refresh();
             }
             else
@@ -13271,7 +13526,7 @@ namespace GCC
             if (IsDynamic)
             {
                 dtValidateMessages = dtValidationResultsDynamic;
-                txt.BackColor = Color.FromArgb(0xFF, 0x99, 0x99);
+                txt.BackColor = Color.LightPink;
                 txt.Refresh();
             }
             else
@@ -13459,7 +13714,7 @@ namespace GCC
         {
             string sEAFMessage = string.Empty;
             if (RunASynch(e))
-            {
+              {
                 DataTable dtEAFValidation = (DataTable)EAF_Call("Validation");
                 foreach (DataRow drEFAValidation in dtEAFValidation.Rows)
                 {
@@ -13685,7 +13940,7 @@ namespace GCC
                                 }
 
                                 if ((sPickList_Insert + sPickList_Delete).Trim().Length > 0)
-                                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(sPickList_Insert + " " + sPickList_Delete + " UPDATE c_project_settings set PICKLIST_LASTUPDATE = NOW() WHERE PROJECT_ID='" + GV.sProjectID + "';");
+                                    GV.MSSQL1.BAL_ExecuteNonReturnQuery(sPickList_Insert + " " + sPickList_Delete + " UPDATE c_project_settings set PICKLIST_LASTUPDATE = GETDATE() WHERE PROJECT_ID='" + GV.sProjectID + "';");
 
                                 //   GV.SQLCE.BAL_DeleteFromTable(GV.sSQLCEContactTable, "Master_ID=" + sMaster_ID + "");
                             }
@@ -13704,7 +13959,7 @@ namespace GCC
                             if (SaveToDB(dtQCTable, GV.sQCTable))//Save MasterContacts
                             {
                                 if (sQCRemove_Log.Length > 0)
-                                    GV.MYSQL.BAL_ExecuteQueryMySQL(sQCRemove_Log);
+                                    GV.MSSQL1.BAL_ExecuteQuery(sQCRemove_Log);
                                 //   GV.SQLCE.BAL_DeleteFromTable(GV.sSQLCEContactTable, "Master_ID=" + sMaster_ID + "");
                             }
                             else
@@ -13933,9 +14188,9 @@ namespace GCC
                             sOldData += "[" + DC.ColumnName + ":" + drToDelete[DC.ColumnName].ToString() + "]";
 
                         if (sLog_Query.Length > 0)
-                            sLog_Query += "," + "(" + drToDelete["RecordID"].ToString() + ",'QC','DataRemoved','" + sOldData.Replace("'", "''") + "',NOW(),'" + GV.sEmployeeName + "','" + sMachine + "')";
+                            sLog_Query += "," + "(" + drToDelete["RecordID"].ToString() + ",'QC','DataRemoved','" + sOldData.Replace("'", "''") + "',GETDATE(),'" + GV.sEmployeeName + "','" + sMachine + "')";
                         else
-                            sLog_Query = "(" + drToDelete["RecordID"].ToString() + ",'QC','DataRemoved','" + sOldData.Replace("'", "''") + "',NOW(),'" + GV.sEmployeeName + "','" + sMachine + "')";
+                            sLog_Query = "(" + drToDelete["RecordID"].ToString() + ",'QC','DataRemoved','" + sOldData.Replace("'", "''") + "',GETDATE(),'" + GV.sEmployeeName + "','" + sMachine + "')";
 
                         drToDelete.Delete(); //Remove qc OK records that are deleted
                     }
@@ -13947,7 +14202,7 @@ namespace GCC
             }
 
             if (sLog_Query.Length > 0)
-                return "INSERT INTO " + GV.sProjectID + "_log (RecordID, TableName, FieldName, oldvalue, `When`, Who, SystemName) VALUES " + sLog_Query;
+                return "INSERT INTO " + GV.sProjectID + "_log (RecordID, TableName, FieldName, oldvalue, [When], [Who], SystemName) VALUES " + sLog_Query;
             else
                 return string.Empty;
         }
@@ -14310,12 +14565,12 @@ namespace GCC
         {
 
             //List<string> lstCompanySessions = new List<string>();            
-            //dtProjectLog = GV.MYSQL.BAL_ExecuteQueryMySQL(@"SELECT A.RecordID,A.CompanySessionID, A.Who, B.OldValue - A.OldValue AS 'NewContactsAdded',A.NewValue AS 'UserType',`A`.`When` AS 'OpeningTime',B.`When` AS 'ClosingTime',B.FieldName AS 'CloseType',A.SystemName FROM ((SELECT * FROM " + GV.sProjectID + "_log WHERE RecordID = " + sMaster_ID + " AND TableName = 'RecordStatus' AND FieldName = 'Opened') AS A LEFT JOIN(SELECT * FROM " + GV.sProjectID + "_log WHERE RecordID = " + sMaster_ID + " AND TableName = 'RecordStatus' AND FieldName IN('Closed', 'Closed without Saving')) AS B ON A.CompanySessionID = B.CompanySessionID) WHERE A.CompanySessionID IS NOT NULL ORDER BY OpeningTime;");
+            //dtProjectLog = GV.MYsdSQL.BAL_ExecuteQueryMydSQL(@"SELECT A.RecordID,A.CompanySessionID, A.Who, B.OldValue - A.OldValue AS 'NewContactsAdded',A.NewValue AS 'UserType',`A`.`When` AS 'OpeningTime',B.`When` AS 'ClosingTime',B.FieldName AS 'CloseType',A.SystemName FROM ((SELECT * FROM " + GV.sProjectID + "_log WHERE RecordID = " + sMaster_ID + " AND TableName = 'RecordStatus' AND FieldName = 'Opened') AS A LEFT JOIN(SELECT * FROM " + GV.sProjectID + "_log WHERE RecordID = " + sMaster_ID + " AND TableName = 'RecordStatus' AND FieldName IN('Closed', 'Closed without Saving')) AS B ON A.CompanySessionID = B.CompanySessionID) WHERE A.CompanySessionID IS NOT NULL ORDER BY OpeningTime;");
             //foreach (DataRow drProjectLog in dtProjectLog.Rows)                
             //    lstCompanySessions.Add(drProjectLog["CompanySessionID"].ToString());
                         
             //if (lstCompanySessions.Count > 0)
-            //    dtCompanyContact_Log = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sProjectID + "_log WHERE  CompanySessionID IN (" + GM.ListToQueryString(lstCompanySessions, "String") + ");");
+            //    dtCompanyContact_Log = GV.MYsdSQL.BAL_ExecuteQueryMysSQL("SELECT * FROM " + GV.sProjectID + "_log WHERE  CompanySessionID IN (" + GM.ListToQueryString(lstCompanySessions, "String") + ");");
             //else
             //    dtCompanyContact_Log.Rows.Clear();
 
@@ -14503,9 +14758,9 @@ namespace GCC
         {
             if (txtSearchHistory.Text.Length > 0)
             {
-                DataRow[] drrCompanyContact_Log = dtCompanyContact_Log.Select("OLDVALUE LIKE '%" + txtSearchHistory.Text.Replace("'","''") + "%' OR NEWVALUE LIKE '%" + txtSearchHistory.Text.Replace("'", "''") + "%'");
+                DataRow[] drrCompanyContact_Log = dtCompanyContact_Log.Select("OLDVALUE LIKE '%" + txtSearchHistory.Text.Replace("'","''").Replace("[","").Replace("]","").Replace("+","") + "%' OR NEWVALUE LIKE '%" + txtSearchHistory.Text.Replace("'", "''").Replace("[", "").Replace("]", "").Replace("+", "") + "%'");
                 if (drrCompanyContact_Log.Length > 0)
-                    Load_History(dtProjectLog.Select("COMPANYSESSIONID IN (" + GM.ColumnToQString("COMPANYSESSIONID", drrCompanyContact_Log.CopyToDataTable(), "String") + ")").CopyToDataTable(), dtCompanyContact_Log.Select("RECORDID IN(" + GM.ColumnToQString("RECORDID", drrCompanyContact_Log.CopyToDataTable(), "String") + ")").CopyToDataTable(), txtSearchHistory.Text);
+                    Load_History(dtProjectLog.Select("COMPANYSESSIONID IN (" + GM.ColumnToQString("COMPANYSESSIONID", drrCompanyContact_Log.CopyToDataTable(), "String") + ")").CopyToDataTable(), dtCompanyContact_Log.Select("RECORDID IN(" + GM.ColumnToQString("RECORDID", drrCompanyContact_Log.CopyToDataTable(), "String") + ")").CopyToDataTable(), txtSearchHistory.Text.Replace("[", "").Replace("]", "").Replace("+", ""));
                 else
                 {
                     Load_History(dtProjectLog, dtCompanyContact_Log, string.Empty);
@@ -14521,13 +14776,13 @@ namespace GCC
             if(!HistoryLoaded)
             {
                 List<string> lstCompanySessions = new List<string>();
-                dtProjectLog = GV.MYSQL.BAL_ExecuteQueryMySQL(@"SELECT A.RecordID,A.CompanySessionID, A.Who, B.OldValue - A.OldValue AS 'NewContactsAdded',A.NewValue AS 'UserType',`A`.`When` AS 'OpeningTime',B.`When` AS 'ClosingTime',CASE WHEN B.FieldName = 'Closed'  THEN 'Y' ELSE  'N' END  AS 'CloseType',A.SystemName FROM ((SELECT * FROM " + GV.sProjectID + "_log WHERE RecordID = " + sMaster_ID + " AND TableName = 'RecordStatus' AND FieldName = 'Opened') AS A LEFT JOIN(SELECT * FROM " + GV.sProjectID + "_log WHERE RecordID = " + sMaster_ID + " AND TableName = 'RecordStatus' AND FieldName IN('Closed', 'Closed without Saving')) AS B ON A.CompanySessionID = B.CompanySessionID) WHERE A.CompanySessionID IS NOT NULL ORDER BY OpeningTime;");
+                dtProjectLog = GV.MSSQL1.BAL_ExecuteQuery(@"SELECT A.RecordID,A.CompanySessionID, A.Who, CAST(B.OldValue as int) - CAST(A.OldValue as int) AS 'NewContactsAdded',A.NewValue AS 'UserType',[A].[When] AS 'OpeningTime',B.[When] AS 'ClosingTime',CASE WHEN B.FieldName = 'Closed'  THEN 'Y' ELSE  'N' END  AS 'CloseType',A.SystemName FROM ((SELECT * FROM " + GV.sProjectID + "_log WHERE RecordID = " + sMaster_ID + " AND TableName = 'RecordStatus' AND FieldName = 'Opened') AS A LEFT JOIN(SELECT * FROM " + GV.sProjectID + "_log WHERE RecordID = " + sMaster_ID + " AND TableName = 'RecordStatus' AND FieldName IN('Closed', 'Closed without Saving')) AS B ON A.CompanySessionID = B.CompanySessionID) WHERE A.CompanySessionID IS NOT NULL ORDER BY OpeningTime;");
                 foreach (DataRow drProjectLog in dtProjectLog.Rows)
                     lstCompanySessions.Add(drProjectLog["CompanySessionID"].ToString());
 
                 if (lstCompanySessions.Count > 0)
                 {
-                    dtCompanyContact_Log = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sProjectID + "_log WHERE  CompanySessionID IN (" + GM.ListToQueryString(lstCompanySessions, "String") + ");");
+                    dtCompanyContact_Log = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + GV.sProjectID + "_log WHERE  CompanySessionID IN (" + GM.ListToQueryString(lstCompanySessions, "String") + ");");
 
                     string sCompanyColumnsToIgnore = string.Empty;
                     string sContactColumnsToIgnore = string.Empty;
@@ -14730,242 +14985,449 @@ namespace GCC
 
         private void btnGSpeechRecord_MouseDown(object sender, MouseEventArgs e)
         {
-            bNAudioStarted = false;
-            if (DsDevice.GetDevicesOfCat(FilterCategory.AudioInputDevice).Count() > 0)
-            {
-                if (GV.GSpeech)
-                {
-                    if (bWorkerNameSayer.IsBusy)
-                    {
-                        ToastNotification.Show(this, "Busy processing previous speech.", eToastPosition.TopRight);
-                        return;
-                    }
-                    try
-                    {
-                        sNAudioPath = string.Empty;
-                        waveSource = new WaveIn();
 
-                        waveSource.WaveFormat = new WaveFormat(16000, 1);
-                        waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
-                        waveSource.RecordingStopped += new EventHandler<NAudio.Wave.StoppedEventArgs>(waveSource_RecordingStopped);
-                        sNAudioPath = AppDomain.CurrentDomain.BaseDirectory + "GSpeech\\" + GV.sProjectID + "_" + GV.sEmployeeNo + "_" + sMaster_ID + "_" + GV.IP.Replace(".", string.Empty).Reverse().Replace("'", "").Replace("-", "") + GM.GetDateTime().ToString("yyMMddHHmmssff") + ".wav";
-                        if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "GSpeech"))
-                            Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "GSpeech");
-                        waveFile = new WaveFileWriter(sNAudioPath, waveSource.WaveFormat);
-                        waveSource.StartRecording();
-                        bNAudioStarted = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        ToastNotification.Show(this, "Problem with recording device.", eToastPosition.TopRight);
-                        GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
-                    }
-                }
-                else
-                    ToastNotification.Show(this, "Speech server not initialized.", eToastPosition.TopRight);
-            }
-            else
+            if (NAudio.Wave.WaveIn.DeviceCount < 1)
+            {
                 ToastNotification.Show(this, "No Audio device found.", eToastPosition.TopRight);
+                return;
+            }
+
+            GRecording = true;
+            GSpeak();
+
+            //bNAudioStarted = false;
+            //if (DsDevice.GetDevicesOfCat(FilterCategory.AudioInputDevice).Count() > 0)
+            //{
+            //    if (GV.GSpeech)
+            //    {
+            //        if (bWorkerNameSayer.IsBusy)
+            //        {
+            //            ToastNotification.Show(this, "Busy processing previous speech.", eToastPosition.TopRight);
+            //            return;
+            //        }
+            //        try
+            //        {
+            //            sNAudioPath = string.Empty;
+            //            waveSource = new WaveIn();
+
+            //            waveSource.WaveFormat = new WaveFormat(16000, 1);
+            //            waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
+            //            waveSource.RecordingStopped += new EventHandler<NAudio.Wave.StoppedEventArgs>(waveSource_RecordingStopped);
+            //            sNAudioPath = AppDomain.CurrentDomain.BaseDirectory + "GSpeech\\" + GV.sProjectID + "_" + GV.sEmployeeNo + "_" + sMaster_ID + "_" + GV.IP.Replace(".", string.Empty).Reverse().Replace("'", "").Replace("-", "") + GM.GetDateTime().ToString("yyMMddHHmmssff") + ".wav";
+            //            if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "GSpeech"))
+            //                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "GSpeech");
+            //            waveFile = new WaveFileWriter(sNAudioPath, waveSource.WaveFormat);
+            //            waveSource.StartRecording();
+            //            bNAudioStarted = true;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            ToastNotification.Show(this, "Problem with recording device.", eToastPosition.TopRight);
+            //            GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
+            //        }
+            //    }
+            //    else
+            //        ToastNotification.Show(this, "Speech server not initialized.", eToastPosition.TopRight);
+            //}
+            //else
+            //    ToastNotification.Show(this, "No Audio device found.", eToastPosition.TopRight);
+
+
+
         }
 
-        void waveSource_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            if (waveFile != null)
-            {
-                waveFile.Write(e.Buffer, 0, e.BytesRecorded);
-                waveFile.Flush();
-            }
-        }
+        #region Google Speech
 
-        void waveSource_RecordingStopped(object sender, NAudio.Wave.StoppedEventArgs e)
-        {
-            try
-            {
-                if (bNAudioStarted)
-                {
-                    if (waveSource != null)
-                    {
-                        waveSource.Dispose();
-                        waveSource = null;
-                    }
+        //void waveSource_DataAvailable(object sender, WaveInEventArgs e)
+        //{
+        //    if (waveFile != null)
+        //    {
+        //        waveFile.Write(e.Buffer, 0, e.BytesRecorded);
+        //        waveFile.Flush();
+        //    }
+        //}
 
-                    if (waveFile != null)
-                    {
-                        waveFile.Dispose();
-                        waveFile = null;
-                    }
+        //void waveSource_RecordingStopped(object sender, NAudio.Wave.StoppedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (bNAudioStarted)
+        //        {
+        //            if (waveSource != null)
+        //            {
+        //                waveSource.Dispose();
+        //                waveSource = null;
+        //            }
 
-                    // System.Threading.Thread.Sleep(3000);
+        //            if (waveFile != null)
+        //            {
+        //                waveFile.Dispose();
+        //                waveFile = null;
+        //            }
 
-                    if (bWorkerNameSayer.IsBusy)
-                        this.Invoke((MethodInvoker)delegate { ToastNotification.Show(this, "Busy processing previous request.", eToastPosition.TopRight); });
-                    else
-                    {
-                        sRequestType = "GS";
-                        iRequestWaitTime = 60;
-                        iESPTimertick = 0;
-                        timerESRequest.Start();
-                        bWorkerNameSayer.RunWorkerAsync();
-                    }
+        //            // System.Threading.Thread.Sleep(3000);
 
-                        //bWorkerGSpeech.RunWorkerAsync();
-                    //StartBtn.Enabled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
-            }
-        }
+        //            if (bWorkerNameSayer.IsBusy)
+        //                this.Invoke((MethodInvoker)delegate { ToastNotification.Show(this, "Busy processing previous request.", eToastPosition.TopRight); });
+        //            else
+        //            {
+        //                sRequestType = "GS";
+        //                iRequestWaitTime = 60;
+        //                iESPTimertick = 0;
+        //                timerESRequest.Start();
+        //                bWorkerNameSayer.RunWorkerAsync();
+        //            }
 
-        void GSpeechTranscribe()
-        {
-            try
-            {
-                if (GV.IsWindowsXP)
-                {
-                    string sNAudioNetworkPath = string.Empty;
-                    if (File.Exists(sNAudioPath))
-                    {
-                        sNAudioNetworkPath = @"\\172.27.137.182\Campaign Manager\GSpeech\" + Path.GetFileName(sNAudioPath);
-                        File.Copy(sNAudioPath, sNAudioNetworkPath);                        
-                    }
-                    if (File.Exists(sNAudioNetworkPath))
-                    {
-                        string sDataToSend = "GSQuery[:|:]" + GV.IP + "[:|:]" + sNAudioNetworkPath + "[:|:]" + GV.ESPort;                        
-                        Random Rand = new Random();
-                        int iPort = Rand.Next(2000, 9000);//Max 65535
-                        using (System.Net.Sockets.UdpClient sender1 = new System.Net.Sockets.UdpClient(iPort))
-                        {
-                            List<string> lstMachine = GetMachine();
-                            if (lstMachine.Count > 0)
-                            {
-                                sCommentText = string.Empty;
-                                sCommentError = string.Empty;
-                                sCurrentAudioPath = sNAudioNetworkPath;
-                                sender1.Send(Encoding.ASCII.GetBytes(sDataToSend), sDataToSend.Length, lstMachine[0], Convert.ToInt32(lstMachine[1]));
-                               // MessageBox.Show("RequestSent");
-                                int iStart = iESPTimertick;
-                                while (sCommentError.Length == 0)//Wait till result arrives
-                                {
-                                    if ((iESPTimertick - iStart) > iRequestWaitTime)
-                                    {
-                                        //sCommentText = string.Empty;
-                                        //sCommentError = string.Empty;
-                                        sCurrentAudioPath = string.Empty;
-                                        return;
-                                    }
-                                }
-                               // MessageBox.Show(sCommentText);
-                                if (sCommentText.Length > 0 && sCommentError != "Error")
-                                {
-                                   // MessageBox.Show("Error");
-                                    TR_COMMENTS.Invoke((MethodInvoker)delegate { TR_COMMENTS.Text = sCommentText; });
-                                }
-                                //else
-                                // Invoke((MethodInvoker)delegate { ToastNotification.Show(this, "Service machine not responding.", eToastPosition.TopRight); });
-                                sCurrentAudioPath = string.Empty;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    var request = new Google.Apis.CloudSpeechAPI.v1beta1.Data.SyncRecognizeRequest()
-                    {
-                        Config = new Google.Apis.CloudSpeechAPI.v1beta1.Data.RecognitionConfig()
-                        {
-                            Encoding = "LINEAR16",
-                            SampleRate = 16000,
-                            LanguageCode = "en-IN"
-                        },
-                        Audio = new Google.Apis.CloudSpeechAPI.v1beta1.Data.RecognitionAudio()
-                        {
-                            Content = Convert.ToBase64String(File.ReadAllBytes(sNAudioPath))
-                        }
-                    };
+        //                //bWorkerGSpeech.RunWorkerAsync();
+        //            //StartBtn.Enabled = true;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
+        //    }
+        //}
 
-                    
-
-                    var response = GV.GSpeechCloudAPI.Speech.Syncrecognize(request).Execute();
-                    string sOut = string.Empty;
-                    foreach (var result in response.Results)
-                    {
-                        foreach (var alternative in result.Alternatives)
-                            sOut += alternative.Transcript;
-                    }
+        //void GSpeechTranscribe()
+        //{
+        //    try
+        //    {
+        //        if (GV.IsWindowsXP)
+        //        {
+        //            string sNAudioNetworkPath = string.Empty;
+        //            if (File.Exists(sNAudioPath))
+        //            {
+        //                sNAudioNetworkPath = @"\\172.27.137.182\Campaign Manager\GSpeech\" + Path.GetFileName(sNAudioPath);
+        //                File.Copy(sNAudioPath, sNAudioNetworkPath);                        
+        //            }
+        //            if (File.Exists(sNAudioNetworkPath))
+        //            {
+        //                string sDataToSend = "GSQuery[:|:]" + GV.IP + "[:|:]" + sNAudioNetworkPath + "[:|:]" + GV.ESPort;                        
+        //                Random Rand = new Random();
+        //                int iPort = Rand.Next(2000, 9000);//Max 65535
+        //                using (System.Net.Sockets.UdpClient sender1 = new System.Net.Sockets.UdpClient(iPort))
+        //                {
+        //                    List<string> lstMachine = GetMachine();
+        //                    if (lstMachine.Count > 0)
+        //                    {
+        //                        sCommentText = string.Empty;
+        //                        sCommentError = string.Empty;
+        //                        sCurrentAudioPath = sNAudioNetworkPath;
+        //                        sender1.Send(Encoding.ASCII.GetBytes(sDataToSend), sDataToSend.Length, lstMachine[0], Convert.ToInt32(lstMachine[1]));
+        //                       // MessageBox.Show("RequestSent");
+        //                        int iStart = iESPTimertick;
+        //                        while (sCommentError.Length == 0)//Wait till result arrives
+        //                        {
+        //                            if ((iESPTimertick - iStart) > iRequestWaitTime)
+        //                            {
+        //                                //sCommentText = string.Empty;
+        //                                //sCommentError = string.Empty;
+        //                                sCurrentAudioPath = string.Empty;
+        //                                return;
+        //                            }
+        //                        }
+        //                       // MessageBox.Show(sCommentText);
+        //                        if (sCommentText.Length > 0 && sCommentError != "Error")
+        //                        {
+        //                           // MessageBox.Show("Error");
+        //                            TR_COMMENTS.Invoke((MethodInvoker)delegate { TR_COMMENTS.Text = sCommentText; });
+        //                        }
+        //                        //else
+        //                        // Invoke((MethodInvoker)delegate { ToastNotification.Show(this, "Service machine not responding.", eToastPosition.TopRight); });
+        //                        sCurrentAudioPath = string.Empty;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            //var request = new Google.Apis.CloudSpeechAPI.v1beta1.Data.SyncRecognizeRequest()
+        //            //{
+        //            //    Config = new Google.Apis.CloudSpeechAPI.v1beta1.Data.RecognitionConfig()
+        //            //    {
+        //            //        Encoding = "LINEAR16",
+        //            //        SampleRate = 16000,
+        //            //        LanguageCode = "en-IN"
+        //            //    },
+        //            //    Audio = new Google.Apis.CloudSpeechAPI.v1beta1.Data.RecognitionAudio()
+        //            //    {
+        //            //        Content = Convert.ToBase64String(File.ReadAllBytes(sNAudioPath))
+        //            //    }
+        //            //};
 
 
-                    if (sOut.Length > 0)
-                        TR_COMMENTS.Invoke((MethodInvoker)delegate { TR_COMMENTS.Text = sOut; });
-                    try
-                    {
-                        GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("INSERT INTO c_gspeech_log (SessionID,CompanySessionID,ProjectID,AudioFileName,RecognitionText,Who,`When`) VALUES('" + GV.sSessionID + "','" + GV.sCompanySessionID + "','" + GV.sProjectID + "','" + Path.GetFileName(sNAudioPath) + "','" + sOut.Replace("'", "''") + "','" + GV.sEmployeeName.Replace("'", "''") + "',NOW());");                        
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Insert: " + ex.Message);
-                    }
-                }
 
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Google : " + ex.Message);
-                ToastNotification.Show(this, "Speech recognition error.", eToastPosition.TopRight);
-            }
-        }
+        //            //var response = GV.GSpeechCloudAPI.Speech.Syncrecognize(request).Execute();
+        //            string sOut = string.Empty;
+        //            //foreach (var result in response.Results)
+        //            //{
+        //            //    foreach (var alternative in result.Alternatives)
+        //            //        sOut += alternative.Transcript;
+        //            //}
+
+
+        //            if (sOut.Length > 0)
+        //                TR_COMMENTS.Invoke((MethodInvoker)delegate { TR_COMMENTS.Text = sOut; });
+        //            try
+        //            {
+        //                GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO c_gspeech_log (SessionID,CompanySessionID,ProjectID,AudioFileName,RecognitionText,Who,[When]) VALUES('" + GV.sSessionID + "','" + GV.sCompanySessionID + "','" + GV.sProjectID + "','" + Path.GetFileName(sNAudioPath) + "','" + sOut.Replace("'", "''") + "','" + GV.sEmployeeName.Replace("'", "''") + "',GETDATE());");                        
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                MessageBox.Show("Insert: " + ex.Message);
+        //            }
+        //        }
+
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        MessageBox.Show("Google : " + ex.Message);
+        //        ToastNotification.Show(this, "Speech recognition error.", eToastPosition.TopRight);
+        //    }
+        //}
+
+        //private void bWorkerGSpeech_DoWork(object sender, DoWorkEventArgs e)
+        //{            
+        //    //btnGSpeechRecord.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Visible = false; });            
+        //    //circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.Visible = true; });
+        //    //GSpeechTranscribe();
+        //}
+
+        //private void bWorkerGSpeech_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        //{
+        //    //btnGSpeechRecord.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Visible = true; });
+        //    //circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.IsRunning = false; });
+        //    //circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.Visible = false; });
+        //}
+
+        #endregion
 
         private void btnGSpeechRecord_MouseUp(object sender, MouseEventArgs e)
         {
-            if (bNAudioStarted)
+            GRecording = false;
+        }
+
+        async Task<object> StreamingMicRecognizeAsync(int seconds)
+        {
+
+            
+            var speech = SpeechClient.Create();
+            var streamingCall = speech.StreamingRecognize();
+            // Write the initial request with the config.
+            await streamingCall.WriteAsync(new StreamingRecognizeRequest()
             {
-                waveSource.StopRecording();
-                circularProgressGSpeech.IsRunning = true;
+                StreamingConfig = new StreamingRecognitionConfig()
+                {
+                    Config = new RecognitionConfig()
+                    {
+                        Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
+                        SampleRateHertz = 16000,
+                        LanguageCode = "en-IN",
+                    },
+                    InterimResults = true,
+                }
+            });
+
+            string sOldtxt = TR_COMMENTS.Text;
+
+            // Print responses as they arrive.
+            Task printResponses = Task.Run(async () =>
+            {
+                while (await streamingCall.ResponseStream.MoveNext(default(CancellationToken)))
+                {
+                    foreach (var result in streamingCall.ResponseStream.Current.Results)
+                    {
+                        foreach (var alternative in result.Alternatives)
+                        {
+                            //Console.WriteLine(alternative.Transcript);
+
+                            this.Invoke((MethodInvoker)delegate { TR_COMMENTS.Text = sOldtxt + " " + alternative.Transcript; });
+
+                        }
+                    }
+                }
+            });
+            // Read from the microphone and stream to API.
+            object writeLock = new object();
+            bool writeMore = true;
+            waveIn = new NAudio.Wave.WaveInEvent();
+            waveIn.DeviceNumber = 0;
+            waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
+            waveIn.DataAvailable += (object sender, NAudio.Wave.WaveInEventArgs args) =>
+            {
+                lock (writeLock)
+                {
+                    if (!writeMore) return;
+                    streamingCall.WriteAsync(new StreamingRecognizeRequest() { AudioContent = Google.Protobuf.ByteString.CopyFrom(args.Buffer, 0, args.BytesRecorded) }).Wait();
+                }
+            };
+
+            waveIn.StartRecording();
+           // this.Invoke((MethodInvoker)delegate { btnGSpeechRecord.PressedImage = GCC.Properties.Resources.voice_search_icon; });
+            //Console.WriteLine("Speak now.");
+            // txtOut.Text += "Speak now." + Environment.NewLine;
+
+            while (GRecording)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1));
             }
+            // Stop recording and shut down.
+            waveIn.StopRecording();
+            // waveIn.
+
+
+           // this.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Image = GCC.Properties.Resources.voice_search_icon___idle; });
+
+            lock (writeLock) writeMore = false;
+            await streamingCall.WriteCompleteAsync();
+            await printResponses;
+            return 0;
         }
 
-        private void bWorkerGSpeech_DoWork(object sender, DoWorkEventArgs e)
-        {            
-            //btnGSpeechRecord.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Visible = false; });            
-            //circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.Visible = true; });
-            //GSpeechTranscribe();
-        }
-
-        private void bWorkerGSpeech_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        public async void GSpeak()
         {
-            //btnGSpeechRecord.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Visible = true; });
-            //circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.IsRunning = false; });
-            //circularProgressGSpeech.Invoke((MethodInvoker)delegate { circularProgressGSpeech.Visible = false; });
-        }
-
-        private void btnenIN_Click(object sender, EventArgs e)
-        {
-            btnenIN.Checked = true;
-            btnenUK.Checked = false;
-            btnenUS.Checked = false;
-        }
-
-        private void btnenUK_Click(object sender, EventArgs e)
-        {
-            btnenIN.Checked = false;
-            btnenUK.Checked = true;
-            btnenUS.Checked = false;
-        }
-
-        private void btnenUS_Click(object sender, EventArgs e)
-        {
-            btnenIN.Checked = false;
-            btnenUK.Checked = false;
-            btnenUS.Checked = true;
-        }
+            var backupStatus = await StreamingMicRecognizeAsync(10);
+        }       
     }
+
 
     static class StringExtensions
     {
         public static string Reverse(this string input)
         {
             return new string(input.ToCharArray().Reverse().ToArray());
+        }
+
+        static Dictionary<string, string> foreign_characters = new Dictionary<string, string>
+    {
+        { "äæǽ", "ae" },
+        { "öœ", "oe" },
+        { "ü", "ue" },
+        { "Ä", "Ae" },
+        { "Ü", "Ue" },
+        { "Ö", "Oe" },
+        { "ÀÁÂÃÄÅǺĀĂĄǍΑΆẢẠẦẪẨẬẰẮẴẲẶА", "A" },
+        { "àáâãåǻāăąǎªαάảạầấẫẩậằắẵẳặа", "a" },
+        { "Б", "B" },
+        { "б", "b" },
+        { "ÇĆĈĊČ", "C" },
+        { "çćĉċč", "c" },
+        { "Д", "D" },
+        { "д", "d" },
+        { "ÐĎĐΔ", "Dj" },
+        { "ðďđδ", "dj" },
+        { "ÈÉÊËĒĔĖĘĚΕΈẼẺẸỀẾỄỂỆЕЭ", "E" },
+        { "èéêëēĕėęěέεẽẻẹềếễểệеэ", "e" },
+        { "Ф", "F" },
+        { "ф", "f" },
+        { "ĜĞĠĢΓГҐ", "G" },
+        { "ĝğġģγгґ", "g" },
+        { "ĤĦ", "H" },
+        { "ĥħ", "h" },
+        { "ÌÍÎÏĨĪĬǏĮİΗΉΊΙΪỈỊИЫ", "I" },
+        { "ìíîïĩīĭǐįıηήίιϊỉịиыї", "i" },
+        { "Ĵ", "J" },
+        { "ĵ", "j" },
+        { "ĶΚК", "K" },
+        { "ķκк", "k" },
+        { "ĹĻĽĿŁΛЛ", "L" },
+        { "ĺļľŀłλл", "l" },
+        { "М", "M" },
+        { "м", "m" },
+        { "ÑŃŅŇΝН", "N" },
+        { "ñńņňŉνн", "n" },
+        { "ÒÓÔÕŌŎǑŐƠØǾΟΌΩΏỎỌỒỐỖỔỘỜỚỠỞỢО", "O" },
+        { "òóôõōŏǒőơøǿºοόωώỏọồốỗổộờớỡởợо", "o" },
+        { "П", "P" },
+        { "п", "p" },
+        { "ŔŖŘΡР", "R" },
+        { "ŕŗřρр", "r" },
+        { "ŚŜŞȘŠΣС", "S" },
+        { "śŝşșšſσςс", "s" },
+        { "ȚŢŤŦτТ", "T" },
+        { "țţťŧт", "t" },
+        { "ÙÚÛŨŪŬŮŰŲƯǓǕǗǙǛŨỦỤỪỨỮỬỰУ", "U" },
+        { "ùúûũūŭůűųưǔǖǘǚǜυύϋủụừứữửựу", "u" },
+        { "ÝŸŶΥΎΫỲỸỶỴЙ", "Y" },
+        { "ýÿŷỳỹỷỵй", "y" },
+        { "В", "V" },
+        { "в", "v" },
+        { "Ŵ", "W" },
+        { "ŵ", "w" },
+        { "ŹŻŽΖЗ", "Z" },
+        { "źżžζз", "z" },
+        { "ÆǼ", "AE" },
+        { "ß", "ss" },
+        { "Ĳ", "IJ" },
+        { "ĳ", "ij" },
+        { "Œ", "OE" },
+        { "ƒ", "f" },
+        { "ξ", "ks" },
+        { "π", "p" },
+        { "β", "ss" },
+        { "μ", "m" },
+        { "ψ", "ps" },
+        { "Ё", "Yo" },
+        { "ё", "yo" },
+        { "Є", "Ye" },
+        { "є", "ye" },
+        { "Ї", "Yi" },
+        { "Ж", "Zh" },
+        { "ж", "zh" },
+        { "Х", "Kh" },
+        { "х", "kh" },
+        { "Ц", "Ts" },
+        { "ц", "ts" },
+        { "Ч", "Ch" },
+        { "ч", "ch" },
+        { "Ш", "Sh" },
+        { "ш", "sh" },
+        { "Щ", "Shch" },
+        { "щ", "shch" },
+        { "ЪъЬь", "" },
+        { "Ю", "Yu" },
+        { "ю", "yu" },
+        { "Я", "Ya" },
+        { "я", "ya" },
+    };
+
+        public static char ConvertDiacritics(this char c)
+        {
+            foreach (KeyValuePair<string, string> entry in foreign_characters)
+            {
+                if (entry.Key.IndexOf(c) != -1)
+                {
+                    return entry.Value[0];
+                }
+            }
+            return c;
+        }
+
+        public static string ConvertDiacritics(this string s)
+        {
+            //StringBuilder sb = new StringBuilder ();
+            string text = "";
+
+
+            foreach (char c in s)
+            {
+                int len = text.Length;
+
+                foreach (KeyValuePair<string, string> entry in foreign_characters)
+                {
+                    if (entry.Key.IndexOf(c) != -1)
+                    {
+                        text += entry.Value;
+                        break;
+                    }
+                }
+
+                if (len == text.Length)
+                {
+                    text += c;
+                }
+            }
+            return text;
         }
     }
 }

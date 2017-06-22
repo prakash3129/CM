@@ -9,7 +9,7 @@ using DAL;
 
 namespace BAL
 {
-    public class BAL_GlobalMySQL:DAL_GlobalMySQL
+    public class BAL_Global:DAL_GlobalMySQL
     {
         public DataTable BAL_FetchTableMySQL(string sTableName, string sCondition)
         {

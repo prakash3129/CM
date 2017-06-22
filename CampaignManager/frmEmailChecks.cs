@@ -32,11 +32,11 @@ namespace GCC
         {
             try
             {
-                dtStatus = GV.MYSQL.BAL_FetchTableMySQL("c_picklists", "PicklistCategory = 'EmailStatus'");
+                dtStatus = GV.MSSQL1.BAL_FetchTable("c_picklists", "PicklistCategory = 'EmailStatus'");
                 if (GV.sProjectID.ToUpper() == "CRUPRO001" && (GV.sUserType == "QC" || GV.sUserType == "Admin"))
                 {
                     txtSourceORAgent.WatermarkText = "Select Source";
-                    dtImportSources = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT PicklistCategory,PicklistValue FROM crupro001_picklists ORDER BY ID DESC LIMIT 100;");
+                    dtImportSources = GV.MSSQL1.BAL_ExecuteQuery("SELECT TOP 100 PicklistCategory,PicklistValue FROM crupro001_picklists ORDER BY ID DESC;");
                     panelLegends.Location = new Point(239, 7);
                 }
                 else
@@ -131,10 +131,10 @@ namespace GCC
                 if (GV.sUserType == "Agent")
                 {
                     dtEmails =
-                        GV.MYSQL.BAL_ExecuteQueryMySQL(
+                        GV.MSSQL1.BAL_ExecuteQuery(
                             "SELECT B.MASTER_ID,B.CONTACT_ID_P,B.First_Name,B.LAST_NAME,A.EMAIL,A.DESCRIPTION,A.DETAIL,A.CREATED_BY,A.PROCESSED_SERVER,A.CREATED_DATE,A.EMAIL_SOURCE FROM c_email_checks A INNER JOIN " +
                             GV.sProjectID +
-                            "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE date(A.CREATED_DATE) = '" +
+                            "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE cast(A.CREATED_DATE as date) = '" +
                             dtProcessDate.Value.ToString("yyyy-MM-dd") + "' AND A.CREATED_BY = '" + GV.sEmployeeName +
                             "' AND A.PROJECT_ID = '" + GV.sProjectID + "' AND A.REPROCESSED = 0 ORDER BY B.MASTER_ID,B.CONTACT_ID_P;");
                 }
@@ -143,10 +143,10 @@ namespace GCC
                     if (txtSourceORAgent.Text.Trim().Length > 0)
                     {
                         dtEmails =
-                            GV.MYSQL.BAL_ExecuteQueryMySQL(
+                            GV.MSSQL1.BAL_ExecuteQuery(
                                 "SELECT B.MASTER_ID,B.CONTACT_ID_P,B.First_Name,B.LAST_NAME,A.EMAIL,A.DESCRIPTION,A.DETAIL,A.CREATED_BY,A.PROCESSED_SERVER,A.CREATED_DATE,A.EMAIL_SOURCE FROM c_email_checks A INNER JOIN " +
                                 GV.sProjectID +
-                                "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE date(A.CREATED_DATE) = '" +
+                                "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE cast(A.CREATED_DATE as date) = '" +
                                 dtProcessDate.Value.ToString("yyyy-MM-dd") + "' AND EMAIL_SOURCE = '" +
                                 txtSourceORAgent.Text.Trim().Replace("'", "''") + "' AND A.PROJECT_ID = '" +
                                 GV.sProjectID + "' ORDER BY B.MASTER_ID,B.CONTACT_ID_P;");
@@ -154,10 +154,10 @@ namespace GCC
                     else
                     {
                         dtEmails =
-                            GV.MYSQL.BAL_ExecuteQueryMySQL(
+                            GV.MSSQL1.BAL_ExecuteQuery(
                                 "SELECT B.MASTER_ID,B.CONTACT_ID_P,B.First_Name,B.LAST_NAME,A.EMAIL,A.DESCRIPTION,A.DETAIL,A.CREATED_BY,A.PROCESSED_SERVER,A.CREATED_DATE,A.EMAIL_SOURCE FROM c_email_checks A INNER JOIN " +
                                 GV.sProjectID +
-                                "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE date(A.CREATED_DATE) = '" +
+                                "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE cast(A.CREATED_DATE as date) = '" +
                                 dtProcessDate.Value.ToString("yyyy-MM-dd") + "' AND A.PROJECT_ID = '" + GV.sProjectID +
                                 "' ORDER BY B.MASTER_ID,B.CONTACT_ID_P;");
                     }
@@ -167,10 +167,10 @@ namespace GCC
                     if (txtSourceORAgent.Text.Trim().Length > 0)
                     {
                         dtEmails =
-                            GV.MYSQL.BAL_ExecuteQueryMySQL(
+                            GV.MSSQL1.BAL_ExecuteQuery(
                                 "SELECT B.MASTER_ID,B.CONTACT_ID_P,B.First_Name,B.LAST_NAME,A.EMAIL,A.DESCRIPTION,A.DETAIL,A.CREATED_BY,A.PROCESSED_SERVER,A.CREATED_DATE,A.EMAIL_SOURCE FROM c_email_checks A INNER JOIN " +
                                 GV.sProjectID +
-                                "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE date(A.CREATED_DATE) = '" +
+                                "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE cast(A.CREATED_DATE as date) = '" +
                                 dtProcessDate.Value.ToString("yyyy-MM-dd") + "' AND A.CREATED_BY = '" +
                                 txtSourceORAgent.Text.Trim().Replace("'", "''") + "' AND A.PROJECT_ID = '" +
                                 GV.sProjectID +
@@ -179,10 +179,10 @@ namespace GCC
                     else
                     {
                         dtEmails =
-                            GV.MYSQL.BAL_ExecuteQueryMySQL(
+                            GV.MSSQL1.BAL_ExecuteQuery(
                                 "SELECT B.MASTER_ID,B.CONTACT_ID_P,B.First_Name,B.LAST_NAME,A.EMAIL,A.DESCRIPTION,A.DETAIL,A.CREATED_BY,A.PROCESSED_SERVER,A.CREATED_DATE,A.EMAIL_SOURCE FROM c_email_checks A INNER JOIN " +
                                 GV.sProjectID +
-                                "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE date(A.CREATED_DATE) = '" +
+                                "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE cast(A.CREATED_DATE as date) = '" +
                                 dtProcessDate.Value.ToString("yyyy-MM-dd") + "' AND A.PROJECT_ID = '" + GV.sProjectID +
                                 "' AND A.REPROCESSED = 0 ORDER BY B.MASTER_ID,B.CONTACT_ID_P;");
                     }
@@ -190,7 +190,7 @@ namespace GCC
                 //else if (GV.sUserType == "Admin")
                 //{
                 //    dtEmails =
-                //        GV.MYSQL.BAL_ExecuteQueryMySQL(
+                //        GV.MYdSQL.BAL_ExecuteQuery(
                 //            "SELECT B.MASTER_ID,B.First_Name,B.LAST_NAME,A.EMAIL,A.DESCRIPTION, A.CREATED_BY FROM c_email_checks A INNER JOIN " +
                 //            GV.sProjectID +
                 //            "_mastercontacts B ON A.CONTACT_ID = B.CONTACT_ID_P WHERE date(A.CREATED_DATE) = '" +
@@ -481,7 +481,7 @@ namespace GCC
                                 sInsertString += ",('" + GV.sProjectID + "',0,'" +
                                                  txtImportSource.Text.Trim().Replace("'", "''") + "', '" +
                                                  drImport["EMAIL"].ToString().Trim() + "','" + GV.sEmployeeName +
-                                                 "', NOW())";
+                                                 "', GETDATE())";
                         }
 
                         if (sInsertString.Trim().Length > 0)
@@ -489,22 +489,22 @@ namespace GCC
                             sInsertString =
                                 "INSERT INTO c_email_checks (PROJECT_ID, CONTACT_ID, EMAIL_SOURCE, EMAIL, CREATED_BY, CREATED_DATE) Values " +
                                 sInsertString.Substring(1);
-                            GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(sInsertString);
+                            GV.MSSQL1.BAL_ExecuteNonReturnQuery(sInsertString);
 
                             if (
-                                GV.MYSQL.BAL_ExecuteQueryMySQL(
+                                GV.MSSQL1.BAL_ExecuteQuery(
                                     "SELECT 1 FROM crupro001_picklists WHERE PicklistCategory = 'EmailSource' AND PicklistValue = '" +
                                     txtImportSource.Text.Trim().Replace("'", "''") + "';").Rows.Count == 0)
                             {
                                 //Insert for new source
-                                GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(
+                                GV.MSSQL1.BAL_ExecuteNonReturnQuery(
                                     "INSERT INTO crupro001_picklists (PicklistCategory, PicklistValue)VALUES ('EmailSource','" +
                                     txtImportSource.Text.Trim().Replace("'", "''") + "');");
 
                                 //Refresh Source table
                                 dtImportSources =
-                                    GV.MYSQL.BAL_ExecuteQueryMySQL(
-                                        "SELECT PicklistCategory,PicklistValue FROM crupro001_picklists ORDER BY ID DESC LIMIT 100;");
+                                    GV.MSSQL1.BAL_ExecuteQuery(
+                                        "SELECT TOP 100 PicklistCategory,PicklistValue FROM crupro001_picklists ORDER BY ID DESC;");
                             }
 
                             txtImportPath.Text = string.Empty;

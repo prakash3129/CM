@@ -28,9 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.rtxtHelp = new DevComponents.DotNetBar.Controls.RichTextBoxEx();
             this.btnClose = new System.Windows.Forms.Button();
+            this.rtxtHelp = new DevComponents.DotNetBar.Controls.RichTextBoxEx();
             this.SuspendLayout();
+            // 
+            // btnClose
+            // 
+            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnClose.Location = new System.Drawing.Point(491, 136);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.TabIndex = 1;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // rtxtHelp
             // 
@@ -44,18 +55,10 @@
             this.rtxtHelp.Location = new System.Drawing.Point(0, 0);
             this.rtxtHelp.Name = "rtxtHelp";
             this.rtxtHelp.ReadOnly = true;
+            this.rtxtHelp.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang1033{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs24\\par\r\n}\r\n";
             this.rtxtHelp.Size = new System.Drawing.Size(498, 396);
             this.rtxtHelp.TabIndex = 0;
-            // 
-            // btnClose
-            // 
-            this.btnClose.Location = new System.Drawing.Point(491, 136);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 1;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // frmHelp
             // 
@@ -65,6 +68,7 @@
             this.ClientSize = new System.Drawing.Size(498, 396);
             this.Controls.Add(this.rtxtHelp);
             this.Controls.Add(this.btnClose);
+            this.DoubleBuffered = true;
             this.EnableGlass = false;
             this.Name = "frmHelp";
             this.Text = "Help";

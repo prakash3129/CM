@@ -76,34 +76,34 @@ namespace GCC
                     {
                         if (sProcessType == "Fresh")
                         {
-                            sQuery = "SELECT A.Master_ID FROM " + GV.sContactTable + " A LEFT JOIN " + GV.sQCTable + " B ON A.CONTACT_ID_P = B.RecordID AND B.TableName='Contact' AND B.ResearchType='" + GV.sAccessTo + "'";
-                            sQuery += " WHERE CONVERT(A." + GV.sAccessTo + "_UPDATED_DATE,DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND A." + GV.sAccessTo + "_CONTACT_STATUS IN ";
-                            sQuery += " (" + sValidStatus + ")  AND B.QC_Sample_Status IS NULL Order By Rand() limit 1;";
+                            sQuery = "SELECT TOP 1 A.Master_ID FROM " + GV.sContactTable + " A LEFT JOIN " + GV.sQCTable + " B ON A.CONTACT_ID_P = B.RecordID AND B.TableName='Contact' AND B.ResearchType='" + GV.sAccessTo + "'";
+                            sQuery += " WHERE CAST(A." + GV.sAccessTo + "_UPDATED_DATE AS DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND A." + GV.sAccessTo + "_CONTACT_STATUS IN ";
+                            sQuery += " (" + sValidStatus + ")  AND B.QC_Sample_Status IS NULL Order By Rand();";
                         }
                         else
                         {
-                            sQuery = "SELECT A.Master_ID FROM " + GV.sContactTable + " A INNER JOIN " + GV.sQCTable + " B ON A.CONTACT_ID_P = B.RecordID AND B.TableName='Contact' AND B.ResearchType='" + GV.sAccessTo + "'";
-                            sQuery += " WHERE CONVERT(A." + GV.sAccessTo + "_UPDATED_DATE,DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND B.QC_Status ='Reprocessed'";
-                            sQuery += " Order By Rand() limit 1;";
+                            sQuery = "SELECT TOP 1 A.Master_ID FROM " + GV.sContactTable + " A INNER JOIN " + GV.sQCTable + " B ON A.CONTACT_ID_P = B.RecordID AND B.TableName='Contact' AND B.ResearchType='" + GV.sAccessTo + "'";
+                            sQuery += " WHERE CAST(A." + GV.sAccessTo + "_UPDATED_DATE AS DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND B.QC_Status ='Reprocessed'";
+                            sQuery += " Order By Rand();";
                         }
                     }
                     else
                     {                        
                         if (sProcessType == "Fresh")
                         {
-                            sQuery = "SELECT A.Master_ID FROM " + GV.sCompanyTable + " A LEFT JOIN " + GV.sQCTable + " B ON A.MASTER_ID = B.RecordID AND B.TableName='Company' AND B.ResearchType='" + GV.sAccessTo + "'";
-                            sQuery += " WHERE CONVERT(A." + sDateColumn + ",DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENTNAME='" + sSelectedAgentName + "' ";
-                            sQuery += " AND B.QC_Sample_Status IS NULL Order By Rand() limit 1;";
+                            sQuery = "SELECT TOP 1 A.Master_ID FROM " + GV.sCompanyTable + " A LEFT JOIN " + GV.sQCTable + " B ON A.MASTER_ID = B.RecordID AND B.TableName='Company' AND B.ResearchType='" + GV.sAccessTo + "'";
+                            sQuery += " WHERE CAST(A." + sDateColumn + " AS DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENTNAME='" + sSelectedAgentName + "' ";
+                            sQuery += " AND B.QC_Sample_Status IS NULL Order By Rand();";
                         }
                         else
                         {
-                            sQuery = "SELECT A.Master_ID FROM " + GV.sCompanyTable + " A INNER JOIN " + GV.sQCTable + " B ON A.MASTER_ID = B.RecordID AND B.TableName='Company' AND B.ResearchType='" + GV.sAccessTo + "'";
-                            sQuery += " WHERE CONVERT(A." + sDateColumn + ",DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENTNAME='" + sSelectedAgentName + "' AND B.QC_Status ='Reprocessed'";
-                            sQuery += " Order By Rand() limit 1;";
+                            sQuery = "SELECT TOP 1 A.Master_ID FROM " + GV.sCompanyTable + " A INNER JOIN " + GV.sQCTable + " B ON A.MASTER_ID = B.RecordID AND B.TableName='Company' AND B.ResearchType='" + GV.sAccessTo + "'";
+                            sQuery += " WHERE CAST(A." + sDateColumn + " AS DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENTNAME='" + sSelectedAgentName + "' AND B.QC_Status ='Reprocessed'";
+                            sQuery += " Order By Rand();";
                         }
                     }
 
-                    System.Data.DataTable dtSampleRecords = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                    System.Data.DataTable dtSampleRecords = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                     if (dtSampleRecords.Rows.Count > 0)                                            
                         GM.OpenContactUpdate(dtSampleRecords.Rows[0]["MASTER_ID"].ToString(), false, true, this, null);                    
                 }
@@ -130,13 +130,13 @@ namespace GCC
                         if (sProcessType == "Fresh")
                         {
                             sMainQuery = " FROM " + GV.sContactTable + " A LEFT JOIN " + GV.sQCTable + " B ON A.CONTACT_ID_P = B.RecordID AND B.TableName='Contact' AND B.ResearchType='" + GV.sAccessTo + "'";
-                            sMainQuery += " WHERE CONVERT(A." + GV.sAccessTo + "_UPDATED_DATE,DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND A." + GV.sAccessTo + "_CONTACT_STATUS IN ";
+                            sMainQuery += " WHERE CAST(A." + GV.sAccessTo + "_UPDATED_DATE as DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND A." + GV.sAccessTo + "_CONTACT_STATUS IN ";
                             sMainQuery += " (" + sValidStatus + ") AND B.QC_Sample_Status IS NULL";
                         }
                         else
                         {
                             sMainQuery = " FROM " + GV.sContactTable + " A INNER JOIN " + GV.sQCTable + " B ON A.CONTACT_ID_P = B.RecordID AND B.TableName='Contact' AND B.ResearchType='" + GV.sAccessTo + "'";
-                            sMainQuery += " WHERE CONVERT(A." + GV.sAccessTo + "_UPDATED_DATE,DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND B.QC_Status ='Reprocessed'";                            
+                            sMainQuery += " WHERE CAST(A." + GV.sAccessTo + "_UPDATED_DATE as DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND B.QC_Status ='Reprocessed'";                            
                         }
                     }
                     else
@@ -144,24 +144,24 @@ namespace GCC
                         if (sProcessType == "Fresh")
                         {
                             sMainQuery = " FROM " + GV.sCompanyTable + " A LEFT JOIN " + GV.sQCTable + " B ON A.MASTER_ID = B.RecordID AND B.TableName='Company' AND B.ResearchType='" + GV.sAccessTo + "'";
-                            sMainQuery += " WHERE CONVERT(A." + sDateColumn + ",DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENTNAME='" + sSelectedAgentName + "' AND ";
+                            sMainQuery += " WHERE CAST(A." + sDateColumn + " as DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENTNAME='" + sSelectedAgentName + "' AND ";
                             sMainQuery += " B.QC_Sample_Status IS NULL";
                         }
                         else
                         {
                             sMainQuery = " FROM " + GV.sCompanyTable + " A INNER JOIN " + GV.sQCTable + " B ON A.MASTER_ID = B.RecordID AND B.TableName='Company' AND B.ResearchType='" + GV.sAccessTo + "'";
-                            sMainQuery += " WHERE CONVERT(A." + sDateColumn + ",DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENTNAME='" + sSelectedAgentName + "' AND B.QC_Status ='Reprocessed'";                            
+                            sMainQuery += " WHERE CAST(A." + sDateColumn + " as DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENTNAME='" + sSelectedAgentName + "' AND B.QC_Status ='Reprocessed'";                            
                         }
                     }
 
                     string sQuery = "select ceiling(count(1) * " + iSamplePercent + " / 100.0) Count " + sMainQuery + ";";
-                    DataTable dtCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                    DataTable dtCount = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
 
                     if (dtCount.Rows.Count > 0 && dtCount.Rows[0][0].ToString().Length > 0)
                     {
                         
                         string sColumns = string.Empty;
-                        DataTable dtColumns = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT FIELD_NAME_CAPTION,FIELD_NAME_TABLE FROM c_field_master WHERE TABLE_NAME='" + (sProcessTable == "Contact" ? "MasterContacts" : "Master") + "' AND PROJECT_ID='" + GV.sProjectID + "' AND ACTIVE_COLUMN='Y' ORDER BY SEQUENCE_NO;");
+                        DataTable dtColumns = GV.MSSQL1.BAL_ExecuteQuery("SELECT FIELD_NAME_CAPTION,FIELD_NAME_TABLE FROM c_field_master WHERE TABLE_NAME='" + (sProcessTable == "Contact" ? "MasterContacts" : "Master") + "' AND PROJECT_ID='" + GV.sProjectID + "' AND ACTIVE_COLUMN='Y' ORDER BY SEQUENCE_NO;");
                         if (dtColumns.Rows.Count > 0)
                         {
                             foreach (DataRow drColumns in dtColumns.Rows)
@@ -175,9 +175,9 @@ namespace GCC
                         else
                             sColumns = "A.*";
                         
-                        sQuery = "SELECT " + (sProcessTable == "Contact" ? " A.Contact_ID_P, A.Master_ID, " : " A.Master_ID, ") + "" + sColumns + " " + sMainQuery + " Order By Rand() limit " + dtCount.Rows[0][0].ToString() + ";";
+                        sQuery = "SELECT TOP " + dtCount.Rows[0][0].ToString() + " " + (sProcessTable == "Contact" ? " A.Contact_ID_P, A.Master_ID, " : " A.Master_ID, ") + "" + sColumns + " " + sMainQuery + " Order By Rand();";
 
-                        DataTable dtRandomRecord = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                        DataTable dtRandomRecord = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                         if (dtRandomRecord.Rows.Count > 0)
                         {
                             dgvQCList.DataSource = dtRandomRecord;
@@ -210,7 +210,7 @@ namespace GCC
 
                     string sQuery = string.Empty;
                     string sColumns = string.Empty;
-                    DataTable dtColumns = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT FIELD_NAME_CAPTION,FIELD_NAME_TABLE FROM c_field_master WHERE TABLE_NAME='MasterContacts' AND PROJECT_ID='" + GV.sProjectID + "' AND ACTIVE_COLUMN='Y' ORDER BY SEQUENCE_NO;");
+                    DataTable dtColumns = GV.MSSQL1.BAL_ExecuteQuery("SELECT FIELD_NAME_CAPTION,FIELD_NAME_TABLE FROM c_field_master WHERE TABLE_NAME='MasterContacts' AND PROJECT_ID='" + GV.sProjectID + "' AND ACTIVE_COLUMN='Y' ORDER BY SEQUENCE_NO;");
                     if (dtColumns.Rows.Count > 0)
                     {
                         foreach (DataRow drColumns in dtColumns.Rows)
@@ -226,7 +226,7 @@ namespace GCC
                     sQuery = "SELECT A.Contact_ID_P, A.Master_ID," + sColumns + " FROM " + GV.sContactTable + " A INNER JOIN " + GV.sQCTable + " B ON A.CONTACT_ID_P = B.RecordID AND B.TableName='Contact' AND B.ResearchType='" + GV.sAccessTo + "'";
                     sQuery += " WHERE CONVERT(A." + GV.sAccessTo + "_UPDATED_DATE,DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND A." + GV.sAccessTo + "_CONTACT_STATUS IN ";
                     sQuery += " (" + sValidStatus + ")  AND B.QC_Sample_Status IN (0,1) ORDER BY Master_ID";
-                    System.Data.DataTable dtRandomRecord = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                    System.Data.DataTable dtRandomRecord = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                     if (dtRandomRecord.Rows.Count > 0)
                     {
                         dgvQCList.DataSource = dtRandomRecord;
@@ -282,29 +282,57 @@ namespace GCC
                     sProcessed = " WHERE (SendBack > 0 OR Reprocessed >0) ";    
 
                 if (sProcessTable == "Contact")
-                {                                                       
-                    sQuery = "SELECT T.AgentName,Processed, TRUNCATE(((Pass + Fail)/Processed)*100,2) Sampled,TRUNCATE((Pass/Processed)*100,2) Pass,TRUNCATE((Fail/Processed)*100,2) Fail, SendBack,Reprocessed FROM (";
-                    sQuery += " SELECT " + GV.sAccessTo + "_AGENT_NAME AgentName,COUNT(*) Processed,";
-                    sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.CONTACT_ID_P AND TABLENAME='Contact' AND QC.ResearchType='" + GV.sAccessTo + "' AND QC.QC_Sample_Status = 1)) Pass,";
-                    sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.CONTACT_ID_P AND TABLENAME='Contact' AND QC.ResearchType='" + GV.sAccessTo + "'  AND QC.QC_Sample_Status = 0)) Fail,";
-                    sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.CONTACT_ID_P AND TABLENAME='Contact' AND QC.ResearchType='" + GV.sAccessTo + "' AND QC.QC_STATUS='SendBack')) SendBack,";
-                    sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.CONTACT_ID_P AND TABLENAME='Contact' AND QC.ResearchType='" + GV.sAccessTo + "'  AND QC.QC_STATUS='Reprocessed')) Reprocessed";
-                    sQuery += " FROM " + GV.sContactTable + "  CM WHERE cm." + GV.sAccessTo + "_CONTACT_STATUS IN (" + sValidContactStatus + ")";
-                    sQuery += " AND DATE(CM." + GV.sAccessTo + "_UPDATED_DATE) = '" + sDate + "' GROUP BY " + GV.sAccessTo + "_AGENT_NAME)T " + sProcessed + " Order by T.Processed Desc;";
+                {
+                    //sQuery = "SELECT T.AgentName,Processed, ROUND(((Pass + Fail)/Processed)*100,2,1) Sampled,ROUND((Pass/Processed)*100,2,1) Pass,ROUND((Fail/Processed)*100,2,1) Fail, SendBack,Reprocessed FROM (";
+                    //sQuery += " SELECT " + GV.sAccessTo + "_AGENT_NAME AgentName,COUNT(*) Processed,";
+                    //sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.CONTACT_ID_P AND TABLENAME='Contact' AND QC.ResearchType='" + GV.sAccessTo + "' AND QC.QC_Sample_Status = 1)) Pass,";
+                    //sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.CONTACT_ID_P AND TABLENAME='Contact' AND QC.ResearchType='" + GV.sAccessTo + "'  AND QC.QC_Sample_Status = 0)) Fail,";
+                    //sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.CONTACT_ID_P AND TABLENAME='Contact' AND QC.ResearchType='" + GV.sAccessTo + "' AND QC.QC_STATUS='SendBack')) SendBack,";
+                    //sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.CONTACT_ID_P AND TABLENAME='Contact' AND QC.ResearchType='" + GV.sAccessTo + "'  AND QC.QC_STATUS='Reprocessed')) Reprocessed";
+                    //sQuery += " FROM " + GV.sContactTable + "  CM WHERE cm." + GV.sAccessTo + "_CONTACT_STATUS IN (" + sValidContactStatus + ")";
+                    //sQuery += " AND CAST(CM." + GV.sAccessTo + "_UPDATED_DATE AS DATE) = '" + sDate + "' GROUP BY " + GV.sAccessTo + "_AGENT_NAME)T " + sProcessed + " Order by T.Processed Desc;";
+
+                    sQuery = "select T.AgentName,Processed, ROUND(((Pass + Fail) / Processed) * 100, 2, 1) Sampled,ROUND((Pass / Processed) * 100, 2, 1) Pass,ROUND((Fail / Processed) * 100, 2, 1) Fail, SendBack, Reprocessed from (";
+                    sQuery += " select cm." + GV.sAccessTo + "_AGENT_NAME agentname, COUNT(*) Processed,";
+                    sQuery += " count(case when  QC.QC_Sample_Status = 1 then cm.CONTACT_ID_P end) Pass,";
+                    sQuery += " count(case when  QC.QC_Sample_Status = 0 then cm.CONTACT_ID_P end) Fail,";
+                    sQuery += " count(case when  QC.QC_STATUS = 'SENDBACK' then cm.CONTACT_ID_P end) SendBack,";
+                    sQuery += " count(case when  QC.QC_STATUS = 'Reprocessed' then cm.CONTACT_ID_P end) Reprocessed";
+                    sQuery += " from " + GV.sContactTable + " CM left join (select * from " + GV.sQCTable + " where TableName = 'Contact'  AND ResearchType = '" + GV.sAccessTo + "') QC";
+                    sQuery += " on QC.RecordID = CM.CONTACT_ID_P WHERE cm." + GV.sAccessTo + "_CONTACT_STATUS IN (" + sValidContactStatus + ")";
+                    sQuery += " AND CAST(CM." + GV.sAccessTo + "_UPDATED_DATE AS DATE) = '" + sDate + "' GROUP BY cm." + GV.sAccessTo + "_AGENT_NAME )t Order by T.Processed Desc;";
+
                 }
                 else
                 {                    
-                    sQuery = "SELECT T.AgentName,Processed, TRUNCATE(((Pass + Fail)/Processed)*100,2) Sampled,TRUNCATE((Pass/Processed)*100,2) Pass,TRUNCATE((Fail/Processed)*100,2) Fail, SendBack,Reprocessed FROM (";
-                    sQuery += " SELECT " + GV.sAccessTo + "_AGENTNAME AgentName,COUNT(*) Processed,";
-                    sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.MASTER_ID AND TABLENAME='Company' AND QC.ResearchType='" + GV.sAccessTo + "' AND QC.QC_Sample_Status = 1)) Pass,";
-                    sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.MASTER_ID AND TABLENAME='Company' AND QC.ResearchType='" + GV.sAccessTo + "'  AND QC.QC_Sample_Status = 0)) Fail,";
-                    sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.MASTER_ID AND TABLENAME='Company' AND QC.ResearchType='" + GV.sAccessTo + "' AND QC.QC_STATUS='SendBack')) SendBack,";
-                    sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.MASTER_ID AND TABLENAME='Company' AND QC.ResearchType='" + GV.sAccessTo + "'  AND QC.QC_STATUS='Reprocessed')) Reprocessed";
-                    sQuery += " FROM " + GV.sCompanyTable + "  CM WHERE ";
-                    sQuery += " DATE(CM." + sDateColumn + ") = '" + sDate + "' GROUP BY " + GV.sAccessTo + "_AGENTNAME)T " + sProcessed + " Order by T.Processed Desc;";
+                    //sQuery = "SELECT T.AgentName,Processed, ROUND(((Pass + Fail)/Processed)*100,2,1) Sampled,ROUND((Pass/Processed)*100,2,1) Pass,ROUND((Fail/Processed)*100,2,1) Fail, SendBack,Reprocessed FROM (";
+                    //sQuery += " SELECT " + GV.sAccessTo + "_AGENTNAME AgentName,COUNT(*) Processed,";
+                    //sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.MASTER_ID AND TABLENAME='Company' AND QC.ResearchType='" + GV.sAccessTo + "' AND QC.QC_Sample_Status = 1)) Pass,";
+                    //sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.MASTER_ID AND TABLENAME='Company' AND QC.ResearchType='" + GV.sAccessTo + "'  AND QC.QC_Sample_Status = 0)) Fail,";
+                    //sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.MASTER_ID AND TABLENAME='Company' AND QC.ResearchType='" + GV.sAccessTo + "' AND QC.QC_STATUS='SendBack')) SendBack,";
+                    //sQuery += " COUNT((SELECT 1 FROM " + GV.sQCTable + " QC WHERE QC.RecordID=CM.MASTER_ID AND TABLENAME='Company' AND QC.ResearchType='" + GV.sAccessTo + "'  AND QC.QC_STATUS='Reprocessed')) Reprocessed";
+                    //sQuery += " FROM " + GV.sCompanyTable + "  CM WHERE ";
+                    //sQuery += " CAST(CM." + sDateColumn + " AS DATE) = '" + sDate + "' GROUP BY " + GV.sAccessTo + "_AGENTNAME)T " + sProcessed + " Order by T.Processed Desc;";
+
+
+
+                    sQuery = "select T.AgentName,Processed, ROUND(((Pass + Fail) / Processed) * 100, 2, 1) Sampled,ROUND((Pass / Processed) * 100, 2, 1) Pass,ROUND((Fail / Processed) * 100, 2, 1) Fail, SendBack, Reprocessed from (";
+                    sQuery += " select cm." + GV.sAccessTo + "_AGENT_NAME agentname, COUNT(*) Processed,";
+                    sQuery += " count(case when  QC.QC_Sample_Status = 1 then cm.CONTACT_ID_P end) Pass,";
+                    sQuery += " count(case when  QC.QC_Sample_Status = 0 then cm.CONTACT_ID_P end) Fail,";
+                    sQuery += " count(case when  QC.QC_STATUS = 'SENDBACK' then cm.CONTACT_ID_P end) SendBack,";
+                    sQuery += " count(case when  QC.QC_STATUS = 'Reprocessed' then cm.CONTACT_ID_P end) Reprocessed";
+                    sQuery += " from " + GV.sContactTable + " CM left join (select * from " + GV.sQCTable + " where TableName = 'Contact'  AND ResearchType = '" + GV.sAccessTo + "') QC";
+                    sQuery += " on QC.RecordID = CM.CONTACT_ID_P WHERE ";
+                    sQuery += " CAST(CM." + sDateColumn + " AS DATE) = '" + sDate + "' GROUP BY cm." + GV.sAccessTo + "_AGENT_NAME )t Order by T.Processed Desc;";
                 }
-               
-                dtQCTable = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+
+
+
+
+                
+
+                dtQCTable = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                 if (dtQCTable.Rows.Count > 0)
                 {
                     DataColumn dcEmpImage = new DataColumn("EmpImage", typeof(System.Byte[]));

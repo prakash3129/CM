@@ -68,7 +68,7 @@ namespace GCC
             #endregion
         }
 
-        //BAL_GlobalMySQL objBALGlobalMySQL = new BAL_GlobalMySQL();        
+        //BAL_GlobalMySfdQL objBALGlobalMyfdSQL = new BAL_GlobalMyfdSQL();        
 
         DataRow _drContact;
         public DataRow drContact
@@ -294,7 +294,7 @@ namespace GCC
             sSchema += "SELECT '1' AS TableID, MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,ADDRESS_3,ADDRESS_4,CITY,COUNTY,POST_CODE,COUNTRY,SWITCHBOARD,WEB," + GV.sAccessTo + "_PRIMARY_DISPOSAL," + GV.sAccessTo + "_SECONDARY_DISPOSAL,SOURCE " + sSearchOutsideColumns + " FROM " + sCompanyTableName + " COMPANY WHERE 1=0;";
             sSchema += "SELECT '2' AS TableID, MASTER_ID,CONTACT_ID_P,FIRST_NAME,LAST_NAME,JOB_TITLE,OTHERS_JOBTITLE,CONTACT_EMAIL,CONTACT_TELEPHONE,TR_CONTACT_STATUS,WR_CONTACT_STATUS,EMAIL_VERIFIED " + sSearchOutsideColumns + " FROM " + sContactTableName + " CONTACT WHERE 1=0;";
 
-            dsContactSearch = GV.MYSQL.BAL_ExecuteQueryMySQLSet(sSchema);
+            dsContactSearch = GV.MSSQL1.BAL_ExecuteQuerySet(sSchema);
             dsCompanySearch.Tables.Add(dsContactSearch.Tables[1].Copy());
             dsCompanySearch.Tables.Add(dsContactSearch.Tables[2].Copy());
 
@@ -399,7 +399,7 @@ namespace GCC
                                 if (sSearchText.Length > 0)
                                     lstAND.Add("Company.COMPANY_NAME LIKE '%" + sSearchText + "%'");
                                 else
-                                    lstAND.Add("IFNULL(Company.COMPANY_NAME,'') = ''");
+                                    lstAND.Add("ISNULL(Company.COMPANY_NAME,'') = ''");
                             }
                             else
                             {
@@ -424,7 +424,7 @@ namespace GCC
                                 if (sSearchText.Length > 0)
                                     lstAND.Add("REPLACE(Company.POST_CODE,' ','') LIKE '%" + sSearchText + "%'");
                                 else
-                                    lstAND.Add("IFNULL(Company.POST_CODE,'') =''");
+                                    lstAND.Add("ISNULL(Company.POST_CODE,'') =''");
                             }
                             else
                             {
@@ -462,7 +462,7 @@ namespace GCC
                             else
                             {
                                 if (IsChecked)
-                                    lstAND.Add("IFNULL(Company.SWITCHBOARD,'') = ''");
+                                    lstAND.Add("ISNULL(Company.SWITCHBOARD,'') = ''");
                             }
                         }
                         break;
@@ -499,7 +499,7 @@ namespace GCC
                                 if (sWeb.Length > 0)
                                     lstAND.Add("Company.WEB LIKE '%" + sWeb.Replace("'", "''") + "%'");
                                 else
-                                    lstAND.Add("IFNULL(Company.WEB,'') = ''");
+                                    lstAND.Add("ISNULL(Company.WEB,'') = ''");
                             }
                             else
                             {
@@ -524,7 +524,7 @@ namespace GCC
                                 if (sSearchText.Length > 0)
                                     lstAND.Add("Company." + sSearch_Column + " LIKE  '%" + sSearchText + "%'");
                                 else
-                                    lstAND.Add("IFNULL(Company." + sSearch_Column + ",'') =  ''");
+                                    lstAND.Add("ISNULL(Company." + sSearch_Column + ",'') =  ''");
                             }
                             else
                             {
@@ -542,7 +542,7 @@ namespace GCC
                                 if (sSearchText.Length > 0)
                                     lstAND.Add("Company." + sSearch_Column + " LIKE  '%" + sSearchText + "%'");
                                 else
-                                    lstAND.Add("IFNULL(Company." + sSearch_Column + ",'') =  ''");
+                                    lstAND.Add("ISNULL(Company." + sSearch_Column + ",'') =  ''");
                             }
                             else
                             {
@@ -568,7 +568,7 @@ namespace GCC
                                     lstAND.Add("Contact.FIRST_NAME LIKE '%" + sSearchText + "%'");
                             }
                             else
-                                lstAND.Add("IFNULL(Contact.FIRST_NAME,'') = ''");
+                                lstAND.Add("ISNULL(Contact.FIRST_NAME,'') = ''");
                         }
                         else
                         {
@@ -594,7 +594,7 @@ namespace GCC
                                     lstAND.Add("Contact.LAST_NAME LIKE '%" + sSearchText + "%'");
                             }
                             else
-                                lstAND.Add("IFNULL(Contact.LAST_NAME,'') = ''");
+                                lstAND.Add("ISNULL(Contact.LAST_NAME,'') = ''");
                         }
                         else
                         {
@@ -626,7 +626,7 @@ namespace GCC
                                 if (sSearchText.Length > 0)
                                     lstAND.Add("Contact.CONTACT_EMAIL LIKE  '%" + sSearchText + "%'");
                                 else
-                                    lstAND.Add("IFNULL(Contact.CONTACT_EMAIL,'') =  ''");
+                                    lstAND.Add("ISNULL(Contact.CONTACT_EMAIL,'') =  ''");
                             }
                             else
                             {
@@ -643,7 +643,7 @@ namespace GCC
                             if (sSearchText.Length > 0)
                                 lstAND.Add("(Contact.JOB_TITLE LIKE  '%" + sSearchText + "%' OR Contact.OTHERS_JOBTITLE LIKE '%" + sSearchText + "%')");
                             else
-                                lstAND.Add("(IFNULL(Contact.JOB_TITLE,'') =  '' OR IFNULL(Contact.OTHERS_JOBTITLE,'') =  '')");
+                                lstAND.Add("(ISNULL(Contact.JOB_TITLE,'') =  '' OR ISNULL(Contact.OTHERS_JOBTITLE,'') =  '')");
                         }
                         else
                         {
@@ -679,7 +679,7 @@ namespace GCC
                         else
                         {
                             if (IsChecked)
-                                lstAND.Add("IFNULL(Contact.CONTACT_TELEPHONE,'') = ''");
+                                lstAND.Add("ISNULL(Contact.CONTACT_TELEPHONE,'') = ''");
                         }
                         break;
 
@@ -689,7 +689,7 @@ namespace GCC
                             if (sSearchText.Length > 0)
                                 lstAND.Add("Contact."+sSearch_Column+" LIKE  '%" + sSearchText + "%'");
                             else
-                                lstAND.Add("IFNULL(Contact." + sSearch_Column + ",'') =  ''");
+                                lstAND.Add("ISNULL(Contact." + sSearch_Column + ",'') =  ''");
                         }
                         else
                         {
@@ -1199,20 +1199,20 @@ namespace GCC
 
                         if (superTabSearch.SelectedTab == superTabContact)
                         {
-                            dtQuery.Rows.Add("SELECT '0' AS TableID,MASTER_ID,CONTACT_ID_P,FIRST_NAME,LAST_NAME,JOB_TITLE,OTHERS_JOBTITLE,CONTACT_EMAIL,CONTACT_TELEPHONE,TR_CONTACT_STATUS,WR_CONTACT_STATUS,EMAIL_VERIFIED " + sSearchOutsideColumns + " FROM " + sContactTableName + " Contact WHERE (" + sWhereClause + ") LIMIT 100;", "0", "0");
+                            dtQuery.Rows.Add("SELECT TOP 100 '0' AS TableID,MASTER_ID,CONTACT_ID_P,FIRST_NAME,LAST_NAME,JOB_TITLE,OTHERS_JOBTITLE,CONTACT_EMAIL,CONTACT_TELEPHONE,TR_CONTACT_STATUS,WR_CONTACT_STATUS,EMAIL_VERIFIED " + sSearchOutsideColumns + " FROM " + sContactTableName + " Contact WHERE (" + sWhereClause + ");", "0", "0");
                             dtQuery.Rows.Add("SELECT '1' AS TableID,MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,ADDRESS_3,ADDRESS_4,CITY,COUNTY,POST_CODE,COUNTRY,SWITCHBOARD,WEB," + GV.sAccessTo + "_PRIMARY_DISPOSAL," + GV.sAccessTo + "_SECONDARY_DISPOSAL,SOURCE " + sSearchOutsideColumns + " FROM " + sCompanyTableName + " Company", "1", "0");
                             dtQuery.Rows.Add("SELECT '2' AS TableID,MASTER_ID,CONTACT_ID_P,FIRST_NAME,LAST_NAME,JOB_TITLE,OTHERS_JOBTITLE,CONTACT_EMAIL,CONTACT_TELEPHONE,TR_CONTACT_STATUS,WR_CONTACT_STATUS,EMAIL_VERIFIED " + sSearchOutsideColumns + " FROM " + sContactTableName + " Contact", "2", "0");
                         }
                         else
                         {
-                            dtQuery.Rows.Add("SELECT '3' AS TableID,MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,ADDRESS_3,ADDRESS_4,CITY,COUNTY,POST_CODE,COUNTRY,SWITCHBOARD,WEB," + GV.sAccessTo + "_PRIMARY_DISPOSAL," + GV.sAccessTo + "_SECONDARY_DISPOSAL,SOURCE " + sSearchOutsideColumns + " FROM " + sCompanyTableName + " Company WHERE (" + sWhereClause + ") LIMIT 100;", "3", "0");
+                            dtQuery.Rows.Add("SELECT TOP 100 '3' AS TableID,MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,ADDRESS_3,ADDRESS_4,CITY,COUNTY,POST_CODE,COUNTRY,SWITCHBOARD,WEB," + GV.sAccessTo + "_PRIMARY_DISPOSAL," + GV.sAccessTo + "_SECONDARY_DISPOSAL,SOURCE " + sSearchOutsideColumns + " FROM " + sCompanyTableName + " Company WHERE (" + sWhereClause + ");", "3", "0");
                             dtQuery.Rows.Add("SELECT '4' AS TableID,MASTER_ID,CONTACT_ID_P,FIRST_NAME,LAST_NAME,JOB_TITLE,OTHERS_JOBTITLE,CONTACT_EMAIL,CONTACT_TELEPHONE,TR_CONTACT_STATUS,WR_CONTACT_STATUS,EMAIL_VERIFIED " + sSearchOutsideColumns + " FROM " + sContactTableName + " Contact", "4", "0");
                         }
                         
                         RunQuery(dtQuery);
                         
                         #region Comment
-                        //dsSearchData = GV.MYSQL.BAL_ExecuteQueryMySQLSet(sSelect);
+                        //dsSearchData = GV.MYdSQL.BAL_ExecuteQueryMyfgSQLSet(sSelect);
                         //if (dsSearchData.Tables[0].Rows.Count > 0)
                         //{
                         //    //dsSearchData.Tables[0].Columns["MASTER_ID"].ColumnName = "MASTER_ID";//Grid Column is Case sensitive
@@ -1924,7 +1924,7 @@ namespace GCC
                         if (dbFetchNeeded)
                         {
                             DataTable dtTableToReturn;
-                            dtTableToReturn = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + sCondition);                            
+                            dtTableToReturn = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + sCondition);                            
                             foreach (string sCol in lstPopulateColumns)
                             {
                                 bool ColumnsMatch = false;
@@ -1940,7 +1940,7 @@ namespace GCC
                                     return;
                                 }
                             }
-                            //dtTableToReturn = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT " + GM.ListToQueryString(lstPopulateColumns, "Int") + " FROM " + sCondition);
+                            //dtTableToReturn = GV.MYasSQL.BAL_ExecuteQueryMygfSQL("SELECT " + GM.ListToQueryString(lstPopulateColumns, "Int") + " FROM " + sCondition);
                             if (dtTableToReturn.Rows.Count > 0)
                                 drReturnRow = dtTableToReturn.Rows[0];
                             else

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using System.Net;
 using System.Threading;
 using System.IO;
@@ -21,7 +21,7 @@ namespace GCC
                 
                 //BackgroundWorker bELV = new BackgroundWorker();
                 DateTime dProcess_StartTime = default(DateTime);
-                using (MySqlConnection con1 = new MySqlConnection(GV.sMySQL))
+                using (SqlConnection con1 = new SqlConnection(GV.sMSSQL1))
                 {
                     
                     while (true)
@@ -43,17 +43,17 @@ namespace GCC
                             string sProjectTables_Update = string.Empty;
                             try
                             {
-                                using (MySqlCommand cmdEmails = new MySqlCommand("CALL MVC.ELV ('" + GV.sSessionID + "',"+ GV.ibg_BatchExpiry + ","+ GV.ibg_LoadCount + ")", con1))
+                                using (SqlCommand cmdEmails = new SqlCommand("Exec MVC_latest..ELV '" + GV.sSessionID + "',"+ GV.ibg_BatchExpiry + ","+ GV.ibg_LoadCount, con1))
                                 //using (MySqlCommand cmdEmails = new MySqlCommand("ELV", con1))
                                 {
                                     if (con1.State != ConnectionState.Open)
                                         con1.Open();
                                     //cmdEmails.CommandType = CommandType.StoredProcedure;
-                                    //cmdEmails.Parameters.Add(new MySqlParameter("serverid", GV.sSessionID));
-                                    //cmdEmails.Parameters.Add(new MySqlParameter("inter", GV.ibg_BatchExpiry));
-                                    //cmdEmails.Parameters.Add(new MySqlParameter("caveats", GV.ibg_LoadCount));
+                                    //cmdEmails.Parameters.Add(new MydfSqlParameter("serverid", GV.sSessionID));
+                                    //cmdEmails.Parameters.Add(new MfdySqlParameter("inter", GV.ibg_BatchExpiry));
+                                    //cmdEmails.Parameters.Add(new MydfSqlParameter("caveats", GV.ibg_LoadCount));
 
-                                    using (MySqlDataAdapter daEmails = new MySqlDataAdapter(cmdEmails))
+                                    using (SqlDataAdapter daEmails = new SqlDataAdapter(cmdEmails))
                                     {
                                         
                                         daEmails.Fill(dtEmails);
@@ -149,7 +149,7 @@ namespace GCC
                                                     sBounceStatus = "BOUNCED";
 
                                                 sProjectTables_Update += "UPDATE " + drEmails["PROJECT_ID"] + "_mastercontacts set EMAIL_VERIFIED = '" + sBounceStatus + "', BOUNCE_STATUS = '" + sDescription.Replace("'", "''").Replace("\\", string.Empty) +
-                                                                "', BOUNCE_LOADED_DATE = NOW(), BOUNCE_LOADED_BY = 'CM' WHERE CONTACT_ID_P=" + drEmails["CONTACT_ID"] + ";";
+                                                                "', BOUNCE_LOADED_DATE = GETDATE(), BOUNCE_LOADED_BY = 'CM' WHERE CONTACT_ID_P=" + drEmails["CONTACT_ID"] + ";";
 
                                                 //drEmails["DESCRIPTION"] = sDescription;
                                                 //drEmails["DETAIL"] = sDetails;
@@ -168,11 +168,11 @@ namespace GCC
 
                                     if (GM.GetDateTime(true) < dProcess_StartTime.AddSeconds(GV.ibg_BatchExpiry))
                                     {
-                                        using (MySqlConnection con2 = new MySqlConnection(GV.sMySQL))
+                                        using (SqlConnection con2 = new SqlConnection(GV.sMSSQL1))
                                         {
-                                            using (MySqlDataAdapter da = new MySqlDataAdapter("SELECT * FROM c_email_checks Where 1=0", con2))
+                                            using (SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM c_email_checks Where 1=0", con2))
                                             {
-                                                using (MySqlCommandBuilder cb = new MySqlCommandBuilder(da))
+                                                using (SqlCommandBuilder cb = new SqlCommandBuilder(da))
                                                 {
                                                     if(con2.State != ConnectionState.Open)
                                                         con2.Open();
@@ -189,7 +189,7 @@ namespace GCC
 
                                             if (sProjectTables_Update.Length > 0)
                                             {
-                                                using (MySqlCommand cmdUpdateTables = new MySqlCommand(sProjectTables_Update, con2))
+                                                using (SqlCommand cmdUpdateTables = new SqlCommand(sProjectTables_Update, con2))
                                                 {
                                                     if (con2.State != ConnectionState.Open)
                                                         con2.Open();

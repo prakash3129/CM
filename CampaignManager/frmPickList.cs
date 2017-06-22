@@ -18,7 +18,7 @@ namespace GCC
             ToastNotification.ToastFont = new Font(this.Font.FontFamily, 22);
         }
 
-        //BAL.BAL_GlobalMySQL objBAL_GlobalMySQL = new BAL.BAL_GlobalMySQL();
+        //BAL.BAL_GlobalMySdfQL objBAL_GlobalMySfdQL = new BAL.BAL_GlobalMyfdSQL();
         DataTable dtPickList = new DataTable();
         bool IsLoading = false;
 
@@ -30,7 +30,7 @@ namespace GCC
         private void InitialLoad()
         {
             IsLoading = true;
-            dtPickList = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_picklists", "1=1");
+            dtPickList = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_picklists", "1=1");
             dgvPickListValues.DataSource = dtPickList;
             dgvPicklistCategory.DataSource = dtPickList.DefaultView.ToTable(true, "PicklistCategory");
             dgvPicklistCategory.BackgroundColor = GV.pnlGlobalColor.Style.BackColor2.Color;
@@ -88,11 +88,11 @@ namespace GCC
         private void Save()
         {
             if (dtPickList.GetChanges(DataRowState.Added) != null)
-                GV.MYSQL.BAL_SaveToTableMySQL(dtPickList.GetChanges(DataRowState.Added), GV.sProjectID + "_picklists", "New",  true);
+                GV.MSSQL1.BAL_SaveToTable(dtPickList.GetChanges(DataRowState.Added), GV.sProjectID + "_picklists", "New",  true);
             if (dtPickList.GetChanges(DataRowState.Modified) != null)
-                GV.MYSQL.BAL_SaveToTableMySQL(dtPickList.GetChanges(DataRowState.Modified), GV.sProjectID + "_picklists", "Update", true);
+                GV.MSSQL1.BAL_SaveToTable(dtPickList.GetChanges(DataRowState.Modified), GV.sProjectID + "_picklists", "Update", true);
             if (dtPickList.GetChanges(DataRowState.Deleted) != null)
-                GV.MYSQL.BAL_SaveToTableMySQL(dtPickList.GetChanges(DataRowState.Deleted), GV.sProjectID + "_picklists", "Delete", true);
+                GV.MSSQL1.BAL_SaveToTable(dtPickList.GetChanges(DataRowState.Deleted), GV.sProjectID + "_picklists", "Delete", true);
         }
 
         private void dgvPickListValues_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)

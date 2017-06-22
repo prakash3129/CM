@@ -272,13 +272,15 @@ function rec(ID)
 						$(this).attr("SSTBTN","True");
 						var txtAreaID = $(this).attr("id").replace('Merit_SST_','');
 						var btnID = $(this).attr("id");
-						//console.log($(this).attr('class'));
+						var txtValue = $("#"+txtAreaID).val();
+						
+						//console.log(txtValue);
 						try
 						{	
 							if (!('webkitSpeechRecognition' in window)) 
 							{			
 								alert('Chrome version not supported. Upgrade your Chrome.');
-							} 
+							}
 							else 
 							{			
 								if (recognizing) 
@@ -316,10 +318,24 @@ function rec(ID)
 										}    
 										
 										//console.log("#" + txtAreaID);
-										$(document.getElementById(txtAreaID)).val(interim_transcript);
-										//$("#" + txtAreaID).val(interim_transcript);	
-										if(final_transcript.length > 0)
-											$(document.getElementById(txtAreaID)).val(final_transcript);
+										
+										if(txtValue.length > 0)
+										{
+											$(document.getElementById(txtAreaID)).val(txtValue + " " + interim_transcript);
+											
+											if(final_transcript.length > 0)
+												$(document.getElementById(txtAreaID)).val(txtValue + " " + final_transcript);
+										}
+										else
+										{
+											$(document.getElementById(txtAreaID)).val(interim_transcript);											
+											if(final_transcript.length > 0)
+												$(document.getElementById(txtAreaID)).val(final_transcript);
+										}
+										
+										//$("#" + txtAreaID).val(interim_transcript);
+										
+										
 											//$("#" + txtAreaID).val(final_transcript);	
 									}
 									catch(err)

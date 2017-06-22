@@ -53,7 +53,7 @@ namespace GCC
         
         private void frm_Uncertain_Load(object sender, EventArgs e)
         {
-            //DataTable dtFields = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT FIELD_NAME_TABLE,UNCERTAIN_RAISABLE,UNCERTAIN_LINKED_COLUMN,PICKLIST_CATEGORY FROM c_field_master WHERE PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME='MasterContacts' AND (LENGTH(IFNULL(UNCERTAIN_LINKED_COLUMN,'')) > 0 OR UNCERTAIN_RAISABLE = 'Y');");
+            //DataTable dtFields = GV.MYsaSQL.BAL_ExecuteQueryMyfdSQL("SELECT FIELD_NAME_TABLE,UNCERTAIN_RAISABLE,UNCERTAIN_LINKED_COLUMN,PICKLIST_CATEGORY FROM c_field_master WHERE PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME='MasterContacts' AND (LENGTH(IFNULL(UNCERTAIN_LINKED_COLUMN,'')) > 0 OR UNCERTAIN_RAISABLE = 'Y');");
             //DataRow[] drrTemp = dtFields.Select("UNCERTAIN_RAISABLE = 'Y'");
             //foreach (DataRow drFieldRows in drrTemp)
             //{
@@ -88,7 +88,7 @@ namespace GCC
                 dtUncertain_Fields.Clear();
             
             cmbFieldNames.Items.Clear();
-            dtPending = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sContactTable + " WHERE " + GV.sAccessTo + "_UNCERTAIN_STATUS = 1;");
+            dtPending = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + GV.sContactTable + " WHERE " + GV.sAccessTo + "_UNCERTAIN_STATUS = 1;");
             dtUncertain_Fields = dtPending.DefaultView.ToTable(true, GV.sAccessTo + "_UNCERTAIN_FIELD");
             foreach (DataRow drAddFields in dtUncertain_Fields.Rows)
                 cmbFieldNames.Items.Add(drAddFields[GV.sAccessTo + "_UNCERTAIN_FIELD"].ToString());
@@ -160,7 +160,7 @@ namespace GCC
             try
             {                
                 DataTable dtChangedData = dtNewTable.GetChanges(DataRowState.Modified);
-                DataTable dtLog = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_log", "1=0");
+                DataTable dtLog = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_log", "1=0");
 
                 if (dtChangedData != null)
                 {
@@ -186,7 +186,7 @@ namespace GCC
                             }
                         }
                     }
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtLog, GV.sProjectID + "_log", "New", false);
+                    GV.MSSQL1.BAL_SaveToTable(dtLog, GV.sProjectID + "_log", "New", false);
                 }
             }
             catch (Exception ex)
@@ -232,7 +232,7 @@ namespace GCC
             {
                 sQuery = "SELECT * FROM " + GV.sContactTable + " WHERE (" + sQuery + ") AND " + GV.sAccessTo + "_UNCERTAIN_STATUS = 1";
 
-                DataTable dtRealTime_ContactData = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                DataTable dtRealTime_ContactData = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                 DataTable dtRealTime_ContactData_Copy = dtRealTime_ContactData.Copy();
                 string sPickList_Update = string.Empty;
                 DataTable dtPickList_Delete = new DataTable();
@@ -298,7 +298,7 @@ namespace GCC
                 }
 
                 Logging(dtRealTime_ContactData, dtRealTime_ContactData_Copy);
-                if (GV.MYSQL.BAL_SaveToTableMySQL(dtRealTime_ContactData.GetChanges(DataRowState.Modified), GV.sContactTable, "Update", true))
+                if (GV.MSSQL1.BAL_SaveToTable(dtRealTime_ContactData.GetChanges(DataRowState.Modified), GV.sContactTable, "Update", true))
                 {
                     if (sPickList_Update.Length > 0)
                     {
@@ -309,12 +309,12 @@ namespace GCC
                                 sPicklist_Delete += "DELETE FROM " + GV.sProjectID + "_picklists WHERE remarks ='Pending' AND PicklistCategory = '" + drDeletePending[0] + "' AND PicklistValue IN (" + GM.RemoveEndBackSlash(drDeletePending[1].ToString().Substring(1)) + ");";
                         }
 
-                        GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("INSERT INTO " + GV.sProjectID + "_picklists (PicklistCategory, PicklistValue, remarks) VALUES " + sPickList_Update.Substring(1));
+                        GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO " + GV.sProjectID + "_picklists (PicklistCategory, PicklistValue, remarks) VALUES " + sPickList_Update.Substring(1));
 
                         if (sPicklist_Delete.Trim().Length > 0)
-                            GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(sPicklist_Delete);
+                            GV.MSSQL1.BAL_ExecuteNonReturnQuery(sPicklist_Delete);
 
-                        GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE c_project_settings set PICKLIST_LASTUPDATE = NOW() WHERE PROJECT_ID='" + GV.sProjectID + "';");
+                        GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE c_project_settings set PICKLIST_LASTUPDATE = GETDATE() WHERE PROJECT_ID='" + GV.sProjectID + "';");
                         ToastNotification.Show(this, "Updated Successfully", eToastPosition.TopRight);
                         ReLoad_Tables("OTHERS_JOBTITLE");
                     }

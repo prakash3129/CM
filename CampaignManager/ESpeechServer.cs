@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Data.SqlClient;
 using System.Threading;
-using MySql.Data.MySqlClient;
 
 namespace GCC
 {
@@ -94,45 +94,49 @@ namespace GCC
                             sender1.Send(Encoding.ASCII.GetBytes(sDataToReturn), sDataToReturn.Length, lstRecived[1], Convert.ToInt32(lstRecived[5]));
                         }
                     }
-                    else if (lstRecived[0] == "GSQuery")
-                    {
-                        iSQuery = true;
-                        sSendPort = lstRecived[3];
-                        sSendHost = lstRecived[1];
-                        string sAudioPath = lstRecived[2];
 
-                        var request = new Google.Apis.CloudSpeechAPI.v1beta1.Data.SyncRecognizeRequest()
-                        {
-                            Config = new Google.Apis.CloudSpeechAPI.v1beta1.Data.RecognitionConfig()
-                            {
-                                Encoding = "LINEAR16",
-                                SampleRate = 16000,
-                                LanguageCode = "en-IN"
-                            },
-                            Audio = new Google.Apis.CloudSpeechAPI.v1beta1.Data.RecognitionAudio()
-                            {
-                                Content = Convert.ToBase64String(System.IO.File.ReadAllBytes(sAudioPath))
-                            }
-                        };
-                        var response = GV.GSpeechCloudAPI.Speech.Syncrecognize(request).Execute();
-                        string sOut = string.Empty;
-                        foreach (var result in response.Results)
-                        {
-                            foreach (var alternative in result.Alternatives)
-                                sOut += alternative.Transcript;
-                        }
+                    #region OldGSpeech
+                    //else if (lstRecived[0] == "GSQuery")
+                    //{
+                    //    iSQuery = true;
+                    //    sSendPort = lstRecived[3];
+                    //    sSendHost = lstRecived[1];
+                    //    string sAudioPath = lstRecived[2];
 
-                        string sDataToReturn;
-                        if (sOut.Length > 0)
-                            sDataToReturn = "GSResult[:|:]" + sOut + "[:|:]Sucess[:|:]" + sAudioPath;                                                    
-                        else
-                            sDataToReturn = "GSResult[:|:][:|:]Error[:|:]" + sAudioPath;
+                    //    var request = new Google.Apis.CloudSpeechAPI.v1beta1.Data.SyncRecognizeRequest()
+                    //    {
+                    //        Config = new Google.Apis.CloudSpeechAPI.v1beta1.Data.RecognitionConfig()
+                    //        {
+                    //            Encoding = "LINEAR16",
+                    //            SampleRate = 16000,
+                    //            LanguageCode = "en-IN"
+                    //        },
+                    //        Audio = new Google.Apis.CloudSpeechAPI.v1beta1.Data.RecognitionAudio()
+                    //        {
+                    //            Content = Convert.ToBase64String(System.IO.File.ReadAllBytes(sAudioPath))
+                    //        }
+                    //    };
+                    //    //var response = string.Empty; //GV.GSpeechCloudAPI.Speech.Syncrecognize(request).Execute();
+                    //    string sOut = string.Empty;
+                    //    //foreach (var result in response.Results)
+                    //    //{
+                    //    //    foreach (var alternative in result.Alternatives)
+                    //    //        sOut += alternative.Transcript;
+                    //    //}
 
-                        using (System.Net.Sockets.UdpClient sender1 = new System.Net.Sockets.UdpClient(7000))
-                        {
-                            sender1.Send(Encoding.ASCII.GetBytes(sDataToReturn), sDataToReturn.Length, lstRecived[1], Convert.ToInt32(lstRecived[3]));
-                        }                                               
-                    }
+                    //    string sDataToReturn;
+                    //    if (sOut.Length > 0)
+                    //        sDataToReturn = "GSResult[:|:]" + sOut + "[:|:]Sucess[:|:]" + sAudioPath;                                                    
+                    //    else
+                    //        sDataToReturn = "GSResult[:|:][:|:]Error[:|:]" + sAudioPath;
+
+                    //    using (System.Net.Sockets.UdpClient sender1 = new System.Net.Sockets.UdpClient(7000))
+                    //    {
+                    //        sender1.Send(Encoding.ASCII.GetBytes(sDataToReturn), sDataToReturn.Length, lstRecived[1], Convert.ToInt32(lstRecived[3]));
+                    //    }                                               
+                    //} 
+                    #endregion
+
                     else if (lstRecived[0] == "ESResult")
                     {
                         foreach (System.Windows.Forms.Form f in System.Windows.Forms.Application.OpenForms)
@@ -148,28 +152,28 @@ namespace GCC
                             }
                         }
                     }
-                    else if (lstRecived[0] == "GSResult")
-                    {
-                        foreach (System.Windows.Forms.Form f in System.Windows.Forms.Application.OpenForms)
-                        {
-                            if (f.Name == "FrmContactsUpdate")
-                            {
-                                if (((FrmContactsUpdate)f).sCurrentAudioPath == lstRecived[3])
-                                {
-                                    ((FrmContactsUpdate)f).sCommentText = lstRecived[1];
-                                    ((FrmContactsUpdate)f).sCommentError = lstRecived[2];
-                                    try
-                                    {
-                                        GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("INSERT INTO c_gspeech_log (SessionID,CompanySessionID,ProjectID,AudioFileName,RecognitionText,Who,`When`) VALUES('" + GV.sSessionID + "','" + GV.sCompanySessionID + "','" + GV.sProjectID + "','" + System.IO.Path.GetFileName(lstRecived[3]) + "','" + lstRecived[1].Replace("'", "''") + "','" + GV.sEmployeeName.Replace("'", "''") + "',NOW());");
-                                    }
-                                    catch (Exception ex)
-                                    {}
+                    //else if (lstRecived[0] == "GSResult")
+                    //{
+                    //    foreach (System.Windows.Forms.Form f in System.Windows.Forms.Application.OpenForms)
+                    //    {
+                    //        if (f.Name == "FrmContactsUpdate")
+                    //        {
+                    //            if (((FrmContactsUpdate)f).sCurrentAudioPath == lstRecived[3])
+                    //            {
+                    //                ((FrmContactsUpdate)f).sCommentText = lstRecived[1];
+                    //                ((FrmContactsUpdate)f).sCommentError = lstRecived[2];
+                    //                try
+                    //                {
+                    //                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO c_gspeech_log (SessionID,CompanySessionID,ProjectID,AudioFileName,RecognitionText,[Who],[When]) VALUES('" + GV.sSessionID + "','" + GV.sCompanySessionID + "','" + GV.sProjectID + "','" + System.IO.Path.GetFileName(lstRecived[3]) + "','" + lstRecived[1].Replace("'", "''") + "','" + GV.sEmployeeName.Replace("'", "''") + "',GETDATE());");
+                    //                }
+                    //                catch (Exception ex)
+                    //                {}
 
-                                }
-                                break;
-                            }
-                        }
-                    }
+                    //            }
+                    //            break;
+                    //        }
+                    //    }
+                    //}
                     else if (lstRecived[0] == "Error")
                     {
                         foreach (System.Windows.Forms.Form f in System.Windows.Forms.Application.OpenForms)
@@ -203,13 +207,13 @@ namespace GCC
 
         static void ExecuteQuery(string sQuery)
         {
-            using (MySqlConnection con = new MySqlConnection(GV.sMySQL))
+            using (SqlConnection con = new SqlConnection(GV.sMSSQL1))
             {
                 try
                 {
                     if (con.State != System.Data.ConnectionState.Open)
                         con.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(sQuery, con))
+                    using (SqlCommand cmd = new SqlCommand(sQuery, con))
                     {
                         cmd.ExecuteNonQuery();
                     }

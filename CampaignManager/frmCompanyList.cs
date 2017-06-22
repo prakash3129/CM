@@ -10,7 +10,6 @@ using System.Text;
 using System.Windows.Forms;
 using DevComponents.DotNetBar;
 using System.IO;
-using MySql.Data.MySqlClient;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -114,7 +113,7 @@ namespace GCC
         //        bool IsTablePassed = true;
         //        DataTable dtSchema = GV.SQLCE.BAL_FetchTable("information_schema.tables", "TABLE_NAME ='" + sSQLCETableName + "'");
         //        DataTable dtCETableInfo = GV.SQLCE.BAL_FetchTable("TableInfo", "Table_Name = '" + sSQLCETableName + "'");
-        //        DataTable dtSourceTableColumns = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT C.COLUMN_NAME,C.DATA_TYPE,C.CHARACTER_MAXIMUM_LENGTH,IFNULL(C.NUMERIC_PRECISION,'0') AS NUMERIC_PRECISION,IFNULL(C.NUMERIC_SCALE,'0') AS NUMERIC_SCALE FROM information_schema.COLUMNS C WHERE C.TABLE_SCHEMA='mvc' AND C.TABLE_NAME='" + sTableName + "'");
+        //        DataTable dtSourceTableColumns = GV.MYSdQL.BAL_ExecuteQueryMydSQL("SELECT C.COLUMN_NAME,C.DATA_TYPE,C.CHARACTER_MAXIMUM_LENGTH,IFNULL(C.NUMERIC_PRECISION,'0') AS NUMERIC_PRECISION,IFNULL(C.NUMERIC_SCALE,'0') AS NUMERIC_SCALE FROM information_schema.COLUMNS C WHERE C.TABLE_SCHEMA='mvgc' AND C.TABLE_NAME='" + sTableName + "'");
 
         //        if (dtSchema.Rows.Count > 0)
         //        {
@@ -467,7 +466,7 @@ namespace GCC
 
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Field Setttings"; });
-            dtFieldMasterAllColumns = GV.MYSQL.BAL_FetchTableMySQL("C_FIELD_MASTER", String.Format("PROJECT_ID = '{0}' ORDER BY SEQUENCE_NO", GV.sProjectID)); //All Fields in Master and Master Contacts
+            dtFieldMasterAllColumns = GV.MSSQL1.BAL_FetchTable("C_FIELD_MASTER", String.Format("PROJECT_ID = '{0}' ORDER BY SEQUENCE_NO", GV.sProjectID)); //All Fields in Master and Master Contacts
             dtFieldMasterAllColumns.TableName = "FieldMasterAllColumn";
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Value = 20; });
@@ -532,7 +531,7 @@ namespace GCC
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Value = 40; });
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Validations"; });
-            dtValidations = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sProjectID + "_VALIDATIONS_new WHERE RESEARCH_TYPE='" + GV.sAccessTo + "'"); //Validation Table
+            dtValidations = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + GV.sProjectID + "_VALIDATIONS WHERE RESEARCH_TYPE='" + GV.sAccessTo + "'"); //Validation Table
             dtValidations.TableName = "Validations";
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Validations.."; });
@@ -545,7 +544,7 @@ namespace GCC
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Value = 50; });
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Selection Lists"; });
-            dtPicklist = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_picklists WHERE PicklistCategory NOT IN (SELECT DISTINCT PicklistCategory FROM " + GV.sProjectID + "_picklists) UNION SELECT * FROM " + GV.sProjectID + "_picklists ORDER BY PicklistCategory,PicklistValue;"); //Picklist Table                
+            dtPicklist = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_picklists WHERE PicklistCategory NOT IN (SELECT DISTINCT PicklistCategory FROM " + GV.sProjectID + "_picklists) UNION SELECT * FROM " + GV.sProjectID + "_picklists ORDER BY PicklistCategory,PicklistValue;"); //Picklist Table                
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Selection Lists.."; });
             dtEmailSuggestion = dtPicklist.Select("PicklistCategory = 'EmailSuggestion'", "Remarks ASC").CopyToDataTable();
@@ -557,7 +556,7 @@ namespace GCC
             dtSpellIgnore = dtPicklist.Select("PicklistCategory = 'SpellCheckIgnore'").CopyToDataTable();
 
             dtbg_EmailValidation = dtPicklist.Select("PicklistCategory = 'EmailStatus'").CopyToDataTable();
-                //GV.MYSQL.BAL_FetchTableMySQL("c_picklists", "PicklistCategory = 'SpellCheckIgnore'");
+                //GV.MYdfSQL.BAL_FetchTableMdySQL("c_picklists", "PicklistCategory = 'SpellCheckIgnore'");
 
             dtPicklist.TableName = "PickList";
             GV.PickList_LastUpdate = GM.GetDateTime();
@@ -565,17 +564,17 @@ namespace GCC
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Value = 60; });
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Disposal Lists"; });
-            dtRecordStatus = GV.MYSQL.BAL_ExecuteQueryMySQL("select Distinct Table_Name,Primary_Status,Secondary_Status,Operation_Type,Research_Type,sort from " + GV.sProjectID + "_recordstatus;"); //Contact Status Table
+            dtRecordStatus = GV.MSSQL1.BAL_ExecuteQuery("select Distinct Table_Name,Primary_Status,Secondary_Status,Operation_Type,Research_Type,sort from " + GV.sProjectID + "_recordstatus;"); //Contact Status Table
             dtRecordStatus.TableName = "RecordStatus";
 
             
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Value = 70; });
 
-            dtRecordStatusRevenue = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sProjectID + "_RecordStatus"); //Contact Status Table
+            dtRecordStatusRevenue = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + GV.sProjectID + "_RecordStatus"); //Contact Status Table
             dtRecordStatusRevenue.TableName = "RecordStatusRevenue";
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Countries & Timezones"; });
-            dtCountryInformation = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM Country");//Time Zone Datatable
+            dtCountryInformation = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_country");//Time Zone Datatable
             dtCountryInformation.TableName = "Country";
 
             RefreshBlockTable(true);
@@ -591,7 +590,7 @@ namespace GCC
             if (dtEAFBlob.Rows.Count > 0)
                 EAF = (byte[])dtEAFBlob.Rows[0]["Blob"];
 
-            dtScrapperSettings = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_scrapper_settings where ProjectID = '" + GV.sProjectID + "' AND STATUS = 'ACTIVE';");
+            dtScrapperSettings = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_scrapper_settings where ProjectID = '" + GV.sProjectID + "' AND STATUS = 'ACTIVE';");
             
             Write_Blob_from_DB(dtScrapperSettings.Rows.Count > 0); //Initialize All Blobs
 
@@ -626,15 +625,15 @@ namespace GCC
         {
             if(RefreshbyDefault)
             {
-                dtBlock = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_block WHERE BLOCK_EXPIRY > CURDATE() AND PROJECT_ID IN ('ALL','" + GV.sProjectID + "') AND BLOCK_TO IN ('ALL','" + GV.sUserType + "');");
-                GV.dBlockTableUpdateTime = Convert.ToDateTime(GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT UPDATED_DATE FROM  c_block ORDER BY UPDATED_DATE DESC LIMIT 1;").Rows[0][0]);
+                dtBlock = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_block WHERE BLOCK_EXPIRY > CAST(GETDATE() as date) AND PROJECT_ID IN ('ALL','" + GV.sProjectID + "') AND BLOCK_TO IN ('ALL','" + GV.sUserType + "');");
+                GV.dBlockTableUpdateTime = Convert.ToDateTime(GV.MSSQL1.BAL_ExecuteQuery("SELECT TOP 1 UPDATED_DATE FROM  c_block ORDER BY UPDATED_DATE DESC;").Rows[0][0]);
                 return;
             }
 
             DateTime? dLastUpdatedTime = GV.dBlockTableUpdateTime;            
-            GV.dBlockTableUpdateTime = Convert.ToDateTime(GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT UPDATED_DATE FROM  c_block ORDER BY UPDATED_DATE DESC LIMIT 1;").Rows[0][0]);
+            GV.dBlockTableUpdateTime = Convert.ToDateTime(GV.MSSQL1.BAL_ExecuteQuery("SELECT TOP 1 UPDATED_DATE FROM  c_block ORDER BY UPDATED_DATE DESC;").Rows[0][0]);
             if (GV.dBlockTableUpdateTime > dLastUpdatedTime)            
-                dtBlock = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_block WHERE BLOCK_EXPIRY > CURDATE() AND PROJECT_ID IN ('ALL','" + GV.sProjectID + "') AND BLOCK_TO IN ('ALL','" + GV.sUserType + "');");
+                dtBlock = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_block WHERE BLOCK_EXPIRY > CAST(GETDATE() as date) AND PROJECT_ID IN ('ALL','" + GV.sProjectID + "') AND BLOCK_TO IN ('ALL','" + GV.sUserType + "');");
         }
 
         void Get_projectColumnsNSource()
@@ -643,29 +642,29 @@ namespace GCC
             {
                 ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Columns to Export"; });
                 dtProjectAllColumns =
-                    GV.MYSQL.BAL_ExecuteQueryMySQL(
-                        "SELECT UPPER(TABLE_NAME)'TableName', COLUMN_NAME 'ColumnName',ORDINAL_POSITION 'Order' FROM information_schema.columns WHERE TABLE_SCHEMA='MVC' AND TABLE_NAME IN ('" +
+                    GV.MSSQL1.BAL_ExecuteQuery(
+                        "SELECT UPPER(TABLE_NAME)'TableName', COLUMN_NAME 'ColumnName',ORDINAL_POSITION 'Order' FROM information_schema.columns WHERE TABLE_CATALOG = db_name() AND TABLE_NAME IN ('" +
                         GV.sCompanyTable + "','" + GV.sContactTable +
                         "') AND Column_Name NOT IN ('MASTER_ID','CONTACT_ID_P','GROUP_ID') ORDER BY TABLE_NAME,ORDINAL_POSITION;");
 
                 if (
-                    GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT 'X' FROM " + GV.sProjectID +
+                    GV.MSSQL1.BAL_ExecuteQuery("SELECT 'X' FROM " + GV.sProjectID +
                                                    "_Picklists where PicklistCategory = 'ExportTemplate'").Rows.Count >
                     0)
                     dtProjectExportColumns =
-                        GV.MYSQL.BAL_ExecuteQueryMySQL(
-                            "SELECT PicklistCategory,PicklistField,PicklistValue,CONVERT(remarks,SIGNED)remarks FROM " +
+                        GV.MSSQL1.BAL_ExecuteQuery(
+                            "SELECT PicklistCategory,PicklistField,PicklistValue,CAST(remarks AS INT)remarks FROM " +
                             GV.sProjectID +
-                            "_picklists WHERE PicklistCategory='ExportTemplate' ORDER BY PicklistField, CONVERT(remarks,SIGNED)");
+                            "_picklists WHERE PicklistCategory='ExportTemplate' ORDER BY PicklistField, CAST(remarks AS INT)");
                 else
                     dtProjectExportColumns =
-                        GV.MYSQL.BAL_ExecuteQueryMySQL(
-                            "SELECT PicklistCategory,PicklistField,PicklistValue,CONVERT(remarks,SIGNED)remarks FROM c_picklists WHERE PicklistCategory='ExportTemplate' ORDER BY PicklistField, CONVERT(remarks,SIGNED)");
+                        GV.MSSQL1.BAL_ExecuteQuery(
+                            "SELECT PicklistCategory,PicklistField,PicklistValue,CAST(remarks AS INT)remarks FROM c_picklists WHERE PicklistCategory='ExportTemplate' ORDER BY PicklistField, CAST(remarks AS INT)");
 
                 ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading Export Sources"; });
 
                 dtMoveToSource =
-                    GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT MOVED_TO_SOURCE FROM " + GV.sCompanyTable +
+                    GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT MOVED_TO_SOURCE FROM " + GV.sCompanyTable +
                                                    " WHERE FLAG IN ('TR','WR');");
             }
 
@@ -678,15 +677,15 @@ namespace GCC
             {
 
                 //dtProjectAllColumns =
-                //    GV.MYSQL.BAL_ExecuteQueryMySQL(
-                //        "SELECT UPPER(TABLE_NAME)'TableName', COLUMN_NAME 'ColumnName',ORDINAL_POSITION 'Order' FROM information_schema.columns WHERE TABLE_SCHEMA='MVC' AND TABLE_NAME IN ('" +
+                //    GV.MsYSQL.BAL_ExecuteQueryMydSQL(
+                //        "SELECT UPPER(TABLE_NAME)'TableName', COLUMN_NAME 'ColumnName',ORDINAL_POSITION 'Order' FROM information_schema.columns WHERE TABLE_SCHEMA='MVgC' AND TABLE_NAME IN ('" +
                 //        GV.sCompanyTable + "','" + GV.sContactTable +
                 //        "') AND Column_Name NOT IN ('MASTER_ID','CONTACT_ID_P','GROUP_ID') ORDER BY TABLE_NAME,ORDINAL_POSITION;");
 
-                //if (GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT 'X' FROM " + GV.sProjectID + "_Picklists where PicklistCategory = 'ExportTemplate'").Rows.Count > 0)
-                //    dtProjectExportColumns = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT PicklistCategory,PicklistField,PicklistValue,CONVERT(remarks,SIGNED)remarks FROM " + GV.sProjectID + "_picklists WHERE PicklistCategory='ExportTemplate' ORDER BY PicklistField, CONVERT(remarks,SIGNED)");
+                //if (GV.MsYSQL.BAL_ExecuteQueryMydSQL("SELECT 'X' FROM " + GV.sProjectID + "_Picklists where PicklistCategory = 'ExportTemplate'").Rows.Count > 0)
+                //    dtProjectExportColumns = GV.MsYSQL.BAL_ExecuteQueryMydSQL("SELECT PicklistCategory,PicklistField,PicklistValue,CONVERT(remarks,SIGNED)remarks FROM " + GV.sProjectID + "_picklists WHERE PicklistCategory='ExportTemplate' ORDER BY PicklistField, CONVERT(remarks,SIGNED)");
                 //else
-                //    dtProjectExportColumns = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT PicklistCategory,PicklistField,PicklistValue,CONVERT(remarks,SIGNED)remarks FROM c_picklists WHERE PicklistCategory='ExportTemplate' ORDER BY PicklistField, CONVERT(remarks,SIGNED)");
+                //    dtProjectExportColumns = GV.MYsSQL.BAL_ExecuteQueryMydSQL("SELECT PicklistCategory,PicklistField,PicklistValue,CONVERT(remarks,SIGNED)remarks FROM c_picklists WHERE PicklistCategory='ExportTemplate' ORDER BY PicklistField, CONVERT(remarks,SIGNED)");
                 
                 if (LoadCompany)
                 {
@@ -911,11 +910,11 @@ namespace GCC
 
                 dgvCompanyList.DataSource = null;
 
-               //  dtMasterCompany = GV.MYSQL.BAL_ExecuteQueryMySQL(sPrefix + " where 1=0;");
+               //  dtMasterCompany = GVd.MYdSQL.BAL_ExecuteQueryMySdQL(sPrefix + " where 1=0;");
                                   
-               //  dtMasterContact = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT Contact.* FROM " + GV.sContactTable + " Contact WHERE 1=0");
+               //  dtMasterContact = GV.MdYSQL.BAL_ExecuteQueryMySdQL("SELECT Contact.* FROM " + GV.sContactTable + " Contact WHERE 1=0");
                                   
-               //  dtQC = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT QC.* FROM " + GV.sProjectID + "_QC QC WHERE 1=0");                                
+               //  dtQC = GV.MdYSQL.BAL_ExecuteQueryMydSQL("SELECT QC.* FROM " + GV.sProjectID + "_QC QC WHERE 1=0");                                
 
                  
                ////dgvCompanyList.DataSource = dtMasterCompany;
@@ -1016,10 +1015,10 @@ namespace GCC
                     //        else if (GlobalVariables.sAccessTo == "TR")
                     //            sQuery = "Update " + GlobalVariables.sContactTable + " SET WR_CONTACT_STATUS = 'TELERESEARCHED' WHERE MASTER_ID IN(" + sMasterIDs + ") AND TR_CONTACT_STATUS IN(" + sFreezedContactStatus + ")";
 
-                    //        GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(sQuery);
+                    //        GV.MkYSQL.BAL_ExecuteNonReturnQueryMydSQL(sQuery);
                     //    }
                     //}
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtMasterCompany.GetChanges(DataRowState.Modified), GV.sCompanyTable, "Update", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtMasterCompany.GetChanges(DataRowState.Modified), GV.sCompanyTable, "Update", true);
                     MessageBoxEx.Show("Records Moved", "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ((frmMain)MdiParent).btnClearFilter.RaiseClick();
                 }
@@ -1073,7 +1072,7 @@ namespace GCC
         //                DataTable dtRecordCheck = new DataTable();
         //                if (IsOpenbyID)
         //                {
-        //                    dtRecordCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "'");
+        //                    dtRecordCheck = GV.MsaYSQL.BAL_FetchTableMydSQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "'");
         //                    if (dtRecordCheck.Rows.Count > 0)
         //                    {
         //                        if (dtRecordCheck.Rows[0]["Master_ID"].ToString() == sID && IsFormOpen == false)
@@ -1095,7 +1094,7 @@ namespace GCC
         //                    }
         //                    else
         //                    {
-        //                        dtRecordCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "MASTER_ID = " + sID + " AND FLAG = '" + GV.sAccessTo + "'");
+        //                        dtRecordCheck = GV.MYdSQL.BAL_FetchTableMydSQL(GV.sCompanyTable, "MASTER_ID = " + sID + " AND FLAG = '" + GV.sAccessTo + "'");
         //                        if (dtRecordCheck.Rows.Count > 0 && dtRecordCheck.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().StartsWith("Current") && dtRecordCheck.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().Replace("Current_", "").ToUpper() != GV.sEmployeeName.ToUpper())
         //                        {
         //                            MessageBoxEx.Show("This record is already in use by <font size = '10' color='OrangeRed'><b>" + GM.ProperCase_ProjectSpecific(dtRecordCheck.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().Replace("Current_", string.Empty)) + "</b></font>", "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Stop);
@@ -1105,7 +1104,7 @@ namespace GCC
         //                }
         //                else
         //                {
-        //                    dtRecordCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "'");
+        //                    dtRecordCheck = GV.MYdSQL.BAL_FetchTableMydSQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "'");
         //                    if (dtRecordCheck.Rows.Count > 0)
         //                    {
         //                        MessageBoxEx.Show("Some contact(s) not saved properly. Opening them now.", "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1117,14 +1116,14 @@ namespace GCC
         //                        }
         //                    }
         //                    else
-        //                        dtRecordCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "MASTER_ID = " + sID + " AND " + GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName + "'");
+        //                        dtRecordCheck = GV.MYdSQL.BAL_FetchTableMydSQL(GV.sCompanyTable, "MASTER_ID = " + sID + " AND " + GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName + "'");
         //                }
 
         //                if (dtRecordCheck.Rows.Count > 0)
         //                {
         //                    if (IsFormOpen == false && GV.sCompanyTable.Length > 0 && GV.sContactTable.Length > 0)
         //                    {
-        //                        GV.MYSQL.BAL_ExecuteQueryMySQL("UPDATE " + GV.sCompanyTable + " SET " + GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' WHERE GROUP_ID = " + dtRecordCheck.Rows[0]["GROUP_ID"] + ";");
+        //                        GV.MYdSQL.BAL_ExecuteQueryMydSQL("UPDATE " + GV.sCompanyTable + " SET " + GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' WHERE GROUP_ID = " + dtRecordCheck.Rows[0]["GROUP_ID"] + ";");
         //                        FrmContactsUpdate objfrmContactsUpdate = new FrmContactsUpdate(null, this.MdiParent, "ListOpen", IsNewCompany);
         //                        objfrmContactsUpdate.Show();
         //                    }
@@ -1132,7 +1131,7 @@ namespace GCC
         //            }
         //            else
         //            {
-        //                DataTable dtAdminCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "MASTER_ID = " + sID + ";");
+        //                DataTable dtAdminCheck = GV.MdYSQL.BAL_FetchTableMySdQL(GV.sCompanyTable, "MASTER_ID = " + sID + ";");
         //                if (dtAdminCheck.Rows.Count > 0)
         //                {
         //                    if (dtAdminCheck.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().StartsWith("Current"))
@@ -1326,7 +1325,7 @@ namespace GCC
             {
                 string sSQLText = BuildQuery(FormatDatatableToBuildQuery(false));
                 string sPrefix = string.Empty;
-                if (sSQLText.ToUpper().Contains("IFNULL(CONTACT.QC_STATUS"))
+                if (sSQLText.ToUpper().Contains("ISNULL(CONTACT.QC_STATUS"))
                     //sPrefix = "SELECT * FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID INNER JOIN "+GV.sProjectID+"_QC QC ON Contact.CONTACT_ID_P = QC.RECORDID";
                     sPrefix = "SELECT * FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN  (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
                 else
@@ -1336,11 +1335,11 @@ namespace GCC
                 if (sSQLText.Length > 0)
                 {
                     if (GV.sUserType == "Agent")
-                        dtCompanyContactData = GV.MYSQL.BAL_ExecuteQueryMySQL(sPrefix + " where " + sSQLText + " AND " + GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName + "' AND FLAG = '" + GV.sAccessTo + "';");
+                        dtCompanyContactData = GV.MSSQL1.BAL_ExecuteQuery(sPrefix + " where " + sSQLText + " AND " + GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName + "' AND FLAG = '" + GV.sAccessTo + "';");
                     else if (GV.sUserType == "QC" || GV.sUserType == "Admin")
-                        dtCompanyContactData = GV.MYSQL.BAL_ExecuteQueryMySQL(sPrefix + " where " + sSQLText + ";");
+                        dtCompanyContactData = GV.MSSQL1.BAL_ExecuteQuery(sPrefix + " where " + sSQLText + ";");
                     else
-                        dtCompanyContactData = GV.MYSQL.BAL_ExecuteQueryMySQL(sPrefix + " where " + sSQLText + " AND FLAG = '" + GV.sAccessTo + "';");
+                        dtCompanyContactData = GV.MSSQL1.BAL_ExecuteQuery(sPrefix + " where " + sSQLText + " AND FLAG = '" + GV.sAccessTo + "';");
 
                     DataTable dtSecondarySearch = dtSearch.Clone();
                     DataRow[] drrCondition = dtSearch.Select("Primary = 'False' AND LEN(Criteria)> 0");
@@ -1422,7 +1421,7 @@ namespace GCC
                     
                 if (sSQLText.Length > 0)
                 {
-                    if (sSQLText.ToUpper().Contains("IFNULL(CONTACT.QC_STATUS"))
+                    if (sSQLText.ToUpper().Contains("ISNULL(CONTACT.QC_STATUS"))
                         //sPrefix = "SELECT * FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID INNER JOIN "+GV.sProjectID+"_QC QC ON Contact.CONTACT_ID_P = QC.RECORDID";
                         sPrefix = "SELECT DISTINCT Company.* FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN  (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
                     else
@@ -1436,7 +1435,7 @@ namespace GCC
                     else
                         sExecute = sPrefix + " where " + sSQLText + " AND FLAG = '" + GV.sAccessTo + "';";
                     sQuery = sExecute;
-                    dtMasterCompany = GV.MYSQL.BAL_ExecuteQueryMySQL(sExecute);
+                    dtMasterCompany = GV.MSSQL1.BAL_ExecuteQuery(sExecute);
 
                     DataTable dtSecondarySearch = dtSearch.Clone();
                     DataRow[] drrCondition = dtSearch.Select("Primary = 'False' AND LEN(Criteria)> 0");
@@ -1779,11 +1778,11 @@ namespace GCC
                                 else
                                 {
                                     if (dgvCompanySearch.Rows[iRow].Cells["Table"].Value.ToString() == "Contact")
-                                        objfrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sContactTable + ";");
+                                        objfrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sContactTable + ";");
                                     else if (dgvCompanySearch.Rows[iRow].Cells["Table"].Value.ToString() == "Company")
-                                        objfrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sCompanyTable + ";");
+                                        objfrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sCompanyTable + ";");
                                     else if (dgvCompanySearch.Rows[iRow].Cells["Table"].Value.ToString() == "QC")
-                                        objfrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sProjectID + "_QC;");
+                                        objfrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sProjectID + "_QC;");
                                     else
                                     {
                                         objfrmComboList.dtItems = null;
@@ -1796,11 +1795,11 @@ namespace GCC
                             else
                             {
                                 if (dgvCompanySearch.Rows[iRow].Cells["Table"].Value.ToString() == "Contact")
-                                    objfrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sContactTable + ";");
+                                    objfrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sContactTable + ";");
                                 else if (dgvCompanySearch.Rows[iRow].Cells["Table"].Value.ToString() == "Company")
-                                    objfrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sCompanyTable + ";");
+                                    objfrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sCompanyTable + ";");
                                 else if (dgvCompanySearch.Rows[iRow].Cells["Table"].Value.ToString() == "QC")
-                                    objfrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sProjectID + "_QC;");
+                                    objfrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + dgvCompanySearch.Rows[iRow].Cells["Search On"].Value.ToString() + " FROM " + GV.sProjectID + "_QC;");
                                 else
                                 {
                                     objfrmComboList.dtItems = null;
@@ -2066,7 +2065,7 @@ namespace GCC
                         if (drConditions["Table"].ToString() == "QC") // Changing alias QC to Contact since contact and QC table are considered as same table in select Query. This will help with the problem faced with Left outer Join, Innser Join combination SELECT * FROM CRUCRU005_MASTERCOMPANIES Company LEFT OUTER JOIN (SELECT * FROM CRUCRU005_MASTERCONTACTS Contact INNER JOIN CRUCRU005_QC QC ON Contact.CONTACT_ID_P = QC.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID
                             drConditions["Table"] = "Contact";
 
-                        sFieldName = "IFNULL(" + drConditions["Table"].ToString() + "." + sFieldName + ",'')";
+                        sFieldName = "ISNULL(" + drConditions["Table"].ToString() + "." + sFieldName + ",'')";
 
                         if (sSQLText.Length > 0)
                             sSQLText += " AND ";
@@ -2153,7 +2152,7 @@ namespace GCC
                         {
                             iGroupIndex = (drrContactGroup[0]["Table"].ToString() == "Contact Count") ? 0 : 1;
                             iConditionIndex = (drrContactGroup[0]["Table"].ToString() == "Contact") ? 0 : 1;
-                            sQueryCondition = FormCondition(drrContactGroup[iConditionIndex]["Criteria"].ToString(), drrContactGroup[iConditionIndex]["SearchFrom"].ToString().Trim(), drrContactGroup[iConditionIndex]["SearchTo"].ToString().Trim(), drrContactGroup[iConditionIndex]["Datatype"].ToString(), "IFNULL(GRP." + drrContactGroup[iConditionIndex]["Search On"].ToString() + ",'')");
+                            sQueryCondition = FormCondition(drrContactGroup[iConditionIndex]["Criteria"].ToString(), drrContactGroup[iConditionIndex]["SearchFrom"].ToString().Trim(), drrContactGroup[iConditionIndex]["SearchTo"].ToString().Trim(), drrContactGroup[iConditionIndex]["Datatype"].ToString(), "ISNULL(GRP." + drrContactGroup[iConditionIndex]["Search On"].ToString() + ",'')");
                         }
                         else                        
                             iGroupIndex = 0;
@@ -2531,7 +2530,7 @@ namespace GCC
                             if (dateInputExport.ToString().Length > 0)
                             {
                                 if (rdoContactProcessed.Checked)
-                                    sQueryFull = sPrefix + " WHERE Convert(" + sAccess + "_UPDATED_DATE,DATE) = '" + dateInputExport.Value.ToString("yyyyMMdd") + "'";
+                                    sQueryFull = sPrefix + " WHERE CAST(" + sAccess + "_UPDATED_DATE As DATE) = '" + dateInputExport.Value.ToString("yyyyMMdd") + "'";
                                 else
                                 {
                                     string sDateColumn = string.Empty;
@@ -2540,7 +2539,7 @@ namespace GCC
                                     else
                                         sDateColumn = "TR_DATECALLED";
 
-                                    sQueryFull = sPrefix + " WHERE Convert(" + sDateColumn + ",DATE) = '" + dateInputExport.Value.ToString("yyyyMMdd") + "'";
+                                    sQueryFull = sPrefix + " WHERE CAST(" + sDateColumn + " As DATE) = '" + dateInputExport.Value.ToString("yyyyMMdd") + "'";
                                 }
                             }
                             else
@@ -2587,7 +2586,7 @@ namespace GCC
                     //        ToastNotification.Show(this, "Filter doesn't return value(s)", eToastPosition.TopRight);
                     //        return;
                     //    }
-                    //    DataTable dtToExport = GV.MYSQL.BAL_ExecuteQueryMySQL(sQueryFull);
+                    //    DataTable dtToExport = GV.MaYSQL.BAL_ExecuteQueryMydSQL(sQueryFull);
 
                     //    //if (saveFileDialogExportToExcel.FilterIndex == 2)
                     //    //{
@@ -2666,7 +2665,7 @@ namespace GCC
         //    string sID = Get_LostData_ID();
         //    if (sID.Length > 0)
         //    {
-        //        DataTable dtComp = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "FLAG = '" + GV.sAccessTo + "' AND MASTER_ID =" + sID);
+        //        DataTable dtComp = GV.MfYSQL.BAL_FetchTableMydSQL(GV.sCompanyTable, "FLAG = '" + GV.sAccessTo + "' AND MASTER_ID =" + sID);
         //        DataTable dtContactLost = GV.SQLCE.BAL_FetchTable(GV.sSQLCEContactTable, "MASTER_ID = " + sID);
         //        if (dtComp.Rows.Count > 0)
         //        {
@@ -2683,7 +2682,7 @@ namespace GCC
         //                    else if (dtComp.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().StartsWith("Currnet"))
         //                    {
         //                        if (MessageBoxEx.Show("The record already opened by <b>" + GM.ProperCase_ProjectSpecific(dtComp.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().Replace("Current_", string.Empty)) + "</b>", "Campaign Manager", MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop) == System.Windows.Forms.DialogResult.Retry)
-        //                            dtComp = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "FLAG = '" + GV.sAccessTo + "' AND MASTER_ID =" + sID+ " AND MASTER_ID = GROUP_ID");
+        //                            dtComp = GV.MYfSQL.BAL_FetchTableMydSQL(GV.sCompanyTable, "FLAG = '" + GV.sAccessTo + "' AND MASTER_ID =" + sID+ " AND MASTER_ID = GROUP_ID");
         //                        else
         //                        {
         //                            GV.SQLCE.BAL_DeleteFromTable(GV.sSQLCECompanyTable, "Master_ID = " + sID);
@@ -2693,7 +2692,7 @@ namespace GCC
         //                    }
         //                    else
         //                    {
-        //                        GV.MYSQL.BAL_ExecuteQueryMySQL("UPDATE " + GV.sCompanyTable + " SET " + GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' WHERE MASTER_ID = " + sID + " AND MASTER_ID = GROUP_ID;");
+        //                        GV.MYfdSQL.BAL_ExecuteQueryMydSQL("UPDATE " + GV.sCompanyTable + " SET " + GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' WHERE MASTER_ID = " + sID + " AND MASTER_ID = GROUP_ID;");
         //                        FrmContactsUpdate objfrmContactsUpdate = new FrmContactsUpdate(sID, this.MdiParent, "ListOpen", false, this);
         //                        objfrmContactsUpdate.Show();
         //                        return;
@@ -2715,7 +2714,7 @@ namespace GCC
         //    //DataTable dt = new DataTable();
         //    //if (IsOpenbyID)
         //    //{
-        //    //    dt = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "MASTER_ID = " + sID + " AND FLAG = '" + GV.sAccessTo + "'");
+        //    //    dt = GV.MYdfSQL.BAL_FetchTableMydSQL(GV.sCompanyTable, "MASTER_ID = " + sID + " AND FLAG = '" + GV.sAccessTo + "'");
         //    //    if (dt.Rows.Count > 0 && dt.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().StartsWith("Current") && dt.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().Replace("Current_", "").ToUpper() != GV.sEmployeeName.ToUpper())
         //    //    {
         //    //        MessageBoxEx.Show("This record is already in use by <font size = '10' color='OrangeRed'><b>" + GM.ProperCase(dt.Rows[0][GV.sAccessTo + "_AGENTNAME"].ToString().Replace("Current_", string.Empty)) + "</b></font>", "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Stop);
@@ -2728,7 +2727,7 @@ namespace GCC
         //    //}
         //    //else
         //    //{
-        //    //    dt = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "'");
+        //    //    dt = GV.MYSfdQL.BAL_FetchTableMydSQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "'");
         //    //    if (dt.Rows.Count > 0)
         //    //    {
         //    //        MessageBoxEx.Show("Some contact(s) not saved properly. Opening them now.", "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -2740,14 +2739,14 @@ namespace GCC
         //    //        }
         //    //    }
         //    //    else
-        //    //        dt = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "MASTER_ID = " + sID + " AND " + GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName + "'");
+        //    //        dt = GV.MYfdSQL.BAL_FetchTableMydSQL(GV.sCompanyTable, "MASTER_ID = " + sID + " AND " + GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName + "'");
         //    //}
 
         //    //if (dt.Rows.Count > 0)
         //    //{
         //    //    if (IsFormOpen == false && GV.sCompanyTable.Length > 0 && GV.sContactTable.Length > 0)
         //    //    {
-        //    //        GV.MYSQL.BAL_ExecuteQueryMySQL("UPDATE " + GV.sCompanyTable + " SET " + GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' WHERE MASTER_ID = " + sID + ";");
+        //    //        GV.MYfdSQL.BAL_ExecuteQueryMdySQL("UPDATE " + GV.sCompanyTable + " SET " + GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' WHERE MASTER_ID = " + sID + ";");
         //    //        FrmContactsUpdate objfrmContactsUpdate = new FrmContactsUpdate(null, this.MdiParent, this, "ListOpen", false);
         //    //        objfrmContactsUpdate.Show();
         //    //    }
@@ -2851,13 +2850,13 @@ namespace GCC
                 {
                     if (sImportType == "Bounce") //Bounced records
                     {
-                        dtContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "CONTACT_ID_P IN (" + sContactIDsImported + ") AND " + GV.sAccessTo + "_UNCERTAIN_STATUS IN (0,1);");
-                        DataTable dtEmailStatus = GV.MYSQL.BAL_FetchTableMySQL("c_picklists", "PicklistCategory='EmailStatus'");
+                        dtContacts = GV.MSSQL1.BAL_FetchTable(GV.sContactTable, "CONTACT_ID_P IN (" + sContactIDsImported + ") AND " + GV.sAccessTo + "_UNCERTAIN_STATUS IN (0,1);");
+                        DataTable dtEmailStatus = GV.MSSQL1.BAL_FetchTable("c_picklists", "PicklistCategory='EmailStatus'");
                         iRecordCount = dtContacts.Rows.Count;
                         sContactIDsDB= GM.ColumnToQString("CONTACT_ID_P", dtContacts, "Int");
                         if (sContactIDsDB.Length > 0)
                         {
-                            dtQCTable = GV.MYSQL.BAL_FetchTableMySQL(GV.sQCTable, "RecordID IN (" + sContactIDsDB + ") AND TableName = 'Contact' AND ResearchType = '"+GV.sAccessTo+"'");
+                            dtQCTable = GV.MSSQL1.BAL_FetchTable(GV.sQCTable, "RecordID IN (" + sContactIDsDB + ") AND TableName = 'Contact' AND ResearchType = '"+GV.sAccessTo+"'");
                             foreach (DataRow dr in dtContacts.Rows)
                             {
                                 DataRow[] drrBounceImport = dtImport.Select("CONTACT_ID_P = '" + dr["CONTACT_ID_P"] + "'");
@@ -2887,11 +2886,11 @@ namespace GCC
                     }
                     else if (sImportType == "OK") // OK Records
                     {
-                        dtContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "CONTACT_ID_P IN (" + sContactIDsImported + ") AND " + GV.sAccessTo + "_UNCERTAIN_STATUS = 0;");
+                        dtContacts = GV.MSSQL1.BAL_FetchTable(GV.sContactTable, "CONTACT_ID_P IN (" + sContactIDsImported + ") AND " + GV.sAccessTo + "_UNCERTAIN_STATUS = 0;");
                         sContactIDsDB = GM.ColumnToQString("CONTACT_ID_P", dtContacts, "Int");
                         if (sContactIDsDB.Length > 0)
                         {
-                            dtQCTable = GV.MYSQL.BAL_FetchTableMySQL(GV.sQCTable, "RecordID IN (" + sContactIDsDB + ") AND TableName = 'Contact' AND ResearchType = '" + GV.sAccessTo + "'");
+                            dtQCTable = GV.MSSQL1.BAL_FetchTable(GV.sQCTable, "RecordID IN (" + sContactIDsDB + ") AND TableName = 'Contact' AND ResearchType = '" + GV.sAccessTo + "'");
                             iRecordCount = dtContacts.Rows.Count;
                             foreach (DataRow dr in dtContacts.Rows)
                                 dtQCTable = Update_QCTable(dr["Contact_ID_P"].ToString(), dtContacts, dtQCTable, "Contact", "OK", string.Empty);
@@ -2899,26 +2898,26 @@ namespace GCC
                     }
                     else if(sImportType == "Upload Tag")
                     {
-                        dtContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "CONTACT_ID_P IN (" + sContactIDsImported + ") AND TAG_DATE IS NULL;");
+                        dtContacts = GV.MSSQL1.BAL_FetchTable(GV.sContactTable, "CONTACT_ID_P IN (" + sContactIDsImported + ") AND TAG_DATE IS NULL;");
                         //sContactIDsDB = GM.ColumnToQString("CONTACT_ID_P", dtContacts, "Int");
                         iRecordCount = dtContacts.Rows.Count;
                         if (iRecordCount > 0)
-                        {                            
+                        {
                             foreach (DataRow drContacts in dtContacts.Rows)
                             {
                                 drContacts["TAG_DATE"] = GM.GetDateTime();
                                 drContacts["TAG_COMMENT"] = sComments;
-                                drContacts["TAG_BY"] =GV.sEmployeeName;                                
+                                drContacts["TAG_BY"] = GV.sEmployeeName;
                             }
-                        }                        
+                        }
                     }
                     else//Rejected Records
                     {
-                        dtContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "CONTACT_ID_P IN (" + sContactIDsImported + ") AND " + GV.sAccessTo + "_UNCERTAIN_STATUS = 0;");
+                        dtContacts = GV.MSSQL1.BAL_FetchTable(GV.sContactTable, "CONTACT_ID_P IN (" + sContactIDsImported + ") AND " + GV.sAccessTo + "_UNCERTAIN_STATUS = 0;");
                         sContactIDsDB = GM.ColumnToQString("CONTACT_ID_P", dtContacts, "Int");
                         if (sContactIDsDB.Length > 0)
                         {
-                            dtQCTable = GV.MYSQL.BAL_FetchTableMySQL(GV.sQCTable, "RecordID IN (" + sContactIDsDB + ") AND TableName = 'Contact' AND ResearchType = '" + GV.sAccessTo + "'");
+                            dtQCTable = GV.MSSQL1.BAL_FetchTable(GV.sQCTable, "RecordID IN (" + sContactIDsDB + ") AND TableName = 'Contact' AND ResearchType = '" + GV.sAccessTo + "'");
                             iRecordCount = dtContacts.Rows.Count;
                             foreach (DataRow dr in dtContacts.Rows)
                                 dtQCTable = Update_QCTable(dr["Contact_ID_P"].ToString(), dtContacts, dtQCTable, "Contact", "Rejection - " + dtImport.Select("CONTACT_ID_P = '" + dr["CONTACT_ID_P"] + "'")[0]["Rejection"].ToString(), string.Empty);
@@ -2937,7 +2936,7 @@ namespace GCC
                     {
                         if (iRecordCount > 0)
                         {
-                            if (GV.MYSQL.BAL_SaveToTableMySQL(dtContacts, GV.sContactTable, "Update", true))
+                            if (GV.MSSQL1.BAL_SaveToTable(dtContacts, GV.sContactTable, "Update", true))
                             {
                                 SaveToDB(dtQCTable, GV.sQCTable);
                                 MessageBoxEx.Show(GM.ProperCase_ProjectSpecific(sImportType) + " record(s) updated", "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2957,7 +2956,7 @@ namespace GCC
                     {
                         if (MessageBoxEx.Show("Are you sure to update " + iRecordCount + " record(s)", "Campaign Manager", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
                         {                        
-                            if (GV.MYSQL.BAL_SaveToTableMySQL(dtContacts, GV.sContactTable, "Update", true))
+                            if (GV.MSSQL1.BAL_SaveToTable(dtContacts, GV.sContactTable, "Update", true))
                             {
                                 if(dtQCTable != null)
                                     SaveToDB(dtQCTable, GV.sQCTable);
@@ -2987,11 +2986,11 @@ namespace GCC
             {
                 bool IsSaveSucess = true;
                 if (dtSave.GetChanges(DataRowState.Added) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Added), sTableName, "New", true);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Added), sTableName, "New", true);
                 if (dtSave.GetChanges(DataRowState.Modified) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Modified), sTableName, "Update", true);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Modified), sTableName, "Update", true);
                 if (dtSave.GetChanges(DataRowState.Deleted) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Deleted), sTableName, "Delete", true);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Deleted), sTableName, "Delete", true);
                 return IsSaveSucess;
             }
             catch (Exception ex)
@@ -3020,10 +3019,10 @@ namespace GCC
                 int iContactProcessed = 0;
 
                 if (GV.sUserType == "Agent")
-                    sSQLTEXT = "SELECT " + GV.sAccessTo + "_CONTACT_STATUS ContactCount, COUNT(*) Count FROM " + GV.sContactTable + " WHERE DATE_FORMAT(" + GV.sAccessTo + "_UPDATED_DATE, '%Y%m%d') = CURDATE() AND " + GV.sAccessTo + "_AGENT_NAME = '" + GV.sEmployeeName + "' GROUP BY " + GV.sAccessTo + "_CONTACT_STATUS ORDER BY CASE WHEN (ContactCount LIKE '% Complete') THEN 1 ELSE 2 END;";
+                    sSQLTEXT = "SELECT " + GV.sAccessTo + "_CONTACT_STATUS ContactCount, COUNT(*) Count FROM " + GV.sContactTable + " WHERE CAST(" + GV.sAccessTo + "_UPDATED_DATE AS DATE) = CAST(GETDATE() as date) AND " + GV.sAccessTo + "_AGENT_NAME = '" + GV.sEmployeeName + "' GROUP BY " + GV.sAccessTo + "_CONTACT_STATUS ORDER BY CASE WHEN ( " + GV.sAccessTo + "_CONTACT_STATUS LIKE '% Complete') THEN 1 ELSE 2 END;";
                 else
-                    sSQLTEXT = "SELECT " + GV.sAccessTo + "_CONTACT_STATUS ContactCount, COUNT(*) Count FROM " + GV.sContactTable + " WHERE DATE_FORMAT(" + GV.sAccessTo + "_UPDATED_DATE, '%Y%m%d') = CURDATE() GROUP BY " + GV.sAccessTo + "_CONTACT_STATUS ORDER BY CASE WHEN (ContactCount LIKE '% Complete') THEN 1 ELSE 2 END;";
-                dtContactCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sSQLTEXT);
+                    sSQLTEXT = "SELECT " + GV.sAccessTo + "_CONTACT_STATUS ContactCount, COUNT(*) Count FROM " + GV.sContactTable + " WHERE CAST(" + GV.sAccessTo + "_UPDATED_DATE AS DATE) = CAST(GETDATE() as date) GROUP BY " + GV.sAccessTo + "_CONTACT_STATUS ORDER BY CASE WHEN (" + GV.sAccessTo + "_CONTACT_STATUS LIKE '% Complete') THEN 1 ELSE 2 END;";
+                dtContactCount = GV.MSSQL1.BAL_ExecuteQuery(sSQLTEXT);
 
                 if (dtContactCount != null)
                 {
@@ -3073,10 +3072,10 @@ namespace GCC
                     sDateColumn = "WR_DATE_OF_PROCESS";
 
                 if (GV.sUserType == "Agent")
-                    sSQLTEXT = "SELECT " + GV.sAccessTo + "_PRIMARY_DISPOSAL CompanyCount, COUNT(*) Count FROM " + GV.sCompanyTable + " WHERE DATE_FORMAT(" + sDateColumn + ", '%Y%m%d') = CURDATE() AND " + GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName + "' GROUP BY " + GV.sAccessTo + "_PRIMARY_DISPOSAL;";
+                    sSQLTEXT = "SELECT " + GV.sAccessTo + "_PRIMARY_DISPOSAL CompanyCount, COUNT(*) Count FROM " + GV.sCompanyTable + " WHERE CAST(" + sDateColumn + " AS DATE) = CAST(GETDATE() as date) AND " + GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName + "' GROUP BY " + GV.sAccessTo + "_PRIMARY_DISPOSAL;";
                 else
-                    sSQLTEXT = "SELECT " + GV.sAccessTo + "_PRIMARY_DISPOSAL CompanyCount, COUNT(*) Count FROM " + GV.sCompanyTable + " WHERE DATE_FORMAT(" + sDateColumn + ", '%Y%m%d') = CURDATE() GROUP BY " + GV.sAccessTo + "_PRIMARY_DISPOSAL;";
-                dtCompanyCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sSQLTEXT);
+                    sSQLTEXT = "SELECT " + GV.sAccessTo + "_PRIMARY_DISPOSAL CompanyCount, COUNT(*) Count FROM " + GV.sCompanyTable + " WHERE CAST(" + sDateColumn + " AS DATE) = CAST(GETDATE() as date) GROUP BY " + GV.sAccessTo + "_PRIMARY_DISPOSAL;";
+                dtCompanyCount = GV.MSSQL1.BAL_ExecuteQuery(sSQLTEXT);
 
                 if (dtCompanyCount != null)
                 {
@@ -3228,20 +3227,21 @@ namespace GCC
             double iRowCounter = 0;
             try
             {
-                using (MySqlConnection conMYSQL = new MySqlConnection(GV.sMySQL))
+                using (SqlConnection conMSSQL1 = new SqlConnection(GV.sMSSQL1))
                 {
                     string sQueryData = "SELECT " + sColumns + sQueryString;
                     string sQueryCount = "SELECT COUNT(*) " + sQueryString;
                     lblExportRows.Invoke((MethodInvoker) delegate { lblExportRows.Text = "Fetching data..."; });
-                    DataTable dtRowCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sQueryCount);
+                    DataTable dtRowCount = GV.MSSQL1.BAL_ExecuteQuery(sQueryCount);
                     double iTotalRowCount = Convert.ToDouble(dtRowCount.Rows[0][0]);
-                    conMYSQL.Open();
-                    MySqlCommand cmdExport = new MySqlCommand("SET GLOBAL   net_read_timeout = 100;" + sQueryData, conMYSQL);
+                    conMSSQL1.Open();
+                    //SqlCommand cmdExport = new SqlCommand("SET GLOBAL   net_read_timeout = 100;" + sQueryData, conMSSQL1);
+                    SqlCommand cmdExport = new SqlCommand(sQueryData, conMSSQL1);
                     lblExportRows.Invoke(
                         (MethodInvoker) delegate { lblExportRows.Text = "Estimated Row count :" + iTotalRowCount; });
-                    //if (GV.conMYSQL.State != ConnectionState.Open)
-                    //    GV.conMYSQL.Open();
-                    MySqlDataReader rdrExport = cmdExport.ExecuteReader();
+                    //if (GV.conMYdSQL.State != ConnectionState.Open)
+                    //    GV.conMYSdQL.Open();
+                    SqlDataReader rdrExport = cmdExport.ExecuteReader();
 
                     int iRowsPerSheetCounter = 0;
                     
@@ -3403,7 +3403,7 @@ namespace GCC
                         lblExportRows.Invoke((MethodInvoker) delegate { lblExportRows.Text = "Closing Worksheet..."; });
                         rdrExport.Close();
                         rdrExport.Dispose();
-                        //GV.conMYSQL.Close();
+                        //GV.conMYdSQL.Close();
                         GC.Collect();
                         lblExportRows.Invoke(
                             (MethodInvoker) delegate { lblExportRows.Text = "Worksheet saved sucessfully..."; });
@@ -3491,7 +3491,7 @@ namespace GCC
                 sReturn += " AND " + sPrefix + "." + sDateColumn + " IS NOT NULL";
 
             if (chkMove_only_valid_Switchboard.Checked)
-                sReturn += " AND LENGTH(" + sPrefix + ".SWITCHBOARD_TRIMMED) >= 7";
+                sReturn += " AND LEN(" + sPrefix + ".SWITCHBOARD_TRIMMED) >= 7";
 
             return sReturn;
         }
@@ -3529,13 +3529,13 @@ namespace GCC
 
                 //if (GV.sAccessTo == "WR")//For WR to TR only QC Passed records should be moved.
                 //{
-                //    sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN  (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
+                //    sPrefix = "SELECT DBO.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN  (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
                 //    sQCConditions = " AND Contact.QC_STATUS = 'OK' AND Contact.ResearchType = 'WR' AND Contact.TableName = 'CONTACT'";
                 //    sCompleteContactStatus = GV.sWRContactstatusTobeValidated;
                 //}
                 //else
                 //{
-                //    sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
+                //    sPrefix = "SELECT DBO.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company LEFT OUTER JOIN " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
                 //    sCompleteContactStatus = GV.sTRContactstatusTobeValidated;
                 //}
 
@@ -3548,12 +3548,12 @@ namespace GCC
                 if (chkMove_all_processed_companies.Checked)
                 {
                     if (GV.sAccessTo == "TR")
-                        sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company ";
+                        sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company ";
                     else
                     {
                         if (chkMove_AllowOnlyQCPassed.Checked)
                         {
-                            sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM (SELECT * FROM " +
+                            sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM (SELECT * FROM " +
                                       GV.sCompanyTable + " Com WHERE NOT EXISTS (SELECT 1 FROM " + GV.sContactTable +
                                       " C  INNER JOIN " + GV.sQCTable +
                                       " Q ON C.CONTACT_ID_P=Q.RecordID WHERE C.MASTER_ID = Com.master_id AND Q.QC_STATUS IN ('SendBack', 'Reprocessed'))) Company INNER JOIN  (SELECT * FROM " +
@@ -3562,7 +3562,7 @@ namespace GCC
                         }
                         else
                         {
-                            //sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM (SELECT * FROM " + 
+                            //sPrefix = "SELECT DBO.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM (SELECT * FROM " + 
                             //          GV.sCompanyTable + " Com WHERE NOT EXISTS (SELECT 1 FROM " + GV.sContactTable +
                             //          " C  INNER JOIN " + GV.sQCTable + 
                             //          " Q ON C.CONTACT_ID_P=Q.RecordID WHERE C.MASTER_ID = Com.master_id AND Q.QC_STATUS IN ('SendBack', 'Reprocessed'))) Company INNER JOIN  (SELECT * FROM " +
@@ -3570,7 +3570,7 @@ namespace GCC
                             //          " Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
 
 
-                            sPrefix = "SELECT GROUP_CONCAT(DISTINCT COMPANY.MASTER_ID) FROM " + GV.sCompanyTable + " COMPANY LEFT JOIN " + GV.sCompanyTable + " COMPANY1 on COMPANY.MASTER_ID = COMPANY1.MASTER_ID ";
+                            sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT COMPANY.MASTER_ID) FROM " + GV.sCompanyTable + " COMPANY LEFT JOIN " + GV.sCompanyTable + " COMPANY1 on COMPANY.MASTER_ID = COMPANY1.MASTER_ID ";
                         }
                     }
 
@@ -3614,7 +3614,7 @@ namespace GCC
                             sSQLText = BuildQuery(dtConditionTable);
                             if (chkNon_processed_records.Checked || chkMove_companies_with_zero_contact.Checked || chkMove_companies_with_unsucessfull_contacts.Checked)
                             {
-                                sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company ";
+                                sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company ";
                                 sQCConditions = string.Empty;
                             }
                             else//No boxes checked
@@ -3631,7 +3631,7 @@ namespace GCC
                                     if (chkMove_AllowOnlyQCPassed.Checked)
                                     {
                                         sPrefix =
-                                            "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM (SELECT * FROM " +
+                                            "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM (SELECT * FROM " +
                                             GV.sCompanyTable + " Com WHERE NOT EXISTS (SELECT 1 FROM " +
                                             GV.sContactTable + " C  INNER JOIN " + GV.sQCTable +
                                             " Q ON C.CONTACT_ID_P=Q.RecordID WHERE C.MASTER_ID = Com.master_id AND Q.QC_STATUS IN ('SendBack', 'Reprocessed'))) Company INNER JOIN  (SELECT * FROM " +
@@ -3650,7 +3650,7 @@ namespace GCC
                                         // GV.sContactTable + " C INNER JOIN " + GV.sQCTable +
                                         // " Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
 
-                                        sPrefix = "SELECT GROUP_CONCAT(DISTINCT COMPANY.MASTER_ID) FROM " + GV.sCompanyTable + " COMPANY LEFT JOIN " + GV.sCompanyTable + " COMPANY1 on COMPANY.MASTER_ID = COMPANY1.MASTER_ID ";
+                                        sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT COMPANY.MASTER_ID) FROM " + GV.sCompanyTable + " COMPANY LEFT JOIN " + GV.sCompanyTable + " COMPANY1 on COMPANY.MASTER_ID = COMPANY1.MASTER_ID ";
 
                                         //sQCConditions = " AND Contact.ResearchType = 'WR' AND Contact.TableName = 'CONTACT'";
                                     }
@@ -3658,17 +3658,17 @@ namespace GCC
                                 else
                                 {
                                     if (dtList.Select("TABLE IN ('COMPANY','CONTACT','QC')").Length == 3 || dtList.Select("TABLE IN ('COMPANY','QC')").Length == 2 || dtList.Select("TABLE IN ('CONTACT','QC')").Length == 2)
-                                        sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company INNER JOIN  (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
+                                        sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company INNER JOIN  (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
                                     //else if (dtList.Select("TABLE IN ('CONTACT','QC')").Length == 2)
                                     //    sPrefix = "SELECT GROUP_CONCAT(DISTINCT Contact.MASTER_ID) FROM " + GV.sContactTable + " Contact INNER JOIN " + GV.sProjectID + "_QC Q ON Contact.CONTACT_ID_P = Q.RECORDID ";
                                     else if (dtList.Select("TABLE IN ('COMPANY','CONTACT')").Length == 2 || dtList.Select("TABLE IN ('CONTACT')").Length == 1)
-                                        sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company INNER JOIN  " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
+                                        sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company INNER JOIN  " + GV.sContactTable + " Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
                                     //else if (dtList.Select("TABLE IN ('CONTACT')").Length == 1)
                                     //    sPrefix = "SELECT GROUP_CONCAT(DISTINCT Contact.MASTER_ID) FROM " + GV.sContactTable + " Contact ";
                                     else if (dtList.Select("TABLE IN ('COMPANY')").Length == 1)
-                                        sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company ";
+                                        sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company ";
                                     else if (dtList.Select("TABLE IN ('QC')").Length == 1)
-                                        sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company INNER JOIN  (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
+                                        sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company INNER JOIN  (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact ON Company.MASTER_ID = Contact.MASTER_ID ";
                                         //sPrefix = "Select * from (SELECT * FROM " + GV.sContactTable + " C INNER JOIN " + GV.sProjectID + "_QC Q ON C.CONTACT_ID_P = Q.RECORDID) Contact";
                                 }
                             }
@@ -3728,7 +3728,7 @@ namespace GCC
                     if (sSQLText.Length > 0)
                     {
                         if (sPrefix.Length == 0)
-                            sPrefix = "SELECT GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company ";
+                            sPrefix = "SELECT dbo.GROUP_CONCAT(DISTINCT Company.MASTER_ID) FROM " + GV.sCompanyTable + " Company ";
 
                         sSQLText = sPrefix + " WHERE " + sSQLText;
                     }
@@ -3738,7 +3738,7 @@ namespace GCC
 
                 if (sSQLText.Length > 0)
                 {
-                    DataTable dtCompanyIDsToMove = GV.MYSQL.BAL_ExecuteQueryMySQL(sSQLText);
+                    DataTable dtCompanyIDsToMove = GV.MSSQL1.BAL_ExecuteQuery(sSQLText);
                     string sMasterIDsToMove = dtCompanyIDsToMove.Rows[0][0].ToString();
 
                     if (sMasterIDsToMove.Length > 0)
@@ -3746,8 +3746,8 @@ namespace GCC
                         int RecordsCouont = sMasterIDsToMove.Split(',').Length;
                         if (DialogResult.Yes == MessageBoxEx.Show("Are you sure to move " + RecordsCouont + " companies to " + GV.sOppositAccess + " ?", "Campaign Manager", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                         {
-                            GV.MYSQL.BAL_ExecuteQueryMySQL("UPDATE " + GV.sCompanyTable + " set FLAG='" + GV.sOppositAccess + "', MOVED_TO_" + GV.sOppositAccess + "_DATE = NOW(), MOVED_TO_" + GV.sOppositAccess + "_BY = '" + GV.sEmployeeName + "', MOVED_TO_SOURCE='" + sMovedToSource.Replace("'", "''") + "'  WHERE MASTER_ID IN (" + sMasterIDsToMove + ");");
-                            GV.MYSQL.BAL_ExecuteQueryMySQL("INSERT INTO " + GV.sProjectID + "_log (RecordID, TableName, FieldName, OldValue, NewValue, `When`, Who, SystemName) VALUES (0,'RecordsMoved_To_" + GV.sOppositAccess + "','Source','" + sSQLText.Replace("'", "''") + "','" + sMasterIDsToMove + "', NOW(),'" + GV.sEmployeeName + "','" + Environment.MachineName + "');");
+                            GV.MSSQL1.BAL_ExecuteQuery("UPDATE " + GV.sCompanyTable + " set FLAG='" + GV.sOppositAccess + "', MOVED_TO_" + GV.sOppositAccess + "_DATE = GETDATE(), MOVED_TO_" + GV.sOppositAccess + "_BY = '" + GV.sEmployeeName + "', MOVED_TO_SOURCE='" + sMovedToSource.Replace("'", "''") + "'  WHERE MASTER_ID IN (" + sMasterIDsToMove + ");");
+                            GV.MSSQL1.BAL_ExecuteQuery("INSERT INTO " + GV.sProjectID + "_log (RecordID, TableName, FieldName, OldValue, NewValue, [When], [Who], SystemName) VALUES (0,'RecordsMoved_To_" + GV.sOppositAccess + "','Source','" + sSQLText.Replace("'", "''") + "','" + sMasterIDsToMove + "', GETDATE(),'" + GV.sEmployeeName + "','" + Environment.MachineName + "');");
                             MessageBoxEx.Show(RecordsCouont + " records moved to "+GV.sOppositAccess, "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
@@ -3969,7 +3969,7 @@ namespace GCC
 
         //        if (sSQLText.Length > 0)
         //        {
-        //            DataTable dtCompanyIDsToMove = GV.MYSQL.BAL_ExecuteQueryMySQL(sSQLText);
+        //            DataTable dtCompanyIDsToMove = GV.MfYSQL.BAL_ExecuteQueryMySdQL(sSQLText);
         //            string sMasterIDsToMove = dtCompanyIDsToMove.Rows[0][0].ToString();
 
         //            if (sMasterIDsToMove.Length > 0)
@@ -3977,8 +3977,8 @@ namespace GCC
         //                int RecordsCouont = sMasterIDsToMove.Split(',').Length;
         //                if (DialogResult.Yes == MessageBoxEx.Show("Are you sure to move " + RecordsCouont + " companies to " + GV.sOppositAccess + " ?", "Campaign Manager", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
         //                {
-        //                    GV.MYSQL.BAL_ExecuteQueryMySQL("UPDATE " + GV.sCompanyTable + " set FLAG='" + GV.sOppositAccess + "', MOVED_TO_WR_DATE = NOW(), MOVED_TO_TR_BY = '" + GV.sEmployeeName + "', MOVED_TO_SOURCE='" + sMovedToSource.Replace("'", "''") + "'  WHERE MASTER_ID IN (" + sMasterIDsToMove + ");");
-        //                    GV.MYSQL.BAL_ExecuteQueryMySQL("INSERT INTO " + GV.sProjectID + "_log (RecordID, TableName, FieldName, OldValue, NewValue, `When`, Who, SystemName) VALUES (0,'RecordsMoved_To_" + GV.sOppositAccess + "','Source','" + sSQLText.Replace("'", "''") + "','" + sMasterIDsToMove + "', NOW(),'" + GV.sEmployeeName + "','" + Environment.MachineName + "');");
+        //                    GV.MYSfdQL.BAL_ExecuteQueryMySdQL("UPDATE " + GV.sCompanyTable + " set FLAG='" + GV.sOppositAccess + "', MOVED_TO_WR_DATE = NOW(), MOVED_TO_TR_BY = '" + GV.sEmployeeName + "', MOVED_TO_SOURCE='" + sMovedToSource.Replace("'", "''") + "'  WHERE MASTER_ID IN (" + sMasterIDsToMove + ");");
+        //                    GV.MYSfQL.BAL_ExecuteQueryMydSQL("INSERT INTO " + GV.sProjectID + "_log (RecordID, TableName, FieldName, OldValue, NewValue, `When`, Who, SystemName) VALUES (0,'RecordsMoved_To_" + GV.sOppositAccess + "','Source','" + sSQLText.Replace("'", "''") + "','" + sMasterIDsToMove + "', NOW(),'" + GV.sEmployeeName + "','" + Environment.MachineName + "');");
         //                    MessageBoxEx.Show(RecordsCouont + " records moved to " + GV.sOppositAccess, "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         //                }
         //            }
@@ -4075,11 +4075,13 @@ namespace GCC
 
         void InitilizeGSpeech()
         {
-            if(GV.IsWindowsXP)
-            {
-                GV.GSpeech = true;
-                return;
-            }
+            //return;// Until Google cloud is renewd
+
+            //if(GV.IsWindowsXP)
+            //{
+            //    GV.GSpeech = true;
+            //    return;
+            //}
 
             if (!GV.GSpeech)
             {
@@ -4094,17 +4096,15 @@ namespace GCC
                         StreamWriter sWrite = new StreamWriter(sJpath, false);
                         sWrite.WriteLine(sJFileContent);
                         sWrite.Close();
-
-
-                        //if (File.Exists(sJpath))
+                        if (File.Exists(sJpath))
                         {
                             //string EnvObj = Environment.GetEnvironmentVariable(sEnvVariableName, EnvironmentVariableTarget.);
                             //if (EnvObj != null && EnvObj.ToLower() != sJpath.ToLower())
-                                Environment.SetEnvironmentVariable(sEnvVariableName, sJpath, EnvironmentVariableTarget.Process);
+                            Environment.SetEnvironmentVariable(sEnvVariableName, sJpath, EnvironmentVariableTarget.Process);
 
-                            //if (GV.sAccessTo == "TR" && GV.AudioComments)
+                            if (GV.sAccessTo == "TR" && GV.AudioComments)
                             {
-                                GV.GSpeech = GM.InitilizeGSpeech();
+                                GV.GSpeech = true;
                             }
                         }
                     }

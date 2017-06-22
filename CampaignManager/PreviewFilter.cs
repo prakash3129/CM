@@ -52,7 +52,7 @@ namespace GCC
 
         private string _sSQLText = string.Empty;
         string sTimeZone = "";
-        //BAL_GlobalMySQL objBAL_Global = new BAL_GlobalMySQL();
+        //BAL_GlobalMyfdSQL objBAL_Global = new BAL_GlobalMySdfQL();
         private void PreviewFilter_Load(object sender, EventArgs e)
         {
 
@@ -76,7 +76,7 @@ namespace GCC
 
                     string sQuery = sPrefix + " WHERE " + sSQLText;
                     //string sQuery = "SELECT 'Count' AS 'Details', COUNT(DISTINCT Company.MASTER_ID) AS 'Records' FROM " + GV.sCompanyTable + " COMPANY INNER JOIN " + GV.sContactTable + " CONTACT ON COMPANY.MASTER_ID = CONTACT.MASTER_ID INNER JOIN " + GV.sProjectID + "_QC QC ON QC.RECORDID = CONTACT.CONTACT_ID_P AND QC.TABLENAME = 'CONTACT' AND QC.RESEARCHTYPE = '" + GV.sAccessTo + "' WHERE " + sSQLText;
-                    DataTable dtCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                    DataTable dtCount = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                     dgvCount.DataSource = dtCount;
 
                     if (GV.HasAdminPermission)
@@ -87,7 +87,7 @@ namespace GCC
                 }
                 else
                 {                
-                    DataTable dtContidion = GV.MYSQL.BAL_FetchTableMySQL("allocation_filter_condition", "FILTER_ID=" + sFilterID);
+                    DataTable dtContidion = GV.MSSQL1.BAL_FetchTable("c_allocation_filter_condition", "FILTER_ID=" + sFilterID);
 
                     //if (GlobalVariables.sAccessTo == "TR" && sSQLText.Contains("(TIME(DATE_ADD(NOW(), INTERVAL HoursFromGMT HOUR)) BETWEEN"))
                     //{
@@ -148,7 +148,7 @@ namespace GCC
 
                     if (sTotal.Length > 0)
                     {
-                        DataTable dtCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                        DataTable dtCount = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                         if (GV.HasAdminPermission)
                         {
                             txtQuery.Text = sQuery;
@@ -171,7 +171,7 @@ namespace GCC
                     {
                         List<string> lstValue = new List<string>();
                         string sCondition = drCondition["CONDITION"].ToString();
-                        string sFieldNameQuery = "IFNULL(" + drCondition["TABLE_NAME"].ToString() + "." + drCondition["FIELD"] + ",'')";
+                        string sFieldNameQuery = "ISNULL(" + drCondition["TABLE_NAME"].ToString() + "." + drCondition["FIELD"] + ",'')";
                         string sInnerCondition = string.Empty;
 
                         lstValue = drCondition["VALUE"].ToString().Replace("'", "''").Split(',').ToList();
@@ -233,7 +233,7 @@ namespace GCC
                             if (!IsNewRecord)
                             {
                                 //if (dtCondition.Select("Field = '" + GV.sAccessTo + "_PRIMARY_DISPOSAL" + "'").Length > 0)
-                                    sSQLQuery += " AND DATE(" + sUserTypeDateColumn + ") <= CURDATE() ";
+                                    sSQLQuery += " AND cast(" + sUserTypeDateColumn + " AS DATE) <= cast(GETDATE() as date) ";
                                 //else
                                 //    sSQLQuery += " AND DATE(" + sUserTypeDateColumn + ") <= CURDATE() AND IFNULL(" + GV.sAccessTo + "_PRIMARY_DISPOSAL,'') NOT IN (SELECT Primary_Status FROM " + GV.sProjectID + "_recordstatus WHERE TABLE_NAME='COMPANY' AND Research_Type='" + GV.sAccessTo + "' AND Operation_Type LIKE '%Freeze%')";
                             }
@@ -255,9 +255,9 @@ namespace GCC
                                     sSQLQuery += " AND " + sUserTypeDateColumn + " IS NULL";
                                 else
                                     if (dtCondition.Select("Field = '" + GV.sAccessTo + "_PRIMARY_DISPOSAL" + "'").Length > 0)
-                                        sSQLQuery += " AND " + sUserTypeDateColumn + " < CURDATE() ";
+                                        sSQLQuery += " AND " + sUserTypeDateColumn + " < CAST(GETDATE() as date) ";
                                     else
-                                        sSQLQuery += " AND " + sUserTypeDateColumn + " < CURDATE() AND IFNULL(" + GV.sAccessTo + "_PRIMARY_DISPOSAL,'') NOT IN (SELECT Primary_Status FROM " + GV.sProjectID + "_recordstatus WHERE TABLE_NAME='COMPANY' AND Research_Type='" + GV.sAccessTo + "' AND Operation_Type LIKE '%Freeze%')";
+                                        sSQLQuery += " AND " + sUserTypeDateColumn + " < CAST(GETDATE() as date) AND ISNULL(" + GV.sAccessTo + "_PRIMARY_DISPOSAL,'') NOT IN (SELECT Primary_Status FROM " + GV.sProjectID + "_recordstatus WHERE TABLE_NAME='COMPANY' AND Research_Type='" + GV.sAccessTo + "' AND Operation_Type LIKE '%Freeze%')";
                             }
                         break;
 
@@ -272,7 +272,7 @@ namespace GCC
                             else
                             {
                                 //if (dtCondition.Select("Field = '" + GV.sAccessTo + "_PRIMARY_DISPOSAL" + "'").Length > 0)
-                                    sSQLQuery += " AND DATE(" + sUserTypeDateColumn + ") = CURDATE() ";
+                                    sSQLQuery += " AND CAST(" + sUserTypeDateColumn + " AS DATE) = CAST(GETDATE() as date) ";
                                 //else
                                 //    sSQLQuery += " AND " + sUserTypeDateColumn + " < CURDATE() AND IFNULL(" + GV.sAccessTo + "_PRIMARY_DISPOSAL,'') NOT IN (SELECT Primary_Status FROM " + GV.sProjectID + "_recordstatus WHERE TABLE_NAME='COMPANY' AND Research_Type='" + GV.sAccessTo + "' AND Operation_Type LIKE '%Freeze%')";
                             }
@@ -287,9 +287,9 @@ namespace GCC
                                     sSQLQuery += " AND " + sUserTypeDateColumn + " IS NULL";
                                 else
                                     if (dtCondition.Select("Field = '" + GV.sAccessTo + "_PRIMARY_DISPOSAL" + "'").Length > 0)
-                                        sSQLQuery += " AND " + sUserTypeDateColumn + " < CURDATE() ";
+                                        sSQLQuery += " AND " + sUserTypeDateColumn + " < CAST(GETDATE() as date) ";
                                     else
-                                        sSQLQuery += " AND " + sUserTypeDateColumn + " < CURDATE() AND IFNULL(" + GV.sAccessTo + "_PRIMARY_DISPOSAL,'') NOT IN (SELECT Primary_Status FROM " + GV.sProjectID + "_recordstatus WHERE TABLE_NAME='COMPANY' AND Research_Type='" + GV.sAccessTo + "' AND Operation_Type LIKE '%Freeze%')";
+                                        sSQLQuery += " AND " + sUserTypeDateColumn + " < CAST(GETDATE() as date) AND ISNULL(" + GV.sAccessTo + "_PRIMARY_DISPOSAL,'') NOT IN (SELECT Primary_Status FROM " + GV.sProjectID + "_recordstatus WHERE TABLE_NAME='COMPANY' AND Research_Type='" + GV.sAccessTo + "' AND Operation_Type LIKE '%Freeze%')";
 
                                 //if (dtCondition.Select("FIELD IN ('" + GV.sAccessTo + "_PRIMARY_DISPOSAL','" + GV.sAccessTo + "_SECONDARY_DISPOSAL')").Length > 0)
                                 //    sSQLQuery += " AND " + sUserTypeDateColumn + " < CURDATE()";
@@ -298,9 +298,10 @@ namespace GCC
                             }
 
                             if (GV.sAccessTo == "TR" && bTimeZoneEnabled)
-                                sSQLQuery += "  AND (TIME(DATE_ADD(NOW(), INTERVAL HoursFromGMT HOUR)) BETWEEN '08:00' AND '17:00')"; //Filter Based on TimeZone
+                                sSQLQuery += "  AND (CAST(dateadd(HOUR, HoursFromGMT, getdate()) AS TIME) BETWEEN '08:00' AND '17:00')"; //Filter Based on TimeZone
+                            //sSQLQuery += "  AND (TIME(DATE_ADD(NOW(), INTERVAL HoursFromGMT HOUR)) BETWEEN '08:00' AND '17:00')"; //Filter Based on TimeZone
 
-                        break;
+                            break;
                     }
                     sSQLQuery += " AND FLAG = '" + GV.sAccessTo + "'"; //Set flag
                 }

@@ -22,7 +22,7 @@ namespace GCC
 
         private void Validation_Table_Load(object sender, EventArgs e)
         {
-            dtValidation = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_validations", "VALIDATION_NAME IS NOT NULL");
+            dtValidation = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_validations", "VALIDATION_NAME IS NOT NULL");
             LoadTiles(dtValidation, "TR");
             LoadTiles(dtValidation, "WR");
 

@@ -1,6 +1,6 @@
 namespace GCC
 {
-    partial class StateControl
+    partial class StateControl1
     {
         /// <summary> 
         /// Required designer variable.
@@ -26,10 +26,10 @@ namespace GCC
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        partial void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StateControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StateControl1));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 

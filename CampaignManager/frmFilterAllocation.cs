@@ -28,7 +28,7 @@ namespace GCC
         DataTable dtCompanies = new DataTable();
         DataTable dtContacts = new DataTable();
         DataTable dtFieldMaster = new DataTable();
-        //BAL_GlobalMySQL objBAL_Global = new BAL_GlobalMySQL();
+        //BAL_GlobalMfdySQL objBAL_Global = new BAL_GlobalMyfdSQL();
         DataTable dtFieldList = new DataTable();
         int iAllocationRowIndex;
         int iConditionRowIndex = -1;
@@ -50,7 +50,7 @@ namespace GCC
 
             dgvAllocationFilter.BackgroundColor = GV.pnlGlobalColor.Style.BackColor2.Color;
             dgvConditions.BackgroundColor = GV.pnlGlobalColor.Style.BackColor2.Color;
-            dtFieldMaster = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT CASE WHEN TABLE_NAME = 'Master' THEN 'Company' WHEN TABLE_NAME = 'MasterContacts' THEN 'Contact' ELSE TABLE_NAME END AS 'TABLE_NAME',FIELD_NAME_TABLE FROM c_field_master WHERE PROJECT_ID='" + GV.sProjectID + "' AND SHOW_ON_CRITERIA='Y' ORDER BY TABLE_NAME");
+            dtFieldMaster = GV.MSSQL1.BAL_ExecuteQuery("SELECT CASE WHEN TABLE_NAME = 'Master' THEN 'Company' WHEN TABLE_NAME = 'MasterContacts' THEN 'Contact' ELSE TABLE_NAME END AS 'TABLE_NAME',FIELD_NAME_TABLE FROM c_field_master WHERE PROJECT_ID='" + GV.sProjectID + "' AND SHOW_ON_CRITERIA='Y' ORDER BY TABLE_NAME");
             Load_AllocationGrid_and_Combo();//All Initial loads
             splitGridAndControls.Panel2Collapsed = true;
 
@@ -65,11 +65,11 @@ namespace GCC
         {
             try
             {
-                dtAllocation_Filter = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER", "PROJECT_ID = '" + GV.sProjectID + "' AND USERACCESS = '" + GV.sAccessTo + "'");
+                dtAllocation_Filter = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER", "PROJECT_ID = '" + GV.sProjectID + "' AND USERACCESS = '" + GV.sAccessTo + "'");
                 dtAllocation_Filter_Log = dtAllocation_Filter.Copy();
 
-                dtCompanies = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "1=0");//Company Table
-                dtContacts = GV.MYSQL.BAL_FetchTableMySQL(GV.sContactTable, "1=0");//Contact Table
+                dtCompanies = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, "1=0");//Company Table
+                dtContacts = GV.MSSQL1.BAL_FetchTable(GV.sContactTable, "1=0");//Contact Table
 
 
                 dgvAllocationFilter.Columns.Clear(); //Clear extra manual columns on reload
@@ -102,10 +102,10 @@ namespace GCC
                         //string sCondition = sPrefix+" WHERE " + dgvr.Cells["SQLTEXT"].Value.ToString().Replace("AND (TIME(DATE_ADD(NOW(), INTERVAL HoursFromGMT HOUR)) BETWEEN '09:00' AND '16:00')", "");//Eliminate Timezone filter to calculate count
                         //sCondition = sCondition.Replace("AND " + sUserTypeDateColumn + " IS NULL", "");
                         //sCondition = sCondition.Replace("AND " + sUserTypeDateColumn + " < NOW()", "");
-                        //DataTable dtTimeZoneRecords = GV.MYSQL.BAL_ExecuteQueryMySQL(sPrefix + " WHERE " + dgvr.Cells["SQLTEXT"].Value.ToString()); //Records can be called
-                        //DataTable dtFilterViewTotalCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sCondition);
-                        //DataTable dtFilterViewProcessedCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sCondition + " AND " + sUserTypeDateColumn + " is NOT NULL");
-                        //DataTable dtFilterViewPendingCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sCondition + " AND " + sUserTypeDateColumn + " is NULL");
+                        //DataTable dtTimeZoneRecords = GV.MYSdfQL.BAL_ExecuteQueryMydfSQL(sPrefix + " WHERE " + dgvr.Cells["SQLTEXT"].Value.ToString()); //Records can be called
+                        //DataTable dtFilterViewTotalCount = GV.MYffdSQL.BAL_ExecuteQueryMySfdQL(sCondition);
+                        //DataTable dtFilterViewProcessedCount = GV.MdfYSQL.BAL_ExecuteQueryMyfSQL(sCondition + " AND " + sUserTypeDateColumn + " is NOT NULL");
+                        //DataTable dtFilterViewPendingCount = GV.MYSQdfL.BAL_ExecuteQueryMyfSQL(sCondition + " AND " + sUserTypeDateColumn + " is NULL");
                         //dgvr.Cells["ProcessedCount"].Value = dtFilterViewProcessedCount.Rows.Count;
                         //dgvr.Cells["PendingCount"].Value = dtFilterViewPendingCount.Rows.Count;
                         //dgvr.Cells["RecordCount"].Value = dtFilterViewTotalCount.Rows.Count;
@@ -285,16 +285,16 @@ namespace GCC
                     //    objFrmComboList.dtItems = dtContacts.DefaultView.ToTable(true, sFieldName);//Distinct column value//Contacts
 
                     if (sTableName.ToUpper() == "COMPANY")
-                        objFrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + sFieldName + " FROM " + GV.sCompanyTable + ";");
+                        objFrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + sFieldName + " FROM " + GV.sCompanyTable + ";");
                     else if (sTableName.ToUpper() == "CONTACT")
-                        objFrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + sFieldName + " FROM " + GV.sContactTable + ";");
+                        objFrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + sFieldName + " FROM " + GV.sContactTable + ";");
                     else
-                        objFrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + sFieldName + " FROM " + GV.sProjectID + "_QC;");
+                        objFrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + sFieldName + " FROM " + GV.sProjectID + "_QC;");
 
                     //if (dtCompanies.Columns.Contains(sFieldName))
-                    //    objFrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + sFieldName + " FROM " + GV.sCompanyTable + ";");
+                    //    objFrmComboList.dtItems = GV.MasYSQL.BAL_ExecuteQueryMyfSQL("SELECT DISTINCT " + sFieldName + " FROM " + GV.sCompanyTable + ";");
                     //else
-                    //    objFrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + sFieldName + " FROM " + GV.sContactTable + ";");
+                    //    objFrmComboList.dtItems = GV.MYasSQL.BAL_ExecuteQueryMyfSQL("SELECT DISTINCT " + sFieldName + " FROM " + GV.sContactTable + ";");
 
                     objFrmComboList.lstColumnsToDisplay.Add(sFieldName);
                     objFrmComboList.sColumnToSearch = sFieldName;
@@ -330,8 +330,8 @@ namespace GCC
 
             //if (sFilterID.Length > 0)
             //{
-            //    dtAllocation_Filter_Condition = GV.MYSQL.BAL_FetchTable("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GlobalVariables.sProjectID + "' AND FILTER_ID = " + sFilterID + "");
-            //    dgvConditions.DataSource = dtAllocation_Filter_Condition;
+            //    dtAllsocation_Filter_Condition = GV.MYsdSQL.BAL_FetchTable("ALLOCATIsON_FILTER_CONDITION", "PROJECT_ID = '" + GlobalVariables.sProjectID + "' AND FILTER_ID = " + sFilterID + "");
+            //    dgvConditions.DataSource = dtAllocsation_Filter_Condition;
             //}
             //else//No conditions for selected filter(means create new Condition);
             //{
@@ -339,7 +339,7 @@ namespace GCC
             //    cmbFieldName.SelectedIndex = -1;
             //    cmbCondition.Text = string.Empty;
             //    txtValue.Text = string.Empty;
-            //    dtAllocation_Filter_Condition = GV.MYSQL.BAL_FetchTable("ALLOCATION_FILTER_CONDITION", "1=0");
+            //    dtAllocastion_Filter_Condition = GV.MYdSQL.BAL_FetchTable("ALLOCAsTION_FILTER_CONDITION", "1=0");
             //}
         }
 
@@ -350,7 +350,7 @@ namespace GCC
 
                 //Empty filter is inserted first to get the filter ID which should be used in Condition Table
                 dtAllocation_Filter = new DataTable();
-                dtAllocation_Filter = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER", "PROJECT_ID = '" + GV.sProjectID + "' AND USERACCESS = '" + GV.sAccessTo + "'");
+                dtAllocation_Filter = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER", "PROJECT_ID = '" + GV.sProjectID + "' AND USERACCESS = '" + GV.sAccessTo + "'");
                 DataRow drAllocationFilterNewRow = dtAllocation_Filter.NewRow();
                 string sNewFilterName;
                 int i = 0;
@@ -393,21 +393,21 @@ namespace GCC
             try
             {
                 this.BindingContext[dtAllocation_Filter].EndCurrentEdit();
-                GM.Logging(dtAllocation_Filter, dtAllocation_Filter_Log, "ALLOCATION_FILTER", "FILTER_ID");
+                GM.Logging(dtAllocation_Filter, dtAllocation_Filter_Log, "C_ALLOCATION_FILTER", "FILTER_ID");
                 bool IsDBAffected = false;
                 if (dtAllocation_Filter.GetChanges(DataRowState.Added) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtAllocation_Filter.GetChanges(DataRowState.Added), "ALLOCATION_FILTER", "New", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtAllocation_Filter.GetChanges(DataRowState.Added), "C_ALLOCATION_FILTER", "New", true);
                     IsDBAffected = true;
                 }
                 if (dtAllocation_Filter.GetChanges(DataRowState.Modified) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtAllocation_Filter.GetChanges(DataRowState.Modified), "ALLOCATION_FILTER", "Update", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtAllocation_Filter.GetChanges(DataRowState.Modified), "C_ALLOCATION_FILTER", "Update", true);
                     IsDBAffected = true;
                 }
                 if (dtAllocation_Filter.GetChanges(DataRowState.Deleted) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtAllocation_Filter.GetChanges(DataRowState.Deleted), "ALLOCATION_FILTER", "Delete", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtAllocation_Filter.GetChanges(DataRowState.Deleted), "C_ALLOCATION_FILTER", "Delete", true);
                     IsDBAffected = true;
                 }
                 if (IsDBAffected)
@@ -423,7 +423,7 @@ namespace GCC
         private string ValidateAllocationTable()
         {
             //DataTable dtConditions = new DataTable();
-            //dtConditions = GV.MYSQL.BAL_FetchTable("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '"+GlobalVariables.sProjectID+"'");
+            //dtConditions = GV.MYSsdQL.BAL_FetchTable("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '"+GlobalVariables.sProjectID+"'");
             string sErrortText = string.Empty;
 
             try
@@ -555,8 +555,8 @@ namespace GCC
                 {
                     this.BindingContext[dtAllocation_Filter_Condition].EndCurrentEdit();
                     //Completly delete and insert conditions for current FilterID
-                    GV.MYSQL.BAL_DeleteFromTableMySQL("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + sFilterID + "");
-                    DataTable dtConditions = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER_CONDITION", "1=0");
+                    GV.MSSQL1.BAL_DeleteFromTable("C_ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + sFilterID + "");
+                    DataTable dtConditions = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER_CONDITION", "1=0");
 
                     foreach (DataGridViewRow dgvr in dgvConditions.Rows)
                     {
@@ -573,7 +573,7 @@ namespace GCC
                         drNewRow["UPDATED_DATE"] = dgvr.Cells["UPDATED_DATE"].Value.ToString();
                         dtConditions.Rows.Add(drNewRow);
                     }
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtConditions.GetChanges(DataRowState.Added), "ALLOCATION_FILTER_CONDITION", "New", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtConditions.GetChanges(DataRowState.Added), "C_ALLOCATION_FILTER_CONDITION", "New", true);
                 }
             }
             catch (Exception ex)
@@ -591,7 +591,7 @@ namespace GCC
                 DataTable dtConditionQuery = null;
 
                 if (FilterID.Length > 0)
-                    dtConditionQuery = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + FilterID);
+                    dtConditionQuery = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + FilterID);
                 else
                 {
                     dtConditionQuery = new DataTable();
@@ -614,7 +614,7 @@ namespace GCC
                     }
                 }
 
-                //DataTable dtCondition = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + FilterID);
+                //DataTable dtCondition = GV.MadfYSQL.BAL_FetchTableMyfdSQL("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + FilterID);
 
                 if (dtConditionQuery != null && dtConditionQuery.Rows.Count > 0)
                 {
@@ -623,7 +623,7 @@ namespace GCC
                         List<string> lstValue = new List<string>();
                         string sCondition = drCondition["CONDITION"].ToString();
                         string sTableName = drCondition["TABLE_NAME"].ToString();
-                        string sFieldNameQuery = "IFNULL(" + sTableName + "." + drCondition["FIELD"] + ",'')";
+                        string sFieldNameQuery = "ISNULL(" + sTableName + "." + drCondition["FIELD"] + ",'')";
                         string sInnerCondition = string.Empty;
 
                         lstValue = drCondition["VALUE"].ToString().Replace("'","''") .Split(',').ToList();
@@ -686,9 +686,9 @@ namespace GCC
                         else
                         {
                             if (dtConditionQuery.Select("Field = '" + GV.sAccessTo + "_PRIMARY_DISPOSAL" + "'").Length > 0)
-                                sSQLText += " AND " + sUserTypeDateColumn + " < CURDATE() ";
+                                sSQLText += " AND " + sUserTypeDateColumn + " < cast(GETDATE() as date) ";
                             else
-                                sSQLText += " AND " + sUserTypeDateColumn + " < CURDATE() AND IFNULL(" + GV.sAccessTo + "_PRIMARY_DISPOSAL,'') NOT IN (SELECT Primary_Status FROM " + GV.sProjectID + "_recordstatus WHERE TABLE_NAME='COMPANY' AND Research_Type='" + GV.sAccessTo + "' AND Operation_Type LIKE '%Freeze%')";
+                                sSQLText += " AND " + sUserTypeDateColumn + " < cast(GETDATE() as date) AND ISNULL(" + GV.sAccessTo + "_PRIMARY_DISPOSAL,'') NOT IN (SELECT Primary_Status FROM " + GV.sProjectID + "_recordstatus WHERE TABLE_NAME='COMPANY' AND Research_Type='" + GV.sAccessTo + "' AND Operation_Type LIKE '%Freeze%')";
                         }
                     }
                     sSQLText += " AND COMPANY.FLAG = '" + GV.sAccessTo + "'"; //Set flag
@@ -745,7 +745,7 @@ namespace GCC
                         List<string> lstValue = new List<string>();
                         string sCondition = drCondition["CONDITION"].ToString();
                         string sTableName = drCondition["TABLE_NAME"].ToString();
-                        string sFieldNameQuery = "IFNULL(" + sTableName + "." + drCondition["FIELD"] + ",'')";
+                        string sFieldNameQuery = "ISNULL(" + sTableName + "." + drCondition["FIELD"] + ",'')";
                         lstValue = drCondition["VALUE"].ToString().Split(',').ToList();
                         if (sSQLText.Length > 0)
                             sSQLText += " AND ";
@@ -947,12 +947,12 @@ namespace GCC
                     {
                         if (DialogResult.Yes == MessageBoxEx.Show("Are you sure to delete this condition ?", "Alert", MessageBoxButtons.YesNo))
                         {
-                            GV.MYSQL.BAL_DeleteFromTableMySQL("ALLOCATION_FILTER_CONDITION", "ID = " + sID);
+                            GV.MSSQL1.BAL_DeleteFromTable("C_ALLOCATION_FILTER_CONDITION", "ID = " + sID);
                             //Load_AllocationGrid_and_Combo();
 
                             if (sFilterID.Length > 0)
                             {
-                                dtAllocation_Filter_Condition = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + sFilterID + "");
+                                dtAllocation_Filter_Condition = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + sFilterID + "");
                                 dgvConditions.DataSource = dtAllocation_Filter_Condition;
                                 if (dtAllocation_Filter_Condition.Rows.Count > 0)
                                 {
@@ -966,7 +966,7 @@ namespace GCC
                                     txtTableName.Text = string.Empty;
                                     cmbCondition.Text = string.Empty;
                                     txtValue.Text = string.Empty;
-                                    dtAllocation_Filter_Condition = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER_CONDITION", "1=0");
+                                    dtAllocation_Filter_Condition = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER_CONDITION", "1=0");
                                 }
                             }
                             else//No conditions for selected filter(means create new Condition);
@@ -976,7 +976,7 @@ namespace GCC
                                 txtTableName.Text = string.Empty;
                                 cmbCondition.Text = string.Empty;
                                 txtValue.Text = string.Empty;
-                                dtAllocation_Filter_Condition = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER_CONDITION", "1=0");
+                                dtAllocation_Filter_Condition = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER_CONDITION", "1=0");
                             }
                         }
                     }
@@ -1332,7 +1332,7 @@ namespace GCC
 
                     if (sFilterID.Length > 0)
                     {
-                        dtAllocation_Filter_Condition = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + sFilterID + "");
+                        dtAllocation_Filter_Condition = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER_CONDITION", "PROJECT_ID = '" + GV.sProjectID + "' AND FILTER_ID = " + sFilterID + "");
                         dgvConditions.DataSource = dtAllocation_Filter_Condition;
                     }
                     else//No conditions for selected filter(means create new Condition);
@@ -1342,7 +1342,7 @@ namespace GCC
                         txtTableName.Text = string.Empty;
                         cmbCondition.Text = string.Empty;
                         txtValue.Text = string.Empty;
-                        dtAllocation_Filter_Condition = GV.MYSQL.BAL_FetchTableMySQL("ALLOCATION_FILTER_CONDITION", "1=0");
+                        dtAllocation_Filter_Condition = GV.MSSQL1.BAL_FetchTable("C_ALLOCATION_FILTER_CONDITION", "1=0");
                     }
                 }
             }
@@ -1384,7 +1384,7 @@ namespace GCC
             {
                 try
                 {
-                    DataTable dtCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sSQLText);
+                    DataTable dtCount = GV.MSSQL1.BAL_ExecuteQuery(sSQLText);
                     lblCount.Text = "Record(s) Found:" + dtCount.Rows.Count;
                 }
                 catch (Exception ex)

@@ -2,7 +2,7 @@
 "update_url": "https://clients2.google.com/service/update2/crx",
 
 	"name":"Campaign Manager",
-	"version":"1.2.8",
+	"version":"1.3.0",
 	"manifest_version" : 2,
 
 	"description":"Extension for sending web content directly to Campaign Manager",

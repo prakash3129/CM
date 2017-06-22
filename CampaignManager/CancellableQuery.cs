@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.ComponentModel;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace GCC
 {
@@ -125,10 +125,10 @@ namespace GCC
         {
                         
             isRunning = true;           
-            //MySqlDataReader reader = null;
-            //MySqlConnection Connection = null;
+            //MySfgqlDataReader reader = null;
+            //MyfgSqlConnection Connection = null;
                   
-            //MySqlCommand Command = null;            
+            //MygfSqlCommand Command = null;            
             List<object[]> Results = new List<object[]>();                      
 
 
@@ -213,13 +213,13 @@ namespace GCC
 
                             if (SQL.Length > 0)
                             {
-                                using (MySqlConnection Connection = new MySqlConnection(GV.sMySQL))
+                                using (SqlConnection Connection = new SqlConnection(GV.sMSSQL1))
                                 {
                                     Connection.Open();
-                                    MySqlCommand Command = new MySqlCommand(SQL);
+                                    SqlCommand Command = new SqlCommand(SQL);
                                     Command.Connection = Connection;
-                                    //Command.Connection = GV.conMYSQLReader;
-                                    MySqlDataReader reader = Command.ExecuteReader();
+                                    //Command.Connection = GV.conMYfSQLReader;
+                                    SqlDataReader reader = Command.ExecuteReader();
                                     int CurrentRowCount = 0;
                                     while (reader.Read())
                                     {

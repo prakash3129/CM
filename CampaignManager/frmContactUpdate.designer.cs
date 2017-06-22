@@ -74,11 +74,6 @@
             this.lblFilterTRDate = new DevComponents.DotNetBar.LabelX();
             this.sdgvContacts = new DevComponents.DotNetBar.SuperGrid.SuperGridControl();
             this.tabControlContact = new DevComponents.DotNetBar.SuperTabControl();
-            this.sTabPanelContacts = new DevComponents.DotNetBar.SuperTabControlPanel();
-            this.btnNextContact = new DevComponents.DotNetBar.ButtonX();
-            this.btnPreviousContact = new DevComponents.DotNetBar.ButtonX();
-            this.btnAddNewContact = new DevComponents.DotNetBar.ButtonX();
-            this.tabContacts = new DevComponents.DotNetBar.SuperTabItem();
             this.sTabPanelTRDisposals = new DevComponents.DotNetBar.SuperTabControlPanel();
             this.splitTRDisposalMainParant = new System.Windows.Forms.SplitContainer();
             this.splitTRDisposals = new System.Windows.Forms.SplitContainer();
@@ -87,28 +82,15 @@
             this.lblTRSecondaryDisposal = new System.Windows.Forms.Label();
             this.TR_SECONDARY_DISPOSAL = new System.Windows.Forms.ListBox();
             this.splitTRComment = new System.Windows.Forms.SplitContainer();
-            this.circularProgressGSpeech = new DevComponents.DotNetBar.Controls.CircularProgress();
             this.TR_COMMENTS = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.btnGSpeechRecord = new DevComponents.DotNetBar.ButtonX();
-            this.btnenIN = new DevComponents.DotNetBar.ButtonItem();
-            this.btnenUK = new DevComponents.DotNetBar.ButtonItem();
-            this.btnenUS = new DevComponents.DotNetBar.ButtonItem();
             this.TR_Comments_Browser = new System.Windows.Forms.WebBrowser();
             this.tabTRDisposals = new DevComponents.DotNetBar.SuperTabItem();
-            this.sTabPanelRecordHistory = new DevComponents.DotNetBar.SuperTabControlPanel();
-            this.advTreeRecordHistoryAgent = new DevComponents.AdvTree.AdvTree();
-            this.columnHeader4 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader5 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader6 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader7 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader1 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader2 = new DevComponents.AdvTree.ColumnHeader();
-            this.columnHeader3 = new DevComponents.AdvTree.ColumnHeader();
-            this.txtSearchHistory = new DevComponents.DotNetBar.Controls.TextBoxX();
-            this.elementStyle2 = new DevComponents.DotNetBar.ElementStyle();
-            this.elementStyle1 = new DevComponents.DotNetBar.ElementStyle();
-            this.BoldStyle = new DevComponents.DotNetBar.ElementStyle();
-            this.tabRecordHistory = new DevComponents.DotNetBar.SuperTabItem();
+            this.sTabPanelContacts = new DevComponents.DotNetBar.SuperTabControlPanel();
+            this.btnNextContact = new DevComponents.DotNetBar.ButtonX();
+            this.btnPreviousContact = new DevComponents.DotNetBar.ButtonX();
+            this.btnAddNewContact = new DevComponents.DotNetBar.ButtonX();
+            this.tabContacts = new DevComponents.DotNetBar.SuperTabItem();
             this.sTabPanelQC = new DevComponents.DotNetBar.SuperTabControlPanel();
             this.switchButton1 = new DevComponents.DotNetBar.Controls.SwitchButton();
             this.labelX7 = new DevComponents.DotNetBar.LabelX();
@@ -129,6 +111,20 @@
             this.txtErrorReason = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.labelX1 = new DevComponents.DotNetBar.LabelX();
             this.tabQC = new DevComponents.DotNetBar.SuperTabItem();
+            this.sTabPanelRecordHistory = new DevComponents.DotNetBar.SuperTabControlPanel();
+            this.advTreeRecordHistoryAgent = new DevComponents.AdvTree.AdvTree();
+            this.columnHeader4 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader5 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader6 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader7 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader1 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader2 = new DevComponents.AdvTree.ColumnHeader();
+            this.columnHeader3 = new DevComponents.AdvTree.ColumnHeader();
+            this.txtSearchHistory = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.elementStyle2 = new DevComponents.DotNetBar.ElementStyle();
+            this.elementStyle1 = new DevComponents.DotNetBar.ElementStyle();
+            this.BoldStyle = new DevComponents.DotNetBar.ElementStyle();
+            this.tabRecordHistory = new DevComponents.DotNetBar.SuperTabItem();
             this.sTabPanelAgentNotes = new DevComponents.DotNetBar.SuperTabControlPanel();
             this.btnWindowed = new DevComponents.DotNetBar.ButtonX();
             this.sliderNotesSize = new DevComponents.DotNetBar.Controls.Slider();
@@ -272,7 +268,6 @@
             this.bWorkerNameSayer = new System.ComponentModel.BackgroundWorker();
             this.timerESRequest = new System.Windows.Forms.Timer(this.components);
             this.tCallNotifier = new System.Windows.Forms.Timer(this.components);
-            this.bWorkerGSpeech = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.SplitMain)).BeginInit();
             this.SplitMain.Panel1.SuspendLayout();
             this.SplitMain.Panel2.SuspendLayout();
@@ -291,7 +286,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.Filter_TR_UPDATED_DATE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabControlContact)).BeginInit();
             this.tabControlContact.SuspendLayout();
-            this.sTabPanelContacts.SuspendLayout();
             this.sTabPanelTRDisposals.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitTRDisposalMainParant)).BeginInit();
             this.splitTRDisposalMainParant.Panel1.SuspendLayout();
@@ -305,10 +299,11 @@
             this.splitTRComment.Panel1.SuspendLayout();
             this.splitTRComment.Panel2.SuspendLayout();
             this.splitTRComment.SuspendLayout();
+            this.sTabPanelContacts.SuspendLayout();
+            this.sTabPanelQC.SuspendLayout();
             this.sTabPanelRecordHistory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.advTreeRecordHistoryAgent)).BeginInit();
             this.advTreeRecordHistoryAgent.SuspendLayout();
-            this.sTabPanelQC.SuspendLayout();
             this.sTabPanelAgentNotes.SuspendLayout();
             this.sTabPanelCallScript.SuspendLayout();
             this.sTabPanelWRDisposals.SuspendLayout();
@@ -1075,10 +1070,10 @@
             this.tabControlContact.ControlBox.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
             this.tabControlContact.ControlBox.MenuBox,
             this.tabControlContact.ControlBox.CloseBox});
-            this.tabControlContact.Controls.Add(this.sTabPanelContacts);
             this.tabControlContact.Controls.Add(this.sTabPanelTRDisposals);
-            this.tabControlContact.Controls.Add(this.sTabPanelRecordHistory);
+            this.tabControlContact.Controls.Add(this.sTabPanelContacts);
             this.tabControlContact.Controls.Add(this.sTabPanelQC);
+            this.tabControlContact.Controls.Add(this.sTabPanelRecordHistory);
             this.tabControlContact.Controls.Add(this.sTabPanelAgentNotes);
             this.tabControlContact.Controls.Add(this.sTabPanelCallScript);
             this.tabControlContact.Controls.Add(this.sTabPanelWRDisposals);
@@ -1105,6 +1100,195 @@
             this.tabRecordHistory});
             this.tabControlContact.SelectedTabChanging += new System.EventHandler<DevComponents.DotNetBar.SuperTabStripSelectedTabChangingEventArgs>(this.tabControlContact_SelectedTabChanging);
             this.tabControlContact.SelectedTabChanged += new System.EventHandler<DevComponents.DotNetBar.SuperTabStripSelectedTabChangedEventArgs>(this.tabControlMain_SelectedTabChanged);
+            // 
+            // sTabPanelTRDisposals
+            // 
+            this.sTabPanelTRDisposals.AutoScroll = true;
+            this.sTabPanelTRDisposals.AutoSize = true;
+            this.sTabPanelTRDisposals.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2010;
+            this.sTabPanelTRDisposals.Controls.Add(this.splitTRDisposalMainParant);
+            this.sTabPanelTRDisposals.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sTabPanelTRDisposals.Location = new System.Drawing.Point(0, 74);
+            this.sTabPanelTRDisposals.Name = "sTabPanelTRDisposals";
+            this.sTabPanelTRDisposals.Size = new System.Drawing.Size(429, 665);
+            this.sTabPanelTRDisposals.TabIndex = 0;
+            this.sTabPanelTRDisposals.TabItem = this.tabTRDisposals;
+            // 
+            // splitTRDisposalMainParant
+            // 
+            this.splitTRDisposalMainParant.BackColor = System.Drawing.Color.Transparent;
+            this.splitTRDisposalMainParant.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitTRDisposalMainParant.Location = new System.Drawing.Point(0, 0);
+            this.splitTRDisposalMainParant.Name = "splitTRDisposalMainParant";
+            this.splitTRDisposalMainParant.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitTRDisposalMainParant.Panel1
+            // 
+            this.splitTRDisposalMainParant.Panel1.Controls.Add(this.splitTRDisposals);
+            // 
+            // splitTRDisposalMainParant.Panel2
+            // 
+            this.splitTRDisposalMainParant.Panel2.AutoScroll = true;
+            this.splitTRDisposalMainParant.Panel2.Controls.Add(this.splitTRComment);
+            this.splitTRDisposalMainParant.Size = new System.Drawing.Size(429, 665);
+            this.splitTRDisposalMainParant.SplitterDistance = 349;
+            this.splitTRDisposalMainParant.TabIndex = 529;
+            // 
+            // splitTRDisposals
+            // 
+            this.splitTRDisposals.BackColor = System.Drawing.Color.Transparent;
+            this.splitTRDisposals.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitTRDisposals.Location = new System.Drawing.Point(0, 0);
+            this.splitTRDisposals.Name = "splitTRDisposals";
+            // 
+            // splitTRDisposals.Panel1
+            // 
+            this.splitTRDisposals.Panel1.Controls.Add(this.TR_PRIMARY_DISPOSAL);
+            this.splitTRDisposals.Panel1.Controls.Add(this.lblTRPrimaryDisposal);
+            // 
+            // splitTRDisposals.Panel2
+            // 
+            this.splitTRDisposals.Panel2.Controls.Add(this.lblTRSecondaryDisposal);
+            this.splitTRDisposals.Panel2.Controls.Add(this.TR_SECONDARY_DISPOSAL);
+            this.splitTRDisposals.Size = new System.Drawing.Size(429, 349);
+            this.splitTRDisposals.SplitterDistance = 228;
+            this.splitTRDisposals.TabIndex = 536;
+            this.splitTRDisposals.TabStop = false;
+            // 
+            // TR_PRIMARY_DISPOSAL
+            // 
+            this.TR_PRIMARY_DISPOSAL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TR_PRIMARY_DISPOSAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.TR_PRIMARY_DISPOSAL.ItemHeight = 15;
+            this.TR_PRIMARY_DISPOSAL.Location = new System.Drawing.Point(3, 19);
+            this.TR_PRIMARY_DISPOSAL.Name = "TR_PRIMARY_DISPOSAL";
+            this.TR_PRIMARY_DISPOSAL.Size = new System.Drawing.Size(222, 4);
+            this.TR_PRIMARY_DISPOSAL.TabIndex = 2;
+            this.TR_PRIMARY_DISPOSAL.Tag = "PRIMARY_DISPOSAL;";
+            this.TR_PRIMARY_DISPOSAL.SelectedIndexChanged += new System.EventHandler(this.lstTRPrimaryDisposal_SelectedIndexChanged);
+            // 
+            // lblTRPrimaryDisposal
+            // 
+            this.lblTRPrimaryDisposal.AutoSize = true;
+            this.lblTRPrimaryDisposal.BackColor = System.Drawing.Color.Transparent;
+            this.lblTRPrimaryDisposal.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblTRPrimaryDisposal.Location = new System.Drawing.Point(0, 0);
+            this.lblTRPrimaryDisposal.Name = "lblTRPrimaryDisposal";
+            this.lblTRPrimaryDisposal.Size = new System.Drawing.Size(114, 17);
+            this.lblTRPrimaryDisposal.TabIndex = 528;
+            this.lblTRPrimaryDisposal.Text = "Primary Disposal";
+            // 
+            // lblTRSecondaryDisposal
+            // 
+            this.lblTRSecondaryDisposal.AutoSize = true;
+            this.lblTRSecondaryDisposal.BackColor = System.Drawing.Color.Transparent;
+            this.lblTRSecondaryDisposal.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblTRSecondaryDisposal.Location = new System.Drawing.Point(0, 0);
+            this.lblTRSecondaryDisposal.Name = "lblTRSecondaryDisposal";
+            this.lblTRSecondaryDisposal.Size = new System.Drawing.Size(134, 17);
+            this.lblTRSecondaryDisposal.TabIndex = 527;
+            this.lblTRSecondaryDisposal.Text = "Secondary Disposal";
+            // 
+            // TR_SECONDARY_DISPOSAL
+            // 
+            this.TR_SECONDARY_DISPOSAL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TR_SECONDARY_DISPOSAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.TR_SECONDARY_DISPOSAL.FormattingEnabled = true;
+            this.TR_SECONDARY_DISPOSAL.ItemHeight = 15;
+            this.TR_SECONDARY_DISPOSAL.Location = new System.Drawing.Point(3, 19);
+            this.TR_SECONDARY_DISPOSAL.Name = "TR_SECONDARY_DISPOSAL";
+            this.TR_SECONDARY_DISPOSAL.Size = new System.Drawing.Size(191, 4);
+            this.TR_SECONDARY_DISPOSAL.TabIndex = 3;
+            this.TR_SECONDARY_DISPOSAL.Tag = "SECONDARY_DISPOSAL;";
+            this.TR_SECONDARY_DISPOSAL.SelectedIndexChanged += new System.EventHandler(this.TR_SECONDARY_DISPOSAL_SelectedIndexChanged);
+            // 
+            // splitTRComment
+            // 
+            this.splitTRComment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitTRComment.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitTRComment.Location = new System.Drawing.Point(0, 0);
+            this.splitTRComment.Name = "splitTRComment";
+            this.splitTRComment.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitTRComment.Panel1
+            // 
+            this.splitTRComment.Panel1.Controls.Add(this.TR_COMMENTS);
+            this.splitTRComment.Panel1.Controls.Add(this.btnGSpeechRecord);
+            // 
+            // splitTRComment.Panel2
+            // 
+            this.splitTRComment.Panel2.Controls.Add(this.TR_Comments_Browser);
+            this.splitTRComment.Size = new System.Drawing.Size(429, 312);
+            this.splitTRComment.SplitterDistance = 80;
+            this.splitTRComment.SplitterWidth = 5;
+            this.splitTRComment.TabIndex = 525;
+            // 
+            // TR_COMMENTS
+            // 
+            this.autocompleteMenu.SetAutocompleteMenu(this.TR_COMMENTS, this.autocompleteMenu);
+            this.TR_COMMENTS.BackColor = System.Drawing.Color.White;
+            // 
+            // 
+            // 
+            this.TR_COMMENTS.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.TR_COMMENTS.DisabledBackColor = System.Drawing.Color.White;
+            this.TR_COMMENTS.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TR_COMMENTS.ForeColor = System.Drawing.Color.Black;
+            this.TR_COMMENTS.Location = new System.Drawing.Point(0, 0);
+            this.TR_COMMENTS.MaxLength = 800;
+            this.TR_COMMENTS.Multiline = true;
+            this.TR_COMMENTS.Name = "TR_COMMENTS";
+            this.TR_COMMENTS.Size = new System.Drawing.Size(366, 78);
+            this.TR_COMMENTS.TabIndex = 1;
+            this.TR_COMMENTS.Tag = "Company";
+            this.TR_COMMENTS.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty;
+            this.TR_COMMENTS.WatermarkText = "Enter your comments here";
+            this.TR_COMMENTS.TextChanged += new System.EventHandler(this.TextChanged_StaticControls);
+            // 
+            // btnGSpeechRecord
+            // 
+            this.btnGSpeechRecord.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnGSpeechRecord.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnGSpeechRecord.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnGSpeechRecord.FocusCuesEnabled = false;
+            this.btnGSpeechRecord.Image = global::GCC.Properties.Resources.voice_search_icon___idle;
+            this.btnGSpeechRecord.ImageFixedSize = new System.Drawing.Size(45, 45);
+            this.btnGSpeechRecord.Location = new System.Drawing.Point(366, 0);
+            this.btnGSpeechRecord.Name = "btnGSpeechRecord";
+            this.btnGSpeechRecord.PressedImage = global::GCC.Properties.Resources.voice_search_icon;
+            this.btnGSpeechRecord.Shape = new DevComponents.DotNetBar.RoundRectangleShapeDescriptor(4);
+            this.btnGSpeechRecord.Size = new System.Drawing.Size(61, 78);
+            this.btnGSpeechRecord.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnGSpeechRecord.TabIndex = 2;
+            this.btnGSpeechRecord.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnGSpeechRecord_MouseDown);
+            this.btnGSpeechRecord.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnGSpeechRecord_MouseUp);
+            // 
+            // TR_Comments_Browser
+            // 
+            this.TR_Comments_Browser.AllowNavigation = false;
+            this.TR_Comments_Browser.AllowWebBrowserDrop = false;
+            this.TR_Comments_Browser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TR_Comments_Browser.IsWebBrowserContextMenuEnabled = false;
+            this.TR_Comments_Browser.Location = new System.Drawing.Point(0, 0);
+            this.TR_Comments_Browser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.TR_Comments_Browser.Name = "TR_Comments_Browser";
+            this.TR_Comments_Browser.ScriptErrorsSuppressed = true;
+            this.TR_Comments_Browser.Size = new System.Drawing.Size(427, 225);
+            this.TR_Comments_Browser.TabIndex = 525;
+            this.TR_Comments_Browser.TabStop = false;
+            this.TR_Comments_Browser.WebBrowserShortcutsEnabled = false;
+            // 
+            // tabTRDisposals
+            // 
+            this.tabTRDisposals.AttachedControl = this.sTabPanelTRDisposals;
+            this.tabTRDisposals.GlobalItem = false;
+            this.tabTRDisposals.Image = ((System.Drawing.Image)(resources.GetObject("tabTRDisposals.Image")));
+            this.tabTRDisposals.Name = "tabTRDisposals";
+            this.tabTRDisposals.Text = "Disposals";
             // 
             // sTabPanelContacts
             // 
@@ -1167,408 +1351,6 @@
             this.tabContacts.Text = "Contacts";
             this.tabContacts.TextAlignment = DevComponents.DotNetBar.eItemAlignment.Near;
             this.tabContacts.Tooltip = "Displayes the selected Contact\'s information";
-            // 
-            // sTabPanelTRDisposals
-            // 
-            this.sTabPanelTRDisposals.AutoScroll = true;
-            this.sTabPanelTRDisposals.AutoSize = true;
-            this.sTabPanelTRDisposals.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2010;
-            this.sTabPanelTRDisposals.Controls.Add(this.splitTRDisposalMainParant);
-            this.sTabPanelTRDisposals.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sTabPanelTRDisposals.Location = new System.Drawing.Point(0, 0);
-            this.sTabPanelTRDisposals.Name = "sTabPanelTRDisposals";
-            this.sTabPanelTRDisposals.Size = new System.Drawing.Size(429, 739);
-            this.sTabPanelTRDisposals.TabIndex = 0;
-            this.sTabPanelTRDisposals.TabItem = this.tabTRDisposals;
-            // 
-            // splitTRDisposalMainParant
-            // 
-            this.splitTRDisposalMainParant.BackColor = System.Drawing.Color.Transparent;
-            this.splitTRDisposalMainParant.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitTRDisposalMainParant.Location = new System.Drawing.Point(0, 0);
-            this.splitTRDisposalMainParant.Name = "splitTRDisposalMainParant";
-            this.splitTRDisposalMainParant.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitTRDisposalMainParant.Panel1
-            // 
-            this.splitTRDisposalMainParant.Panel1.Controls.Add(this.splitTRDisposals);
-            // 
-            // splitTRDisposalMainParant.Panel2
-            // 
-            this.splitTRDisposalMainParant.Panel2.AutoScroll = true;
-            this.splitTRDisposalMainParant.Panel2.Controls.Add(this.splitTRComment);
-            this.splitTRDisposalMainParant.Size = new System.Drawing.Size(429, 739);
-            this.splitTRDisposalMainParant.SplitterDistance = 391;
-            this.splitTRDisposalMainParant.TabIndex = 529;
-            // 
-            // splitTRDisposals
-            // 
-            this.splitTRDisposals.BackColor = System.Drawing.Color.Transparent;
-            this.splitTRDisposals.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitTRDisposals.Location = new System.Drawing.Point(0, 0);
-            this.splitTRDisposals.Name = "splitTRDisposals";
-            // 
-            // splitTRDisposals.Panel1
-            // 
-            this.splitTRDisposals.Panel1.Controls.Add(this.TR_PRIMARY_DISPOSAL);
-            this.splitTRDisposals.Panel1.Controls.Add(this.lblTRPrimaryDisposal);
-            // 
-            // splitTRDisposals.Panel2
-            // 
-            this.splitTRDisposals.Panel2.Controls.Add(this.lblTRSecondaryDisposal);
-            this.splitTRDisposals.Panel2.Controls.Add(this.TR_SECONDARY_DISPOSAL);
-            this.splitTRDisposals.Size = new System.Drawing.Size(429, 391);
-            this.splitTRDisposals.SplitterDistance = 228;
-            this.splitTRDisposals.TabIndex = 536;
-            this.splitTRDisposals.TabStop = false;
-            // 
-            // TR_PRIMARY_DISPOSAL
-            // 
-            this.TR_PRIMARY_DISPOSAL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TR_PRIMARY_DISPOSAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.TR_PRIMARY_DISPOSAL.ItemHeight = 15;
-            this.TR_PRIMARY_DISPOSAL.Location = new System.Drawing.Point(3, 19);
-            this.TR_PRIMARY_DISPOSAL.Name = "TR_PRIMARY_DISPOSAL";
-            this.TR_PRIMARY_DISPOSAL.Size = new System.Drawing.Size(222, 34);
-            this.TR_PRIMARY_DISPOSAL.TabIndex = 2;
-            this.TR_PRIMARY_DISPOSAL.Tag = "PRIMARY_DISPOSAL;";
-            this.TR_PRIMARY_DISPOSAL.SelectedIndexChanged += new System.EventHandler(this.lstTRPrimaryDisposal_SelectedIndexChanged);
-            // 
-            // lblTRPrimaryDisposal
-            // 
-            this.lblTRPrimaryDisposal.AutoSize = true;
-            this.lblTRPrimaryDisposal.BackColor = System.Drawing.Color.Transparent;
-            this.lblTRPrimaryDisposal.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblTRPrimaryDisposal.Location = new System.Drawing.Point(0, 0);
-            this.lblTRPrimaryDisposal.Name = "lblTRPrimaryDisposal";
-            this.lblTRPrimaryDisposal.Size = new System.Drawing.Size(114, 17);
-            this.lblTRPrimaryDisposal.TabIndex = 528;
-            this.lblTRPrimaryDisposal.Text = "Primary Disposal";
-            // 
-            // lblTRSecondaryDisposal
-            // 
-            this.lblTRSecondaryDisposal.AutoSize = true;
-            this.lblTRSecondaryDisposal.BackColor = System.Drawing.Color.Transparent;
-            this.lblTRSecondaryDisposal.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblTRSecondaryDisposal.Location = new System.Drawing.Point(0, 0);
-            this.lblTRSecondaryDisposal.Name = "lblTRSecondaryDisposal";
-            this.lblTRSecondaryDisposal.Size = new System.Drawing.Size(134, 17);
-            this.lblTRSecondaryDisposal.TabIndex = 527;
-            this.lblTRSecondaryDisposal.Text = "Secondary Disposal";
-            // 
-            // TR_SECONDARY_DISPOSAL
-            // 
-            this.TR_SECONDARY_DISPOSAL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TR_SECONDARY_DISPOSAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.TR_SECONDARY_DISPOSAL.FormattingEnabled = true;
-            this.TR_SECONDARY_DISPOSAL.ItemHeight = 15;
-            this.TR_SECONDARY_DISPOSAL.Location = new System.Drawing.Point(3, 19);
-            this.TR_SECONDARY_DISPOSAL.Name = "TR_SECONDARY_DISPOSAL";
-            this.TR_SECONDARY_DISPOSAL.Size = new System.Drawing.Size(191, 34);
-            this.TR_SECONDARY_DISPOSAL.TabIndex = 3;
-            this.TR_SECONDARY_DISPOSAL.Tag = "SECONDARY_DISPOSAL;";
-            this.TR_SECONDARY_DISPOSAL.SelectedIndexChanged += new System.EventHandler(this.TR_SECONDARY_DISPOSAL_SelectedIndexChanged);
-            // 
-            // splitTRComment
-            // 
-            this.splitTRComment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.splitTRComment.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitTRComment.Location = new System.Drawing.Point(0, 0);
-            this.splitTRComment.Name = "splitTRComment";
-            this.splitTRComment.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitTRComment.Panel1
-            // 
-            this.splitTRComment.Panel1.Controls.Add(this.circularProgressGSpeech);
-            this.splitTRComment.Panel1.Controls.Add(this.TR_COMMENTS);
-            this.splitTRComment.Panel1.Controls.Add(this.btnGSpeechRecord);
-            // 
-            // splitTRComment.Panel2
-            // 
-            this.splitTRComment.Panel2.Controls.Add(this.TR_Comments_Browser);
-            this.splitTRComment.Size = new System.Drawing.Size(429, 344);
-            this.splitTRComment.SplitterDistance = 89;
-            this.splitTRComment.SplitterWidth = 5;
-            this.splitTRComment.TabIndex = 525;
-            // 
-            // circularProgressGSpeech
-            // 
-            // 
-            // 
-            // 
-            this.circularProgressGSpeech.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.circularProgressGSpeech.Dock = System.Windows.Forms.DockStyle.Right;
-            this.circularProgressGSpeech.FocusCuesEnabled = false;
-            this.circularProgressGSpeech.Location = new System.Drawing.Point(328, 0);
-            this.circularProgressGSpeech.Name = "circularProgressGSpeech";
-            this.circularProgressGSpeech.ProgressBarType = DevComponents.DotNetBar.eCircularProgressType.Donut;
-            this.circularProgressGSpeech.Size = new System.Drawing.Size(38, 87);
-            this.circularProgressGSpeech.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeXP;
-            this.circularProgressGSpeech.TabIndex = 3;
-            this.circularProgressGSpeech.Visible = false;
-            // 
-            // TR_COMMENTS
-            // 
-            this.autocompleteMenu.SetAutocompleteMenu(this.TR_COMMENTS, this.autocompleteMenu);
-            this.TR_COMMENTS.BackColor = System.Drawing.Color.White;
-            // 
-            // 
-            // 
-            this.TR_COMMENTS.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.TR_COMMENTS.DisabledBackColor = System.Drawing.Color.White;
-            this.TR_COMMENTS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TR_COMMENTS.ForeColor = System.Drawing.Color.Black;
-            this.TR_COMMENTS.Location = new System.Drawing.Point(0, 0);
-            this.TR_COMMENTS.MaxLength = 800;
-            this.TR_COMMENTS.Multiline = true;
-            this.TR_COMMENTS.Name = "TR_COMMENTS";
-            this.TR_COMMENTS.Size = new System.Drawing.Size(366, 87);
-            this.TR_COMMENTS.TabIndex = 1;
-            this.TR_COMMENTS.Tag = "Company";
-            this.TR_COMMENTS.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty;
-            this.TR_COMMENTS.WatermarkText = "Enter your comments here";
-            this.TR_COMMENTS.TextChanged += new System.EventHandler(this.TextChanged_StaticControls);
-            // 
-            // btnGSpeechRecord
-            // 
-            this.btnGSpeechRecord.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnGSpeechRecord.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnGSpeechRecord.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnGSpeechRecord.FocusCuesEnabled = false;
-            this.btnGSpeechRecord.Image = global::GCC.Properties.Resources.voice_search_icon___idle;
-            this.btnGSpeechRecord.ImageFixedSize = new System.Drawing.Size(45, 45);
-            this.btnGSpeechRecord.Location = new System.Drawing.Point(366, 0);
-            this.btnGSpeechRecord.Name = "btnGSpeechRecord";
-            this.btnGSpeechRecord.PressedImage = global::GCC.Properties.Resources.voice_search_icon;
-            this.btnGSpeechRecord.Shape = new DevComponents.DotNetBar.RoundRectangleShapeDescriptor(4);
-            this.btnGSpeechRecord.Size = new System.Drawing.Size(61, 87);
-            this.btnGSpeechRecord.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnGSpeechRecord.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.btnenIN,
-            this.btnenUK,
-            this.btnenUS});
-            this.btnGSpeechRecord.TabIndex = 2;
-            this.btnGSpeechRecord.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnGSpeechRecord_MouseDown);
-            this.btnGSpeechRecord.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnGSpeechRecord_MouseUp);
-            // 
-            // btnenIN
-            // 
-            this.btnenIN.Checked = true;
-            this.btnenIN.GlobalItem = false;
-            this.btnenIN.Name = "btnenIN";
-            this.btnenIN.Text = "IN";
-            this.btnenIN.Click += new System.EventHandler(this.btnenIN_Click);
-            // 
-            // btnenUK
-            // 
-            this.btnenUK.Name = "btnenUK";
-            this.btnenUK.Text = "UK";
-            this.btnenUK.Click += new System.EventHandler(this.btnenUK_Click);
-            // 
-            // btnenUS
-            // 
-            this.btnenUS.Name = "btnenUS";
-            this.btnenUS.Text = "US";
-            this.btnenUS.Click += new System.EventHandler(this.btnenUS_Click);
-            // 
-            // TR_Comments_Browser
-            // 
-            this.TR_Comments_Browser.AllowNavigation = false;
-            this.TR_Comments_Browser.AllowWebBrowserDrop = false;
-            this.TR_Comments_Browser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TR_Comments_Browser.IsWebBrowserContextMenuEnabled = false;
-            this.TR_Comments_Browser.Location = new System.Drawing.Point(0, 0);
-            this.TR_Comments_Browser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.TR_Comments_Browser.Name = "TR_Comments_Browser";
-            this.TR_Comments_Browser.ScriptErrorsSuppressed = true;
-            this.TR_Comments_Browser.Size = new System.Drawing.Size(427, 248);
-            this.TR_Comments_Browser.TabIndex = 525;
-            this.TR_Comments_Browser.TabStop = false;
-            this.TR_Comments_Browser.WebBrowserShortcutsEnabled = false;
-            // 
-            // tabTRDisposals
-            // 
-            this.tabTRDisposals.AttachedControl = this.sTabPanelTRDisposals;
-            this.tabTRDisposals.GlobalItem = false;
-            this.tabTRDisposals.Image = ((System.Drawing.Image)(resources.GetObject("tabTRDisposals.Image")));
-            this.tabTRDisposals.Name = "tabTRDisposals";
-            this.tabTRDisposals.Text = "Disposals";
-            // 
-            // sTabPanelRecordHistory
-            // 
-            this.sTabPanelRecordHistory.AutoScroll = true;
-            this.sTabPanelRecordHistory.AutoSize = true;
-            this.sTabPanelRecordHistory.Controls.Add(this.advTreeRecordHistoryAgent);
-            this.sTabPanelRecordHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sTabPanelRecordHistory.Location = new System.Drawing.Point(0, 0);
-            this.sTabPanelRecordHistory.Name = "sTabPanelRecordHistory";
-            this.sTabPanelRecordHistory.Size = new System.Drawing.Size(429, 739);
-            this.sTabPanelRecordHistory.TabIndex = 2;
-            this.sTabPanelRecordHistory.TabItem = this.tabRecordHistory;
-            // 
-            // advTreeRecordHistoryAgent
-            // 
-            this.advTreeRecordHistoryAgent.AllowDrop = true;
-            this.advTreeRecordHistoryAgent.AllowExternalDrop = false;
-            this.advTreeRecordHistoryAgent.BackColor = System.Drawing.SystemColors.Window;
-            // 
-            // 
-            // 
-            this.advTreeRecordHistoryAgent.BackgroundStyle.Class = "TreeBorderKey";
-            this.advTreeRecordHistoryAgent.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader4);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader5);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader6);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader7);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader1);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader2);
-            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader3);
-            this.advTreeRecordHistoryAgent.Controls.Add(this.txtSearchHistory);
-            this.advTreeRecordHistoryAgent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.advTreeRecordHistoryAgent.DragDropEnabled = false;
-            this.advTreeRecordHistoryAgent.DragDropNodeCopyEnabled = false;
-            this.advTreeRecordHistoryAgent.ExpandButtonType = DevComponents.AdvTree.eExpandButtonType.Triangle;
-            this.advTreeRecordHistoryAgent.ExpandLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.advTreeRecordHistoryAgent.ExpandWidth = 14;
-            this.advTreeRecordHistoryAgent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.advTreeRecordHistoryAgent.GridColumnLines = false;
-            this.advTreeRecordHistoryAgent.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
-            this.advTreeRecordHistoryAgent.Location = new System.Drawing.Point(0, 0);
-            this.advTreeRecordHistoryAgent.MultiNodeDragCountVisible = false;
-            this.advTreeRecordHistoryAgent.MultiNodeDragDropAllowed = false;
-            this.advTreeRecordHistoryAgent.Name = "advTreeRecordHistoryAgent";
-            this.advTreeRecordHistoryAgent.NodeHorizontalSpacing = 6;
-            this.advTreeRecordHistoryAgent.NodeSpacing = 5;
-            this.advTreeRecordHistoryAgent.NodeStyle = this.elementStyle2;
-            this.advTreeRecordHistoryAgent.PathSeparator = ";";
-            this.advTreeRecordHistoryAgent.SelectionBoxStyle = DevComponents.AdvTree.eSelectionStyle.FullRowSelect;
-            this.advTreeRecordHistoryAgent.Size = new System.Drawing.Size(429, 739);
-            this.advTreeRecordHistoryAgent.Styles.Add(this.elementStyle2);
-            this.advTreeRecordHistoryAgent.Styles.Add(this.elementStyle1);
-            this.advTreeRecordHistoryAgent.Styles.Add(this.BoldStyle);
-            this.advTreeRecordHistoryAgent.TabIndex = 2;
-            this.advTreeRecordHistoryAgent.Text = "advTree2";
-            this.advTreeRecordHistoryAgent.TouchEnabled = false;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Editable = false;
-            this.columnHeader4.Name = "columnHeader4";
-            this.columnHeader4.SortingEnabled = false;
-            this.columnHeader4.Text = "User";
-            this.columnHeader4.Width.AutoSize = true;
-            this.columnHeader4.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Editable = false;
-            this.columnHeader5.Name = "columnHeader5";
-            this.columnHeader5.SortingEnabled = false;
-            this.columnHeader5.Text = "Open";
-            this.columnHeader5.Width.AutoSize = true;
-            this.columnHeader5.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Editable = false;
-            this.columnHeader6.Name = "columnHeader6";
-            this.columnHeader6.SortingEnabled = false;
-            this.columnHeader6.Text = "Close";
-            this.columnHeader6.Width.AutoSize = true;
-            this.columnHeader6.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Editable = false;
-            this.columnHeader7.Name = "columnHeader7";
-            this.columnHeader7.SortingEnabled = false;
-            this.columnHeader7.Text = "New Contacts";
-            this.columnHeader7.Width.AutoSize = true;
-            this.columnHeader7.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Editable = false;
-            this.columnHeader1.Name = "columnHeader1";
-            this.columnHeader1.SortingEnabled = false;
-            this.columnHeader1.Text = "Saved";
-            this.columnHeader1.Width.AutoSize = true;
-            this.columnHeader1.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Editable = false;
-            this.columnHeader2.Name = "columnHeader2";
-            this.columnHeader2.SortingEnabled = false;
-            this.columnHeader2.Text = "Level";
-            this.columnHeader2.Width.AutoSize = true;
-            this.columnHeader2.Width.AutoSizeMinHeader = true;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Editable = false;
-            this.columnHeader3.Name = "columnHeader3";
-            this.columnHeader3.SortingEnabled = false;
-            this.columnHeader3.Text = "Machine";
-            this.columnHeader3.Width.AutoSize = true;
-            this.columnHeader3.Width.AutoSizeMinHeader = true;
-            // 
-            // txtSearchHistory
-            // 
-            this.txtSearchHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.autocompleteMenu.SetAutocompleteMenu(this.txtSearchHistory, null);
-            // 
-            // 
-            // 
-            this.txtSearchHistory.Border.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.txtSearchHistory.Border.BorderBottomWidth = 2;
-            this.txtSearchHistory.Border.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.txtSearchHistory.Border.BorderLeftWidth = 2;
-            this.txtSearchHistory.Border.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.txtSearchHistory.Border.BorderRightWidth = 2;
-            this.txtSearchHistory.Border.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.txtSearchHistory.Border.BorderTopWidth = 2;
-            this.txtSearchHistory.Border.Class = "TextBoxBorder";
-            this.txtSearchHistory.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSearchHistory.Location = new System.Drawing.Point(308, 694);
-            this.txtSearchHistory.Name = "txtSearchHistory";
-            this.txtSearchHistory.PreventEnterBeep = true;
-            this.txtSearchHistory.Size = new System.Drawing.Size(91, 22);
-            this.txtSearchHistory.TabIndex = 1;
-            this.txtSearchHistory.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty;
-            this.txtSearchHistory.WatermarkText = "Search here";
-            this.txtSearchHistory.TextChanged += new System.EventHandler(this.txtSearchHistory_TextChanged);
-            // 
-            // elementStyle2
-            // 
-            this.elementStyle2.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.elementStyle2.Name = "elementStyle2";
-            this.elementStyle2.TextColor = System.Drawing.SystemColors.ControlText;
-            // 
-            // elementStyle1
-            // 
-            this.elementStyle1.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.elementStyle1.Name = "elementStyle1";
-            // 
-            // BoldStyle
-            // 
-            this.BoldStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.BoldStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BoldStyle.Name = "BoldStyle";
-            // 
-            // tabRecordHistory
-            // 
-            this.tabRecordHistory.AttachedControl = this.sTabPanelRecordHistory;
-            this.tabRecordHistory.GlobalItem = false;
-            this.tabRecordHistory.Image = ((System.Drawing.Image)(resources.GetObject("tabRecordHistory.Image")));
-            this.tabRecordHistory.Name = "tabRecordHistory";
-            this.tabRecordHistory.Text = "Record History";
-            this.tabRecordHistory.Click += new System.EventHandler(this.tabRecordHistory_Click);
-            this.tabRecordHistory.DoubleClick += new System.EventHandler(this.tabRecordHistory_DoubleClick);
             // 
             // sTabPanelQC
             // 
@@ -1897,6 +1679,178 @@
             this.tabQC.Image = ((System.Drawing.Image)(resources.GetObject("tabQC.Image")));
             this.tabQC.Name = "tabQC";
             this.tabQC.Text = "QC";
+            // 
+            // sTabPanelRecordHistory
+            // 
+            this.sTabPanelRecordHistory.AutoScroll = true;
+            this.sTabPanelRecordHistory.AutoSize = true;
+            this.sTabPanelRecordHistory.Controls.Add(this.advTreeRecordHistoryAgent);
+            this.sTabPanelRecordHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sTabPanelRecordHistory.Location = new System.Drawing.Point(0, 0);
+            this.sTabPanelRecordHistory.Name = "sTabPanelRecordHistory";
+            this.sTabPanelRecordHistory.Size = new System.Drawing.Size(429, 739);
+            this.sTabPanelRecordHistory.TabIndex = 2;
+            this.sTabPanelRecordHistory.TabItem = this.tabRecordHistory;
+            // 
+            // advTreeRecordHistoryAgent
+            // 
+            this.advTreeRecordHistoryAgent.AllowDrop = true;
+            this.advTreeRecordHistoryAgent.AllowExternalDrop = false;
+            this.advTreeRecordHistoryAgent.BackColor = System.Drawing.SystemColors.Window;
+            // 
+            // 
+            // 
+            this.advTreeRecordHistoryAgent.BackgroundStyle.Class = "TreeBorderKey";
+            this.advTreeRecordHistoryAgent.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader4);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader5);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader6);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader7);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader1);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader2);
+            this.advTreeRecordHistoryAgent.Columns.Add(this.columnHeader3);
+            this.advTreeRecordHistoryAgent.Controls.Add(this.txtSearchHistory);
+            this.advTreeRecordHistoryAgent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.advTreeRecordHistoryAgent.DragDropEnabled = false;
+            this.advTreeRecordHistoryAgent.DragDropNodeCopyEnabled = false;
+            this.advTreeRecordHistoryAgent.ExpandButtonType = DevComponents.AdvTree.eExpandButtonType.Triangle;
+            this.advTreeRecordHistoryAgent.ExpandLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.advTreeRecordHistoryAgent.ExpandWidth = 14;
+            this.advTreeRecordHistoryAgent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.advTreeRecordHistoryAgent.GridColumnLines = false;
+            this.advTreeRecordHistoryAgent.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
+            this.advTreeRecordHistoryAgent.Location = new System.Drawing.Point(0, 0);
+            this.advTreeRecordHistoryAgent.MultiNodeDragCountVisible = false;
+            this.advTreeRecordHistoryAgent.MultiNodeDragDropAllowed = false;
+            this.advTreeRecordHistoryAgent.Name = "advTreeRecordHistoryAgent";
+            this.advTreeRecordHistoryAgent.NodeHorizontalSpacing = 6;
+            this.advTreeRecordHistoryAgent.NodeSpacing = 5;
+            this.advTreeRecordHistoryAgent.NodeStyle = this.elementStyle2;
+            this.advTreeRecordHistoryAgent.PathSeparator = ";";
+            this.advTreeRecordHistoryAgent.SelectionBoxStyle = DevComponents.AdvTree.eSelectionStyle.FullRowSelect;
+            this.advTreeRecordHistoryAgent.Size = new System.Drawing.Size(429, 739);
+            this.advTreeRecordHistoryAgent.Styles.Add(this.elementStyle2);
+            this.advTreeRecordHistoryAgent.Styles.Add(this.elementStyle1);
+            this.advTreeRecordHistoryAgent.Styles.Add(this.BoldStyle);
+            this.advTreeRecordHistoryAgent.TabIndex = 2;
+            this.advTreeRecordHistoryAgent.Text = "advTree2";
+            this.advTreeRecordHistoryAgent.TouchEnabled = false;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Editable = false;
+            this.columnHeader4.Name = "columnHeader4";
+            this.columnHeader4.SortingEnabled = false;
+            this.columnHeader4.Text = "User";
+            this.columnHeader4.Width.AutoSize = true;
+            this.columnHeader4.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Editable = false;
+            this.columnHeader5.Name = "columnHeader5";
+            this.columnHeader5.SortingEnabled = false;
+            this.columnHeader5.Text = "Open";
+            this.columnHeader5.Width.AutoSize = true;
+            this.columnHeader5.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Editable = false;
+            this.columnHeader6.Name = "columnHeader6";
+            this.columnHeader6.SortingEnabled = false;
+            this.columnHeader6.Text = "Close";
+            this.columnHeader6.Width.AutoSize = true;
+            this.columnHeader6.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Editable = false;
+            this.columnHeader7.Name = "columnHeader7";
+            this.columnHeader7.SortingEnabled = false;
+            this.columnHeader7.Text = "New Contacts";
+            this.columnHeader7.Width.AutoSize = true;
+            this.columnHeader7.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Editable = false;
+            this.columnHeader1.Name = "columnHeader1";
+            this.columnHeader1.SortingEnabled = false;
+            this.columnHeader1.Text = "Saved";
+            this.columnHeader1.Width.AutoSize = true;
+            this.columnHeader1.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Editable = false;
+            this.columnHeader2.Name = "columnHeader2";
+            this.columnHeader2.SortingEnabled = false;
+            this.columnHeader2.Text = "Level";
+            this.columnHeader2.Width.AutoSize = true;
+            this.columnHeader2.Width.AutoSizeMinHeader = true;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Editable = false;
+            this.columnHeader3.Name = "columnHeader3";
+            this.columnHeader3.SortingEnabled = false;
+            this.columnHeader3.Text = "Machine";
+            this.columnHeader3.Width.AutoSize = true;
+            this.columnHeader3.Width.AutoSizeMinHeader = true;
+            // 
+            // txtSearchHistory
+            // 
+            this.txtSearchHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.autocompleteMenu.SetAutocompleteMenu(this.txtSearchHistory, null);
+            // 
+            // 
+            // 
+            this.txtSearchHistory.Border.BorderBottom = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.txtSearchHistory.Border.BorderBottomWidth = 2;
+            this.txtSearchHistory.Border.BorderLeft = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.txtSearchHistory.Border.BorderLeftWidth = 2;
+            this.txtSearchHistory.Border.BorderRight = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.txtSearchHistory.Border.BorderRightWidth = 2;
+            this.txtSearchHistory.Border.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.txtSearchHistory.Border.BorderTopWidth = 2;
+            this.txtSearchHistory.Border.Class = "TextBoxBorder";
+            this.txtSearchHistory.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtSearchHistory.Location = new System.Drawing.Point(308, 694);
+            this.txtSearchHistory.Name = "txtSearchHistory";
+            this.txtSearchHistory.PreventEnterBeep = true;
+            this.txtSearchHistory.Size = new System.Drawing.Size(91, 22);
+            this.txtSearchHistory.TabIndex = 1;
+            this.txtSearchHistory.WatermarkBehavior = DevComponents.DotNetBar.eWatermarkBehavior.HideNonEmpty;
+            this.txtSearchHistory.WatermarkText = "Search here";
+            this.txtSearchHistory.TextChanged += new System.EventHandler(this.txtSearchHistory_TextChanged);
+            // 
+            // elementStyle2
+            // 
+            this.elementStyle2.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.elementStyle2.Name = "elementStyle2";
+            this.elementStyle2.TextColor = System.Drawing.SystemColors.ControlText;
+            // 
+            // elementStyle1
+            // 
+            this.elementStyle1.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.elementStyle1.Name = "elementStyle1";
+            // 
+            // BoldStyle
+            // 
+            this.BoldStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.BoldStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BoldStyle.Name = "BoldStyle";
+            // 
+            // tabRecordHistory
+            // 
+            this.tabRecordHistory.AttachedControl = this.sTabPanelRecordHistory;
+            this.tabRecordHistory.GlobalItem = false;
+            this.tabRecordHistory.Image = ((System.Drawing.Image)(resources.GetObject("tabRecordHistory.Image")));
+            this.tabRecordHistory.Name = "tabRecordHistory";
+            this.tabRecordHistory.Text = "Record History";
+            this.tabRecordHistory.Click += new System.EventHandler(this.tabRecordHistory_Click);
+            this.tabRecordHistory.DoubleClick += new System.EventHandler(this.tabRecordHistory_DoubleClick);
             // 
             // sTabPanelAgentNotes
             // 
@@ -2591,7 +2545,7 @@
             // pictureMTDTopper
             // 
             this.pictureMTDTopper.BackColor = System.Drawing.Color.Transparent;
-            this.pictureMTDTopper.Location = new System.Drawing.Point(6, 44);
+            this.pictureMTDTopper.Location = new System.Drawing.Point(4, 46);
             this.pictureMTDTopper.Name = "pictureMTDTopper";
             this.pictureMTDTopper.Size = new System.Drawing.Size(66, 70);
             this.pictureMTDTopper.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -2693,7 +2647,7 @@
             // pictureProjectTopper
             // 
             this.pictureProjectTopper.BackColor = System.Drawing.Color.Transparent;
-            this.pictureProjectTopper.Location = new System.Drawing.Point(6, 44);
+            this.pictureProjectTopper.Location = new System.Drawing.Point(4, 46);
             this.pictureProjectTopper.Name = "pictureProjectTopper";
             this.pictureProjectTopper.Size = new System.Drawing.Size(66, 70);
             this.pictureProjectTopper.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -2797,7 +2751,7 @@
             // pictureCurrentEmp
             // 
             this.pictureCurrentEmp.BackColor = System.Drawing.Color.Transparent;
-            this.pictureCurrentEmp.Location = new System.Drawing.Point(6, 28);
+            this.pictureCurrentEmp.Location = new System.Drawing.Point(4, 29);
             this.pictureCurrentEmp.Name = "pictureCurrentEmp";
             this.pictureCurrentEmp.Size = new System.Drawing.Size(64, 67);
             this.pictureCurrentEmp.TabIndex = 0;
@@ -3030,7 +2984,7 @@
             this.pictureBoxDialImage.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxDialImage.Enabled = false;
             this.pictureBoxDialImage.Image = global::GCC.Properties.Resources.loader;
-            this.pictureBoxDialImage.Location = new System.Drawing.Point(136, 41);
+            this.pictureBoxDialImage.Location = new System.Drawing.Point(134, 41);
             this.pictureBoxDialImage.Name = "pictureBoxDialImage";
             this.pictureBoxDialImage.Size = new System.Drawing.Size(41, 41);
             this.pictureBoxDialImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3045,7 +2999,7 @@
             // 
             this.circularProgressPrePostCall.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.circularProgressPrePostCall.FocusCuesEnabled = false;
-            this.circularProgressPrePostCall.Location = new System.Drawing.Point(188, 41);
+            this.circularProgressPrePostCall.Location = new System.Drawing.Point(186, 41);
             this.circularProgressPrePostCall.Maximum = 90;
             this.circularProgressPrePostCall.Name = "circularProgressPrePostCall";
             this.circularProgressPrePostCall.ProgressBarType = DevComponents.DotNetBar.eCircularProgressType.Donut;
@@ -3062,7 +3016,7 @@
             this.sdgvCallLog.FilterExprColors.SysFunction = System.Drawing.Color.DarkRed;
             this.sdgvCallLog.ForeColor = System.Drawing.Color.Black;
             this.sdgvCallLog.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
-            this.sdgvCallLog.Location = new System.Drawing.Point(234, 15);
+            this.sdgvCallLog.Location = new System.Drawing.Point(232, 15);
             this.sdgvCallLog.Name = "sdgvCallLog";
             this.sdgvCallLog.PrimaryGrid.AllowEdit = false;
             this.sdgvCallLog.PrimaryGrid.AllowSelection = false;
@@ -3728,11 +3682,6 @@
             this.tCallNotifier.Interval = 300;
             this.tCallNotifier.Tick += new System.EventHandler(this.tCallNotifier_Tick);
             // 
-            // bWorkerGSpeech
-            // 
-            this.bWorkerGSpeech.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bWorkerGSpeech_DoWork);
-            this.bWorkerGSpeech.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bWorkerGSpeech_RunWorkerCompleted);
-            // 
             // FrmContactsUpdate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3772,7 +3721,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tabControlContact)).EndInit();
             this.tabControlContact.ResumeLayout(false);
             this.tabControlContact.PerformLayout();
-            this.sTabPanelContacts.ResumeLayout(false);
             this.sTabPanelTRDisposals.ResumeLayout(false);
             this.splitTRDisposalMainParant.Panel1.ResumeLayout(false);
             this.splitTRDisposalMainParant.Panel2.ResumeLayout(false);
@@ -3788,11 +3736,12 @@
             this.splitTRComment.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitTRComment)).EndInit();
             this.splitTRComment.ResumeLayout(false);
+            this.sTabPanelContacts.ResumeLayout(false);
+            this.sTabPanelQC.ResumeLayout(false);
+            this.sTabPanelQC.PerformLayout();
             this.sTabPanelRecordHistory.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.advTreeRecordHistoryAgent)).EndInit();
             this.advTreeRecordHistoryAgent.ResumeLayout(false);
-            this.sTabPanelQC.ResumeLayout(false);
-            this.sTabPanelQC.PerformLayout();
             this.sTabPanelAgentNotes.ResumeLayout(false);
             this.sTabPanelCallScript.ResumeLayout(false);
             this.sTabPanelWRDisposals.ResumeLayout(false);
@@ -4060,10 +4009,5 @@
         private DevComponents.DotNetBar.ButtonItem btnMicMute;
         private DevComponents.DotNetBar.ButtonItem btnMuteSpeaker;
         private DevComponents.DotNetBar.ButtonX btnGSpeechRecord;
-        private DevComponents.DotNetBar.Controls.CircularProgress circularProgressGSpeech;
-        private System.ComponentModel.BackgroundWorker bWorkerGSpeech;
-        private DevComponents.DotNetBar.ButtonItem btnenIN;
-        private DevComponents.DotNetBar.ButtonItem btnenUK;
-        private DevComponents.DotNetBar.ButtonItem btnenUS;
     }
 }

@@ -63,41 +63,6 @@
             this.rbnBarError = new DevComponents.DotNetBar.RibbonBar();
             this.txtErrors = new DevComponents.DotNetBar.Controls.TextBoxX();
             this.controlContainerItem3 = new DevComponents.DotNetBar.ControlContainerItem();
-            this.rbnPanelProcess = new DevComponents.DotNetBar.RibbonPanel();
-            this.rbnBarQCSampling = new DevComponents.DotNetBar.RibbonBar();
-            this.panelQCSampling = new DevComponents.DotNetBar.PanelEx();
-            this.labelX2 = new DevComponents.DotNetBar.LabelX();
-            this.labelX1 = new DevComponents.DotNetBar.LabelX();
-            this.switchQCProcessTable = new DevComponents.DotNetBar.Controls.SwitchButton();
-            this.switchQCProcessType = new DevComponents.DotNetBar.Controls.SwitchButton();
-            this.btnSamplingCalc = new DevComponents.DotNetBar.ButtonX();
-            this.lblPercentage = new DevComponents.DotNetBar.LabelX();
-            this.txtQCSamplePecent = new DevComponents.Editors.IntegerInput();
-            this.lblSamplePercentage = new DevComponents.DotNetBar.LabelX();
-            this.lblAgentProcessedDate = new DevComponents.DotNetBar.LabelX();
-            this.dateQCSampleDate = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
-            this.itemContainerSampling = new DevComponents.DotNetBar.ItemContainer();
-            this.itemContainer5 = new DevComponents.DotNetBar.ItemContainer();
-            this.controlContainerSamplingPanel = new DevComponents.DotNetBar.ControlContainerItem();
-            this.rbnBarProcess = new DevComponents.DotNetBar.RibbonBar();
-            this.dateRejectionImport = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
-            this.txtQcComments = new DevComponents.DotNetBar.Controls.TextBoxX();
-            this.rbnBarBounce = new DevComponents.DotNetBar.ItemContainer();
-            this.btnImportType = new DevComponents.DotNetBar.ButtonItem();
-            this.btnItemBounce = new DevComponents.DotNetBar.ButtonItem();
-            this.btnItemSendBack = new DevComponents.DotNetBar.ButtonItem();
-            this.btnItemRejection = new DevComponents.DotNetBar.ButtonItem();
-            this.btnItemOK = new DevComponents.DotNetBar.ButtonItem();
-            this.btnUploadTag = new DevComponents.DotNetBar.ButtonItem();
-            this.itemContainerPathandDate = new DevComponents.DotNetBar.ItemContainer();
-            this.swhType = new DevComponents.DotNetBar.SwitchButtonItem();
-            this.controlContainerDate = new DevComponents.DotNetBar.ControlContainerItem();
-            this.txtPath = new DevComponents.DotNetBar.TextBoxItem();
-            this.itemContainerQCComments = new DevComponents.DotNetBar.ItemContainer();
-            this.lblQCComments = new DevComponents.DotNetBar.LabelItem();
-            this.controlContainertxtQcComments = new DevComponents.DotNetBar.ControlContainerItem();
-            this.itemContainerImport = new DevComponents.DotNetBar.ItemContainer();
-            this.btnImport = new DevComponents.DotNetBar.ButtonItem();
             this.ribbonPanelProcess = new DevComponents.DotNetBar.RibbonPanel();
             this.rbnBarScrapper = new DevComponents.DotNetBar.RibbonBar();
             this.itemContainerScrapper = new DevComponents.DotNetBar.ItemContainer();
@@ -148,8 +113,44 @@
             this.btnSendBackInfo = new DevComponents.DotNetBar.ButtonItem();
             this.btnSendBackPrevious = new DevComponents.DotNetBar.ButtonItem();
             this.btnEmailCheck = new DevComponents.DotNetBar.ButtonItem();
+            this.btnHunter = new DevComponents.DotNetBar.ButtonItem();
             this.itemContainerSearch = new DevComponents.DotNetBar.ItemContainer();
             this.btnSearch = new DevComponents.DotNetBar.ButtonItem();
+            this.rbnPanelProcess = new DevComponents.DotNetBar.RibbonPanel();
+            this.rbnBarQCSampling = new DevComponents.DotNetBar.RibbonBar();
+            this.panelQCSampling = new DevComponents.DotNetBar.PanelEx();
+            this.labelX2 = new DevComponents.DotNetBar.LabelX();
+            this.labelX1 = new DevComponents.DotNetBar.LabelX();
+            this.switchQCProcessTable = new DevComponents.DotNetBar.Controls.SwitchButton();
+            this.switchQCProcessType = new DevComponents.DotNetBar.Controls.SwitchButton();
+            this.btnSamplingCalc = new DevComponents.DotNetBar.ButtonX();
+            this.lblPercentage = new DevComponents.DotNetBar.LabelX();
+            this.txtQCSamplePecent = new DevComponents.Editors.IntegerInput();
+            this.lblSamplePercentage = new DevComponents.DotNetBar.LabelX();
+            this.lblAgentProcessedDate = new DevComponents.DotNetBar.LabelX();
+            this.dateQCSampleDate = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
+            this.itemContainerSampling = new DevComponents.DotNetBar.ItemContainer();
+            this.itemContainer5 = new DevComponents.DotNetBar.ItemContainer();
+            this.controlContainerSamplingPanel = new DevComponents.DotNetBar.ControlContainerItem();
+            this.rbnBarProcess = new DevComponents.DotNetBar.RibbonBar();
+            this.dateRejectionImport = new DevComponents.Editors.DateTimeAdv.DateTimeInput();
+            this.txtQcComments = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.rbnBarBounce = new DevComponents.DotNetBar.ItemContainer();
+            this.btnImportType = new DevComponents.DotNetBar.ButtonItem();
+            this.btnItemBounce = new DevComponents.DotNetBar.ButtonItem();
+            this.btnItemSendBack = new DevComponents.DotNetBar.ButtonItem();
+            this.btnItemRejection = new DevComponents.DotNetBar.ButtonItem();
+            this.btnItemOK = new DevComponents.DotNetBar.ButtonItem();
+            this.btnUploadTag = new DevComponents.DotNetBar.ButtonItem();
+            this.itemContainerPathandDate = new DevComponents.DotNetBar.ItemContainer();
+            this.swhType = new DevComponents.DotNetBar.SwitchButtonItem();
+            this.controlContainerDate = new DevComponents.DotNetBar.ControlContainerItem();
+            this.txtPath = new DevComponents.DotNetBar.TextBoxItem();
+            this.itemContainerQCComments = new DevComponents.DotNetBar.ItemContainer();
+            this.lblQCComments = new DevComponents.DotNetBar.LabelItem();
+            this.controlContainertxtQcComments = new DevComponents.DotNetBar.ControlContainerItem();
+            this.itemContainerImport = new DevComponents.DotNetBar.ItemContainer();
+            this.btnImport = new DevComponents.DotNetBar.ButtonItem();
             this.btnStart = new DevComponents.DotNetBar.Office2007StartButton();
             this.itemContainer1 = new DevComponents.DotNetBar.ItemContainer();
             this.itemContainer2 = new DevComponents.DotNetBar.ItemContainer();
@@ -205,6 +206,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictUserAccess)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictProjectSelection)).BeginInit();
             this.rbnBarError.SuspendLayout();
+            this.ribbonPanelProcess.SuspendLayout();
+            this.rbnBarAction.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtID)).BeginInit();
             this.rbnPanelProcess.SuspendLayout();
             this.rbnBarQCSampling.SuspendLayout();
             this.panelQCSampling.SuspendLayout();
@@ -212,9 +216,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dateQCSampleDate)).BeginInit();
             this.rbnBarProcess.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dateRejectionImport)).BeginInit();
-            this.ribbonPanelProcess.SuspendLayout();
-            this.rbnBarAction.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtID)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barStatus)).BeginInit();
             this.SuspendLayout();
             // 
@@ -226,8 +227,8 @@
             // 
             this.ribbonMain.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.ribbonMain.Controls.Add(this.ribbonPanelLogin);
-            this.ribbonMain.Controls.Add(this.rbnPanelProcess);
             this.ribbonMain.Controls.Add(this.ribbonPanelProcess);
+            this.ribbonMain.Controls.Add(this.rbnPanelProcess);
             this.ribbonMain.Dock = System.Windows.Forms.DockStyle.Top;
             this.ribbonMain.ForeColor = System.Drawing.Color.Black;
             this.ribbonMain.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
@@ -728,594 +729,6 @@
             this.controlContainerItem3.Control = this.txtErrors;
             this.controlContainerItem3.MenuVisibility = DevComponents.DotNetBar.eMenuVisibility.VisibleAlways;
             this.controlContainerItem3.Name = "controlContainerItem3";
-            // 
-            // rbnPanelProcess
-            // 
-            this.rbnPanelProcess.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.rbnPanelProcess.Controls.Add(this.rbnBarQCSampling);
-            this.rbnPanelProcess.Controls.Add(this.rbnBarProcess);
-            this.rbnPanelProcess.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rbnPanelProcess.Location = new System.Drawing.Point(0, 25);
-            this.rbnPanelProcess.Name = "rbnPanelProcess";
-            this.rbnPanelProcess.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-            this.rbnPanelProcess.Size = new System.Drawing.Size(1367, 141);
-            // 
-            // 
-            // 
-            this.rbnPanelProcess.Style.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // 
-            // 
-            this.rbnPanelProcess.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // 
-            // 
-            this.rbnPanelProcess.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.rbnPanelProcess.TabIndex = 3;
-            this.rbnPanelProcess.Visible = false;
-            // 
-            // rbnBarQCSampling
-            // 
-            this.rbnBarQCSampling.AutoOverflowEnabled = true;
-            // 
-            // 
-            // 
-            this.rbnBarQCSampling.BackgroundMouseOverStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // 
-            // 
-            this.rbnBarQCSampling.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.rbnBarQCSampling.ContainerControlProcessDialogKey = true;
-            this.rbnBarQCSampling.Controls.Add(this.panelQCSampling);
-            this.rbnBarQCSampling.Dock = System.Windows.Forms.DockStyle.Left;
-            this.rbnBarQCSampling.DragDropSupport = true;
-            this.rbnBarQCSampling.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.itemContainerSampling});
-            this.rbnBarQCSampling.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
-            this.rbnBarQCSampling.Location = new System.Drawing.Point(430, 0);
-            this.rbnBarQCSampling.Name = "rbnBarQCSampling";
-            this.rbnBarQCSampling.Size = new System.Drawing.Size(258, 138);
-            this.rbnBarQCSampling.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.rbnBarQCSampling.TabIndex = 10;
-            this.rbnBarQCSampling.Text = "Sampling";
-            // 
-            // 
-            // 
-            this.rbnBarQCSampling.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // 
-            // 
-            this.rbnBarQCSampling.TitleStyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.rbnBarQCSampling.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
-            // 
-            // panelQCSampling
-            // 
-            this.panelQCSampling.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.panelQCSampling.CanvasColor = System.Drawing.SystemColors.Control;
-            this.panelQCSampling.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.panelQCSampling.Controls.Add(this.labelX2);
-            this.panelQCSampling.Controls.Add(this.labelX1);
-            this.panelQCSampling.Controls.Add(this.switchQCProcessTable);
-            this.panelQCSampling.Controls.Add(this.switchQCProcessType);
-            this.panelQCSampling.Controls.Add(this.btnSamplingCalc);
-            this.panelQCSampling.Controls.Add(this.lblPercentage);
-            this.panelQCSampling.Controls.Add(this.txtQCSamplePecent);
-            this.panelQCSampling.Controls.Add(this.lblSamplePercentage);
-            this.panelQCSampling.Controls.Add(this.lblAgentProcessedDate);
-            this.panelQCSampling.Controls.Add(this.dateQCSampleDate);
-            this.panelQCSampling.DisabledBackColor = System.Drawing.Color.Empty;
-            this.panelQCSampling.Location = new System.Drawing.Point(4, 15);
-            this.panelQCSampling.Name = "panelQCSampling";
-            this.panelQCSampling.Size = new System.Drawing.Size(245, 94);
-            this.panelQCSampling.Style.Alignment = System.Drawing.StringAlignment.Center;
-            this.panelQCSampling.Style.BackColor1.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.panelQCSampling.Style.BorderColor.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
-            this.panelQCSampling.Style.ForeColor.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
-            this.panelQCSampling.Style.GradientAngle = 90;
-            this.panelQCSampling.TabIndex = 11;
-            // 
-            // labelX2
-            // 
-            this.labelX2.AutoSize = true;
-            // 
-            // 
-            // 
-            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(7, 28);
-            this.labelX2.Name = "labelX2";
-            this.labelX2.Size = new System.Drawing.Size(70, 15);
-            this.labelX2.TabIndex = 11;
-            this.labelX2.Text = "Process Type";
-            // 
-            // labelX1
-            // 
-            this.labelX1.AutoSize = true;
-            // 
-            // 
-            // 
-            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(5, 50);
-            this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(73, 15);
-            this.labelX1.TabIndex = 10;
-            this.labelX1.Text = "Process Table";
-            // 
-            // switchQCProcessTable
-            // 
-            // 
-            // 
-            // 
-            this.switchQCProcessTable.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.switchQCProcessTable.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F);
-            this.switchQCProcessTable.Location = new System.Drawing.Point(81, 49);
-            this.switchQCProcessTable.Name = "switchQCProcessTable";
-            this.switchQCProcessTable.OffBackColor = System.Drawing.SystemColors.Control;
-            this.switchQCProcessTable.OffText = "Contact";
-            this.switchQCProcessTable.OnBackColor = System.Drawing.SystemColors.Control;
-            this.switchQCProcessTable.OnText = "Company";
-            this.switchQCProcessTable.Size = new System.Drawing.Size(102, 18);
-            this.switchQCProcessTable.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.switchQCProcessTable.SwitchWidth = 20;
-            this.switchQCProcessTable.TabIndex = 9;
-            // 
-            // switchQCProcessType
-            // 
-            // 
-            // 
-            // 
-            this.switchQCProcessType.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.switchQCProcessType.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F);
-            this.switchQCProcessType.Location = new System.Drawing.Point(81, 27);
-            this.switchQCProcessType.Name = "switchQCProcessType";
-            this.switchQCProcessType.OffBackColor = System.Drawing.SystemColors.Control;
-            this.switchQCProcessType.OffText = "Fresh";
-            this.switchQCProcessType.OnBackColor = System.Drawing.SystemColors.Control;
-            this.switchQCProcessType.OnText = "Reprocessed";
-            this.switchQCProcessType.Size = new System.Drawing.Size(102, 18);
-            this.switchQCProcessType.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.switchQCProcessType.SwitchWidth = 20;
-            this.switchQCProcessType.TabIndex = 8;
-            // 
-            // btnSamplingCalc
-            // 
-            this.btnSamplingCalc.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnSamplingCalc.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSamplingCalc.Location = new System.Drawing.Point(190, 15);
-            this.btnSamplingCalc.Name = "btnSamplingCalc";
-            this.btnSamplingCalc.Size = new System.Drawing.Size(48, 54);
-            this.btnSamplingCalc.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnSamplingCalc.TabIndex = 7;
-            this.btnSamplingCalc.Text = "Refresh";
-            this.btnSamplingCalc.Click += new System.EventHandler(this.btnSamplingCalc_Click);
-            // 
-            // lblPercentage
-            // 
-            this.lblPercentage.AutoSize = true;
-            // 
-            // 
-            // 
-            this.lblPercentage.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblPercentage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.lblPercentage.Location = new System.Drawing.Point(165, 74);
-            this.lblPercentage.Name = "lblPercentage";
-            this.lblPercentage.Size = new System.Drawing.Size(15, 18);
-            this.lblPercentage.TabIndex = 6;
-            this.lblPercentage.Text = "%";
-            // 
-            // txtQCSamplePecent
-            // 
-            // 
-            // 
-            // 
-            this.txtQCSamplePecent.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.txtQCSamplePecent.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtQCSamplePecent.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
-            this.txtQCSamplePecent.Location = new System.Drawing.Point(81, 72);
-            this.txtQCSamplePecent.MaxValue = 100;
-            this.txtQCSamplePecent.MinValue = 1;
-            this.txtQCSamplePecent.Name = "txtQCSamplePecent";
-            this.txtQCSamplePecent.ShowUpDown = true;
-            this.txtQCSamplePecent.Size = new System.Drawing.Size(80, 20);
-            this.txtQCSamplePecent.TabIndex = 5;
-            this.txtQCSamplePecent.Value = 10;
-            // 
-            // lblSamplePercentage
-            // 
-            this.lblSamplePercentage.AutoSize = true;
-            // 
-            // 
-            // 
-            this.lblSamplePercentage.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblSamplePercentage.Location = new System.Drawing.Point(13, 73);
-            this.lblSamplePercentage.Name = "lblSamplePercentage";
-            this.lblSamplePercentage.Size = new System.Drawing.Size(64, 15);
-            this.lblSamplePercentage.TabIndex = 3;
-            this.lblSamplePercentage.Text = "Sample Size";
-            // 
-            // lblAgentProcessedDate
-            // 
-            this.lblAgentProcessedDate.AutoSize = true;
-            // 
-            // 
-            // 
-            this.lblAgentProcessedDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.lblAgentProcessedDate.Location = new System.Drawing.Point(9, 6);
-            this.lblAgentProcessedDate.Name = "lblAgentProcessedDate";
-            this.lblAgentProcessedDate.Size = new System.Drawing.Size(68, 15);
-            this.lblAgentProcessedDate.TabIndex = 1;
-            this.lblAgentProcessedDate.Text = "Process Date";
-            // 
-            // dateQCSampleDate
-            // 
-            // 
-            // 
-            // 
-            this.dateQCSampleDate.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.dateQCSampleDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dateQCSampleDate.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
-            this.dateQCSampleDate.ButtonDropDown.Visible = true;
-            this.dateQCSampleDate.IsPopupCalendarOpen = false;
-            this.dateQCSampleDate.Location = new System.Drawing.Point(81, 3);
-            // 
-            // 
-            // 
-            this.dateQCSampleDate.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dateQCSampleDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dateQCSampleDate.MonthCalendar.CalendarDimensions = new System.Drawing.Size(1, 1);
-            this.dateQCSampleDate.MonthCalendar.ClearButtonVisible = true;
-            // 
-            // 
-            // 
-            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
-            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
-            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
-            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
-            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dateQCSampleDate.MonthCalendar.DisplayMonth = new System.DateTime(2015, 2, 1, 0, 0, 0, 0);
-            this.dateQCSampleDate.MonthCalendar.FirstDayOfWeek = System.DayOfWeek.Monday;
-            this.dateQCSampleDate.MonthCalendar.MarkedDates = new System.DateTime[0];
-            this.dateQCSampleDate.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dateQCSampleDate.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
-            this.dateQCSampleDate.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
-            this.dateQCSampleDate.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.dateQCSampleDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dateQCSampleDate.MonthCalendar.TodayButtonVisible = true;
-            this.dateQCSampleDate.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dateQCSampleDate.Name = "dateQCSampleDate";
-            this.dateQCSampleDate.Size = new System.Drawing.Size(102, 20);
-            this.dateQCSampleDate.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dateQCSampleDate.TabIndex = 0;
-            // 
-            // itemContainerSampling
-            // 
-            // 
-            // 
-            // 
-            this.itemContainerSampling.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerSampling.ItemSpacing = 5;
-            this.itemContainerSampling.MinimumSize = new System.Drawing.Size(100, 0);
-            this.itemContainerSampling.Name = "itemContainerSampling";
-            this.itemContainerSampling.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.itemContainer5});
-            // 
-            // 
-            // 
-            this.itemContainerSampling.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerSampling.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
-            // 
-            // itemContainer5
-            // 
-            // 
-            // 
-            // 
-            this.itemContainer5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainer5.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
-            this.itemContainer5.Name = "itemContainer5";
-            this.itemContainer5.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.controlContainerSamplingPanel});
-            // 
-            // 
-            // 
-            this.itemContainer5.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // controlContainerSamplingPanel
-            // 
-            this.controlContainerSamplingPanel.AllowItemResize = true;
-            this.controlContainerSamplingPanel.Control = this.panelQCSampling;
-            this.controlContainerSamplingPanel.MenuVisibility = DevComponents.DotNetBar.eMenuVisibility.VisibleAlways;
-            this.controlContainerSamplingPanel.Name = "controlContainerSamplingPanel";
-            this.controlContainerSamplingPanel.Text = "QCSample";
-            // 
-            // rbnBarProcess
-            // 
-            this.rbnBarProcess.AutoOverflowEnabled = false;
-            // 
-            // 
-            // 
-            this.rbnBarProcess.BackgroundMouseOverStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // 
-            // 
-            this.rbnBarProcess.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.rbnBarProcess.ContainerControlProcessDialogKey = true;
-            this.rbnBarProcess.Controls.Add(this.dateRejectionImport);
-            this.rbnBarProcess.Controls.Add(this.txtQcComments);
-            this.rbnBarProcess.Dock = System.Windows.Forms.DockStyle.Left;
-            this.rbnBarProcess.DragDropSupport = true;
-            this.rbnBarProcess.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.rbnBarBounce,
-            this.itemContainerPathandDate,
-            this.itemContainerQCComments,
-            this.itemContainerImport});
-            this.rbnBarProcess.ItemSpacing = 10;
-            this.rbnBarProcess.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
-            this.rbnBarProcess.Location = new System.Drawing.Point(3, 0);
-            this.rbnBarProcess.Name = "rbnBarProcess";
-            this.rbnBarProcess.Size = new System.Drawing.Size(427, 138);
-            this.rbnBarProcess.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.rbnBarProcess.TabIndex = 9;
-            this.rbnBarProcess.Text = "Bounce , Sendback && Rejection";
-            // 
-            // 
-            // 
-            this.rbnBarProcess.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            // 
-            // 
-            // 
-            this.rbnBarProcess.TitleStyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.rbnBarProcess.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
-            // 
-            // dateRejectionImport
-            // 
-            // 
-            // 
-            // 
-            this.dateRejectionImport.BackgroundStyle.Class = "DateTimeInputBackground";
-            this.dateRejectionImport.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dateRejectionImport.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
-            this.dateRejectionImport.ButtonDropDown.Visible = true;
-            this.dateRejectionImport.IsPopupCalendarOpen = false;
-            this.dateRejectionImport.Location = new System.Drawing.Point(72, 52);
-            // 
-            // 
-            // 
-            this.dateRejectionImport.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dateRejectionImport.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dateRejectionImport.MonthCalendar.CalendarDimensions = new System.Drawing.Size(1, 1);
-            this.dateRejectionImport.MonthCalendar.ClearButtonVisible = true;
-            // 
-            // 
-            // 
-            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
-            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
-            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
-            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
-            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
-            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dateRejectionImport.MonthCalendar.DisplayMonth = new System.DateTime(2014, 9, 1, 0, 0, 0, 0);
-            this.dateRejectionImport.MonthCalendar.FirstDayOfWeek = System.DayOfWeek.Monday;
-            this.dateRejectionImport.MonthCalendar.MarkedDates = new System.DateTime[0];
-            this.dateRejectionImport.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
-            // 
-            // 
-            // 
-            this.dateRejectionImport.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
-            this.dateRejectionImport.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
-            this.dateRejectionImport.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.dateRejectionImport.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.dateRejectionImport.MonthCalendar.TodayButtonVisible = true;
-            this.dateRejectionImport.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dateRejectionImport.Name = "dateRejectionImport";
-            this.dateRejectionImport.Size = new System.Drawing.Size(118, 20);
-            this.dateRejectionImport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.dateRejectionImport.TabIndex = 1;
-            // 
-            // txtQcComments
-            // 
-            this.txtQcComments.BackColor = System.Drawing.Color.White;
-            // 
-            // 
-            // 
-            this.txtQcComments.Border.Class = "TextBoxBorder";
-            this.txtQcComments.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtQcComments.DisabledBackColor = System.Drawing.Color.White;
-            this.txtQcComments.ForeColor = System.Drawing.Color.Black;
-            this.txtQcComments.Location = new System.Drawing.Point(204, 39);
-            this.txtQcComments.MinimumSize = new System.Drawing.Size(150, 60);
-            this.txtQcComments.Multiline = true;
-            this.txtQcComments.Name = "txtQcComments";
-            this.txtQcComments.PreventEnterBeep = true;
-            this.txtQcComments.Size = new System.Drawing.Size(150, 60);
-            this.txtQcComments.TabIndex = 10003;
-            // 
-            // rbnBarBounce
-            // 
-            // 
-            // 
-            // 
-            this.rbnBarBounce.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.rbnBarBounce.HorizontalItemAlignment = DevComponents.DotNetBar.eHorizontalItemsAlignment.Center;
-            this.rbnBarBounce.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
-            this.rbnBarBounce.MinimumSize = new System.Drawing.Size(60, 0);
-            this.rbnBarBounce.Name = "rbnBarBounce";
-            this.rbnBarBounce.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.btnImportType});
-            // 
-            // 
-            // 
-            this.rbnBarBounce.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.rbnBarBounce.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
-            // 
-            // btnImportType
-            // 
-            this.btnImportType.AutoExpandOnClick = true;
-            this.btnImportType.ButtonStyle = DevComponents.DotNetBar.eButtonStyle.ImageAndText;
-            this.btnImportType.Image = global::GCC.Properties.Resources.email_alert_iconBig;
-            this.btnImportType.ImagePosition = DevComponents.DotNetBar.eImagePosition.Top;
-            this.btnImportType.Name = "btnImportType";
-            this.btnImportType.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.btnItemBounce,
-            this.btnItemSendBack,
-            this.btnItemRejection,
-            this.btnItemOK,
-            this.btnUploadTag});
-            this.btnImportType.SubItemsExpandWidth = 14;
-            this.btnImportType.Text = "Bounce";
-            this.btnImportType.TextChanged += new System.EventHandler(this.btnImportType_TextChanged);
-            // 
-            // btnItemBounce
-            // 
-            this.btnItemBounce.Checked = true;
-            this.btnItemBounce.Image = global::GCC.Properties.Resources.email_alert_icon__1_;
-            this.btnItemBounce.Name = "btnItemBounce";
-            this.btnItemBounce.Text = "Bounce";
-            this.btnItemBounce.Click += new System.EventHandler(this.btnItemBounce_Click);
-            // 
-            // btnItemSendBack
-            // 
-            this.btnItemSendBack.Image = global::GCC.Properties.Resources.send_icon_Small;
-            this.btnItemSendBack.Name = "btnItemSendBack";
-            this.btnItemSendBack.Text = "SendBack";
-            this.btnItemSendBack.Click += new System.EventHandler(this.btnItemSendBack_Click);
-            // 
-            // btnItemRejection
-            // 
-            this.btnItemRejection.Image = global::GCC.Properties.Resources.Close_iconSmall;
-            this.btnItemRejection.Name = "btnItemRejection";
-            this.btnItemRejection.Text = "Rejection";
-            this.btnItemRejection.Click += new System.EventHandler(this.btnItemRejection_Click);
-            // 
-            // btnItemOK
-            // 
-            this.btnItemOK.Image = global::GCC.Properties.Resources.ok_icon_Small;
-            this.btnItemOK.Name = "btnItemOK";
-            this.btnItemOK.Text = "OK";
-            this.btnItemOK.Click += new System.EventHandler(this.btnItemOK_Click);
-            // 
-            // btnUploadTag
-            // 
-            this.btnUploadTag.Image = global::GCC.Properties.Resources.tag_alt_icon;
-            this.btnUploadTag.Name = "btnUploadTag";
-            this.btnUploadTag.Text = "Upload Tag";
-            this.btnUploadTag.Click += new System.EventHandler(this.btnUploadTag_Click);
-            // 
-            // itemContainerPathandDate
-            // 
-            // 
-            // 
-            // 
-            this.itemContainerPathandDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerPathandDate.FixedSize = new System.Drawing.Size(120, 0);
-            this.itemContainerPathandDate.HorizontalItemAlignment = DevComponents.DotNetBar.eHorizontalItemsAlignment.Right;
-            this.itemContainerPathandDate.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
-            this.itemContainerPathandDate.Name = "itemContainerPathandDate";
-            this.itemContainerPathandDate.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.swhType,
-            this.controlContainerDate,
-            this.txtPath});
-            // 
-            // 
-            // 
-            this.itemContainerPathandDate.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerPathandDate.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
-            // 
-            // swhType
-            // 
-            this.swhType.ButtonWidth = 118;
-            this.swhType.Name = "swhType";
-            this.swhType.OffBackColor = System.Drawing.Color.WhiteSmoke;
-            this.swhType.OffText = "File";
-            this.swhType.OnBackColor = System.Drawing.Color.WhiteSmoke;
-            this.swhType.OnText = "Agent";
-            this.swhType.SwitchWidth = 50;
-            this.swhType.ValueChanged += new System.EventHandler(this.swhType_ValueChanged);
-            this.swhType.VisibleChanged += new System.EventHandler(this.swhType_VisibleChanged);
-            // 
-            // controlContainerDate
-            // 
-            this.controlContainerDate.AllowItemResize = true;
-            this.controlContainerDate.Control = this.dateRejectionImport;
-            this.controlContainerDate.MenuVisibility = DevComponents.DotNetBar.eMenuVisibility.VisibleAlways;
-            this.controlContainerDate.Name = "controlContainerDate";
-            this.controlContainerDate.Text = "controlContainerItem6";
-            // 
-            // txtPath
-            // 
-            this.txtPath.ButtonCustom.Text = "...";
-            this.txtPath.ButtonCustom.Visible = true;
-            this.txtPath.Name = "txtPath";
-            this.txtPath.TextBoxHeight = 17;
-            this.txtPath.TextBoxWidth = 118;
-            this.txtPath.WatermarkColor = System.Drawing.SystemColors.GrayText;
-            this.txtPath.ButtonCustomClick += new System.EventHandler(this.textBoxItemBounce_ButtonCustomClick);
-            // 
-            // itemContainerQCComments
-            // 
-            // 
-            // 
-            // 
-            this.itemContainerQCComments.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerQCComments.HorizontalItemAlignment = DevComponents.DotNetBar.eHorizontalItemsAlignment.Center;
-            this.itemContainerQCComments.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
-            this.itemContainerQCComments.Name = "itemContainerQCComments";
-            this.itemContainerQCComments.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.lblQCComments,
-            this.controlContainertxtQcComments});
-            // 
-            // 
-            // 
-            this.itemContainerQCComments.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerQCComments.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
-            // 
-            // lblQCComments
-            // 
-            this.lblQCComments.Name = "lblQCComments";
-            this.lblQCComments.Text = "QC Comments";
-            // 
-            // controlContainertxtQcComments
-            // 
-            this.controlContainertxtQcComments.AllowItemResize = true;
-            this.controlContainertxtQcComments.Control = this.txtQcComments;
-            this.controlContainertxtQcComments.MenuVisibility = DevComponents.DotNetBar.eMenuVisibility.VisibleAlways;
-            this.controlContainertxtQcComments.Name = "controlContainertxtQcComments";
-            this.controlContainertxtQcComments.Text = "controlContainerItem5";
-            // 
-            // itemContainerImport
-            // 
-            // 
-            // 
-            // 
-            this.itemContainerImport.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerImport.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
-            this.itemContainerImport.Name = "itemContainerImport";
-            this.itemContainerImport.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.btnImport});
-            // 
-            // 
-            // 
-            this.itemContainerImport.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerImport.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
-            // 
-            // btnImport
-            // 
-            this.btnImport.ButtonStyle = DevComponents.DotNetBar.eButtonStyle.ImageAndText;
-            this.btnImport.Image = global::GCC.Properties.Resources.Load_icon;
-            this.btnImport.ImagePosition = DevComponents.DotNetBar.eImagePosition.Top;
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Text = "Import";
-            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
             // ribbonPanelProcess
             // 
@@ -2048,14 +1461,15 @@
             // 
             // 
             this.itemContainerProcessedAndNewCompany.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.itemContainerProcessedAndNewCompany.ItemSpacing = 5;
+            this.itemContainerProcessedAndNewCompany.ItemSpacing = 3;
             this.itemContainerProcessedAndNewCompany.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
             this.itemContainerProcessedAndNewCompany.Name = "itemContainerProcessedAndNewCompany";
             this.itemContainerProcessedAndNewCompany.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
             this.btnCompanyList,
             this.btnAddNewCompany,
             this.btnSendBackInfo,
-            this.btnEmailCheck});
+            this.btnEmailCheck,
+            this.btnHunter});
             // 
             // 
             // 
@@ -2105,6 +1519,14 @@
             this.btnEmailCheck.Text = "Email Check";
             this.btnEmailCheck.Click += new System.EventHandler(this.btnEmailCheck_Click);
             // 
+            // btnHunter
+            // 
+            this.btnHunter.ButtonStyle = DevComponents.DotNetBar.eButtonStyle.ImageAndText;
+            this.btnHunter.Image = global::GCC.Properties.Resources.mail_check_icon;
+            this.btnHunter.Name = "btnHunter";
+            this.btnHunter.Text = "Email Hunter";
+            this.btnHunter.Click += new System.EventHandler(this.btnHunter_Click);
+            // 
             // itemContainerSearch
             // 
             // 
@@ -2130,6 +1552,594 @@
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Text = "Search";
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // rbnPanelProcess
+            // 
+            this.rbnPanelProcess.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.rbnPanelProcess.Controls.Add(this.rbnBarQCSampling);
+            this.rbnPanelProcess.Controls.Add(this.rbnBarProcess);
+            this.rbnPanelProcess.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbnPanelProcess.Location = new System.Drawing.Point(0, 0);
+            this.rbnPanelProcess.Name = "rbnPanelProcess";
+            this.rbnPanelProcess.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.rbnPanelProcess.Size = new System.Drawing.Size(1367, 166);
+            // 
+            // 
+            // 
+            this.rbnPanelProcess.Style.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.rbnPanelProcess.StyleMouseDown.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.rbnPanelProcess.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.rbnPanelProcess.TabIndex = 3;
+            this.rbnPanelProcess.Visible = false;
+            // 
+            // rbnBarQCSampling
+            // 
+            this.rbnBarQCSampling.AutoOverflowEnabled = true;
+            // 
+            // 
+            // 
+            this.rbnBarQCSampling.BackgroundMouseOverStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.rbnBarQCSampling.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.rbnBarQCSampling.ContainerControlProcessDialogKey = true;
+            this.rbnBarQCSampling.Controls.Add(this.panelQCSampling);
+            this.rbnBarQCSampling.Dock = System.Windows.Forms.DockStyle.Left;
+            this.rbnBarQCSampling.DragDropSupport = true;
+            this.rbnBarQCSampling.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.itemContainerSampling});
+            this.rbnBarQCSampling.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
+            this.rbnBarQCSampling.Location = new System.Drawing.Point(430, 0);
+            this.rbnBarQCSampling.Name = "rbnBarQCSampling";
+            this.rbnBarQCSampling.Size = new System.Drawing.Size(258, 163);
+            this.rbnBarQCSampling.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.rbnBarQCSampling.TabIndex = 10;
+            this.rbnBarQCSampling.Text = "Sampling";
+            // 
+            // 
+            // 
+            this.rbnBarQCSampling.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.rbnBarQCSampling.TitleStyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.rbnBarQCSampling.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
+            // 
+            // panelQCSampling
+            // 
+            this.panelQCSampling.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelQCSampling.CanvasColor = System.Drawing.SystemColors.Control;
+            this.panelQCSampling.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.panelQCSampling.Controls.Add(this.labelX2);
+            this.panelQCSampling.Controls.Add(this.labelX1);
+            this.panelQCSampling.Controls.Add(this.switchQCProcessTable);
+            this.panelQCSampling.Controls.Add(this.switchQCProcessType);
+            this.panelQCSampling.Controls.Add(this.btnSamplingCalc);
+            this.panelQCSampling.Controls.Add(this.lblPercentage);
+            this.panelQCSampling.Controls.Add(this.txtQCSamplePecent);
+            this.panelQCSampling.Controls.Add(this.lblSamplePercentage);
+            this.panelQCSampling.Controls.Add(this.lblAgentProcessedDate);
+            this.panelQCSampling.Controls.Add(this.dateQCSampleDate);
+            this.panelQCSampling.DisabledBackColor = System.Drawing.Color.Empty;
+            this.panelQCSampling.Location = new System.Drawing.Point(4, 28);
+            this.panelQCSampling.Name = "panelQCSampling";
+            this.panelQCSampling.Size = new System.Drawing.Size(245, 94);
+            this.panelQCSampling.Style.Alignment = System.Drawing.StringAlignment.Center;
+            this.panelQCSampling.Style.BackColor1.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.panelQCSampling.Style.BorderColor.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.panelQCSampling.Style.ForeColor.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText;
+            this.panelQCSampling.Style.GradientAngle = 90;
+            this.panelQCSampling.TabIndex = 11;
+            // 
+            // labelX2
+            // 
+            this.labelX2.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX2.Location = new System.Drawing.Point(7, 28);
+            this.labelX2.Name = "labelX2";
+            this.labelX2.Size = new System.Drawing.Size(70, 15);
+            this.labelX2.TabIndex = 11;
+            this.labelX2.Text = "Process Type";
+            // 
+            // labelX1
+            // 
+            this.labelX1.AutoSize = true;
+            // 
+            // 
+            // 
+            this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.labelX1.Location = new System.Drawing.Point(5, 50);
+            this.labelX1.Name = "labelX1";
+            this.labelX1.Size = new System.Drawing.Size(73, 15);
+            this.labelX1.TabIndex = 10;
+            this.labelX1.Text = "Process Table";
+            // 
+            // switchQCProcessTable
+            // 
+            // 
+            // 
+            // 
+            this.switchQCProcessTable.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.switchQCProcessTable.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F);
+            this.switchQCProcessTable.Location = new System.Drawing.Point(81, 49);
+            this.switchQCProcessTable.Name = "switchQCProcessTable";
+            this.switchQCProcessTable.OffBackColor = System.Drawing.SystemColors.Control;
+            this.switchQCProcessTable.OffText = "Contact";
+            this.switchQCProcessTable.OnBackColor = System.Drawing.SystemColors.Control;
+            this.switchQCProcessTable.OnText = "Company";
+            this.switchQCProcessTable.Size = new System.Drawing.Size(102, 18);
+            this.switchQCProcessTable.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.switchQCProcessTable.SwitchWidth = 20;
+            this.switchQCProcessTable.TabIndex = 9;
+            // 
+            // switchQCProcessType
+            // 
+            // 
+            // 
+            // 
+            this.switchQCProcessType.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.switchQCProcessType.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F);
+            this.switchQCProcessType.Location = new System.Drawing.Point(81, 27);
+            this.switchQCProcessType.Name = "switchQCProcessType";
+            this.switchQCProcessType.OffBackColor = System.Drawing.SystemColors.Control;
+            this.switchQCProcessType.OffText = "Fresh";
+            this.switchQCProcessType.OnBackColor = System.Drawing.SystemColors.Control;
+            this.switchQCProcessType.OnText = "Reprocessed";
+            this.switchQCProcessType.Size = new System.Drawing.Size(102, 18);
+            this.switchQCProcessType.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.switchQCProcessType.SwitchWidth = 20;
+            this.switchQCProcessType.TabIndex = 8;
+            // 
+            // btnSamplingCalc
+            // 
+            this.btnSamplingCalc.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnSamplingCalc.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnSamplingCalc.Location = new System.Drawing.Point(190, 15);
+            this.btnSamplingCalc.Name = "btnSamplingCalc";
+            this.btnSamplingCalc.Size = new System.Drawing.Size(48, 54);
+            this.btnSamplingCalc.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnSamplingCalc.TabIndex = 7;
+            this.btnSamplingCalc.Text = "Refresh";
+            this.btnSamplingCalc.Click += new System.EventHandler(this.btnSamplingCalc_Click);
+            // 
+            // lblPercentage
+            // 
+            this.lblPercentage.AutoSize = true;
+            // 
+            // 
+            // 
+            this.lblPercentage.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblPercentage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.lblPercentage.Location = new System.Drawing.Point(165, 74);
+            this.lblPercentage.Name = "lblPercentage";
+            this.lblPercentage.Size = new System.Drawing.Size(15, 18);
+            this.lblPercentage.TabIndex = 6;
+            this.lblPercentage.Text = "%";
+            // 
+            // txtQCSamplePecent
+            // 
+            // 
+            // 
+            // 
+            this.txtQCSamplePecent.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.txtQCSamplePecent.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtQCSamplePecent.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2;
+            this.txtQCSamplePecent.Location = new System.Drawing.Point(81, 72);
+            this.txtQCSamplePecent.MaxValue = 100;
+            this.txtQCSamplePecent.MinValue = 1;
+            this.txtQCSamplePecent.Name = "txtQCSamplePecent";
+            this.txtQCSamplePecent.ShowUpDown = true;
+            this.txtQCSamplePecent.Size = new System.Drawing.Size(80, 20);
+            this.txtQCSamplePecent.TabIndex = 5;
+            this.txtQCSamplePecent.Value = 10;
+            // 
+            // lblSamplePercentage
+            // 
+            this.lblSamplePercentage.AutoSize = true;
+            // 
+            // 
+            // 
+            this.lblSamplePercentage.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblSamplePercentage.Location = new System.Drawing.Point(13, 73);
+            this.lblSamplePercentage.Name = "lblSamplePercentage";
+            this.lblSamplePercentage.Size = new System.Drawing.Size(64, 15);
+            this.lblSamplePercentage.TabIndex = 3;
+            this.lblSamplePercentage.Text = "Sample Size";
+            // 
+            // lblAgentProcessedDate
+            // 
+            this.lblAgentProcessedDate.AutoSize = true;
+            // 
+            // 
+            // 
+            this.lblAgentProcessedDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lblAgentProcessedDate.Location = new System.Drawing.Point(9, 6);
+            this.lblAgentProcessedDate.Name = "lblAgentProcessedDate";
+            this.lblAgentProcessedDate.Size = new System.Drawing.Size(68, 15);
+            this.lblAgentProcessedDate.TabIndex = 1;
+            this.lblAgentProcessedDate.Text = "Process Date";
+            // 
+            // dateQCSampleDate
+            // 
+            // 
+            // 
+            // 
+            this.dateQCSampleDate.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.dateQCSampleDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dateQCSampleDate.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
+            this.dateQCSampleDate.ButtonDropDown.Visible = true;
+            this.dateQCSampleDate.IsPopupCalendarOpen = false;
+            this.dateQCSampleDate.Location = new System.Drawing.Point(81, 3);
+            // 
+            // 
+            // 
+            this.dateQCSampleDate.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dateQCSampleDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dateQCSampleDate.MonthCalendar.CalendarDimensions = new System.Drawing.Size(1, 1);
+            this.dateQCSampleDate.MonthCalendar.ClearButtonVisible = true;
+            // 
+            // 
+            // 
+            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
+            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
+            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
+            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
+            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
+            this.dateQCSampleDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dateQCSampleDate.MonthCalendar.DisplayMonth = new System.DateTime(2015, 2, 1, 0, 0, 0, 0);
+            this.dateQCSampleDate.MonthCalendar.FirstDayOfWeek = System.DayOfWeek.Monday;
+            this.dateQCSampleDate.MonthCalendar.MarkedDates = new System.DateTime[0];
+            this.dateQCSampleDate.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dateQCSampleDate.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.dateQCSampleDate.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
+            this.dateQCSampleDate.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.dateQCSampleDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dateQCSampleDate.MonthCalendar.TodayButtonVisible = true;
+            this.dateQCSampleDate.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
+            this.dateQCSampleDate.Name = "dateQCSampleDate";
+            this.dateQCSampleDate.Size = new System.Drawing.Size(102, 20);
+            this.dateQCSampleDate.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.dateQCSampleDate.TabIndex = 0;
+            // 
+            // itemContainerSampling
+            // 
+            // 
+            // 
+            // 
+            this.itemContainerSampling.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainerSampling.ItemSpacing = 5;
+            this.itemContainerSampling.MinimumSize = new System.Drawing.Size(100, 0);
+            this.itemContainerSampling.Name = "itemContainerSampling";
+            this.itemContainerSampling.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.itemContainer5});
+            // 
+            // 
+            // 
+            this.itemContainerSampling.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainerSampling.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
+            // 
+            // itemContainer5
+            // 
+            // 
+            // 
+            // 
+            this.itemContainer5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainer5.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
+            this.itemContainer5.Name = "itemContainer5";
+            this.itemContainer5.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.controlContainerSamplingPanel});
+            // 
+            // 
+            // 
+            this.itemContainer5.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // controlContainerSamplingPanel
+            // 
+            this.controlContainerSamplingPanel.AllowItemResize = true;
+            this.controlContainerSamplingPanel.Control = this.panelQCSampling;
+            this.controlContainerSamplingPanel.MenuVisibility = DevComponents.DotNetBar.eMenuVisibility.VisibleAlways;
+            this.controlContainerSamplingPanel.Name = "controlContainerSamplingPanel";
+            this.controlContainerSamplingPanel.Text = "QCSample";
+            // 
+            // rbnBarProcess
+            // 
+            this.rbnBarProcess.AutoOverflowEnabled = false;
+            // 
+            // 
+            // 
+            this.rbnBarProcess.BackgroundMouseOverStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.rbnBarProcess.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.rbnBarProcess.ContainerControlProcessDialogKey = true;
+            this.rbnBarProcess.Controls.Add(this.dateRejectionImport);
+            this.rbnBarProcess.Controls.Add(this.txtQcComments);
+            this.rbnBarProcess.Dock = System.Windows.Forms.DockStyle.Left;
+            this.rbnBarProcess.DragDropSupport = true;
+            this.rbnBarProcess.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.rbnBarBounce,
+            this.itemContainerPathandDate,
+            this.itemContainerQCComments,
+            this.itemContainerImport});
+            this.rbnBarProcess.ItemSpacing = 10;
+            this.rbnBarProcess.LicenseKey = "F962CEC7-CD8F-4911-A9E9-CAB39962FC1F";
+            this.rbnBarProcess.Location = new System.Drawing.Point(3, 0);
+            this.rbnBarProcess.Name = "rbnBarProcess";
+            this.rbnBarProcess.Size = new System.Drawing.Size(427, 163);
+            this.rbnBarProcess.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.rbnBarProcess.TabIndex = 9;
+            this.rbnBarProcess.Text = "Bounce , Sendback && Rejection";
+            // 
+            // 
+            // 
+            this.rbnBarProcess.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            // 
+            // 
+            // 
+            this.rbnBarProcess.TitleStyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.rbnBarProcess.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
+            // 
+            // dateRejectionImport
+            // 
+            // 
+            // 
+            // 
+            this.dateRejectionImport.BackgroundStyle.Class = "DateTimeInputBackground";
+            this.dateRejectionImport.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dateRejectionImport.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
+            this.dateRejectionImport.ButtonDropDown.Visible = true;
+            this.dateRejectionImport.IsPopupCalendarOpen = false;
+            this.dateRejectionImport.Location = new System.Drawing.Point(72, 66);
+            // 
+            // 
+            // 
+            this.dateRejectionImport.MonthCalendar.AnnuallyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dateRejectionImport.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dateRejectionImport.MonthCalendar.CalendarDimensions = new System.Drawing.Size(1, 1);
+            this.dateRejectionImport.MonthCalendar.ClearButtonVisible = true;
+            // 
+            // 
+            // 
+            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground2;
+            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BackColorGradientAngle = 90;
+            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
+            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BorderTop = DevComponents.DotNetBar.eStyleBorderType.Solid;
+            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BorderTopColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarDockedBorder;
+            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.BorderTopWidth = 1;
+            this.dateRejectionImport.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dateRejectionImport.MonthCalendar.DisplayMonth = new System.DateTime(2014, 9, 1, 0, 0, 0, 0);
+            this.dateRejectionImport.MonthCalendar.FirstDayOfWeek = System.DayOfWeek.Monday;
+            this.dateRejectionImport.MonthCalendar.MarkedDates = new System.DateTime[0];
+            this.dateRejectionImport.MonthCalendar.MonthlyMarkedDates = new System.DateTime[0];
+            // 
+            // 
+            // 
+            this.dateRejectionImport.MonthCalendar.NavigationBackgroundStyle.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground2;
+            this.dateRejectionImport.MonthCalendar.NavigationBackgroundStyle.BackColorGradientAngle = 90;
+            this.dateRejectionImport.MonthCalendar.NavigationBackgroundStyle.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.dateRejectionImport.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.dateRejectionImport.MonthCalendar.TodayButtonVisible = true;
+            this.dateRejectionImport.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
+            this.dateRejectionImport.Name = "dateRejectionImport";
+            this.dateRejectionImport.Size = new System.Drawing.Size(118, 20);
+            this.dateRejectionImport.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.dateRejectionImport.TabIndex = 1;
+            // 
+            // txtQcComments
+            // 
+            this.txtQcComments.BackColor = System.Drawing.Color.White;
+            // 
+            // 
+            // 
+            this.txtQcComments.Border.Class = "TextBoxBorder";
+            this.txtQcComments.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtQcComments.DisabledBackColor = System.Drawing.Color.White;
+            this.txtQcComments.ForeColor = System.Drawing.Color.Black;
+            this.txtQcComments.Location = new System.Drawing.Point(204, 52);
+            this.txtQcComments.MinimumSize = new System.Drawing.Size(150, 60);
+            this.txtQcComments.Multiline = true;
+            this.txtQcComments.Name = "txtQcComments";
+            this.txtQcComments.PreventEnterBeep = true;
+            this.txtQcComments.Size = new System.Drawing.Size(150, 60);
+            this.txtQcComments.TabIndex = 10003;
+            // 
+            // rbnBarBounce
+            // 
+            // 
+            // 
+            // 
+            this.rbnBarBounce.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.rbnBarBounce.HorizontalItemAlignment = DevComponents.DotNetBar.eHorizontalItemsAlignment.Center;
+            this.rbnBarBounce.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
+            this.rbnBarBounce.MinimumSize = new System.Drawing.Size(60, 0);
+            this.rbnBarBounce.Name = "rbnBarBounce";
+            this.rbnBarBounce.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.btnImportType});
+            // 
+            // 
+            // 
+            this.rbnBarBounce.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.rbnBarBounce.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
+            // 
+            // btnImportType
+            // 
+            this.btnImportType.AutoExpandOnClick = true;
+            this.btnImportType.ButtonStyle = DevComponents.DotNetBar.eButtonStyle.ImageAndText;
+            this.btnImportType.Image = global::GCC.Properties.Resources.email_alert_iconBig;
+            this.btnImportType.ImagePosition = DevComponents.DotNetBar.eImagePosition.Top;
+            this.btnImportType.Name = "btnImportType";
+            this.btnImportType.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.btnItemBounce,
+            this.btnItemSendBack,
+            this.btnItemRejection,
+            this.btnItemOK,
+            this.btnUploadTag});
+            this.btnImportType.SubItemsExpandWidth = 14;
+            this.btnImportType.Text = "Bounce";
+            this.btnImportType.TextChanged += new System.EventHandler(this.btnImportType_TextChanged);
+            // 
+            // btnItemBounce
+            // 
+            this.btnItemBounce.Checked = true;
+            this.btnItemBounce.Image = global::GCC.Properties.Resources.email_alert_icon__1_;
+            this.btnItemBounce.Name = "btnItemBounce";
+            this.btnItemBounce.Text = "Bounce";
+            this.btnItemBounce.Click += new System.EventHandler(this.btnItemBounce_Click);
+            // 
+            // btnItemSendBack
+            // 
+            this.btnItemSendBack.Image = global::GCC.Properties.Resources.send_icon_Small;
+            this.btnItemSendBack.Name = "btnItemSendBack";
+            this.btnItemSendBack.Text = "SendBack";
+            this.btnItemSendBack.Click += new System.EventHandler(this.btnItemSendBack_Click);
+            // 
+            // btnItemRejection
+            // 
+            this.btnItemRejection.Image = global::GCC.Properties.Resources.Close_iconSmall;
+            this.btnItemRejection.Name = "btnItemRejection";
+            this.btnItemRejection.Text = "Rejection";
+            this.btnItemRejection.Click += new System.EventHandler(this.btnItemRejection_Click);
+            // 
+            // btnItemOK
+            // 
+            this.btnItemOK.Image = global::GCC.Properties.Resources.ok_icon_Small;
+            this.btnItemOK.Name = "btnItemOK";
+            this.btnItemOK.Text = "OK";
+            this.btnItemOK.Click += new System.EventHandler(this.btnItemOK_Click);
+            // 
+            // btnUploadTag
+            // 
+            this.btnUploadTag.Image = global::GCC.Properties.Resources.tag_alt_icon;
+            this.btnUploadTag.Name = "btnUploadTag";
+            this.btnUploadTag.Text = "Upload Tag";
+            this.btnUploadTag.Click += new System.EventHandler(this.btnUploadTag_Click);
+            // 
+            // itemContainerPathandDate
+            // 
+            // 
+            // 
+            // 
+            this.itemContainerPathandDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainerPathandDate.FixedSize = new System.Drawing.Size(120, 0);
+            this.itemContainerPathandDate.HorizontalItemAlignment = DevComponents.DotNetBar.eHorizontalItemsAlignment.Right;
+            this.itemContainerPathandDate.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
+            this.itemContainerPathandDate.Name = "itemContainerPathandDate";
+            this.itemContainerPathandDate.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.swhType,
+            this.controlContainerDate,
+            this.txtPath});
+            // 
+            // 
+            // 
+            this.itemContainerPathandDate.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainerPathandDate.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
+            // 
+            // swhType
+            // 
+            this.swhType.ButtonWidth = 118;
+            this.swhType.Name = "swhType";
+            this.swhType.OffBackColor = System.Drawing.Color.WhiteSmoke;
+            this.swhType.OffText = "File";
+            this.swhType.OnBackColor = System.Drawing.Color.WhiteSmoke;
+            this.swhType.OnText = "Agent";
+            this.swhType.SwitchWidth = 50;
+            this.swhType.ValueChanged += new System.EventHandler(this.swhType_ValueChanged);
+            this.swhType.VisibleChanged += new System.EventHandler(this.swhType_VisibleChanged);
+            // 
+            // controlContainerDate
+            // 
+            this.controlContainerDate.AllowItemResize = true;
+            this.controlContainerDate.Control = this.dateRejectionImport;
+            this.controlContainerDate.MenuVisibility = DevComponents.DotNetBar.eMenuVisibility.VisibleAlways;
+            this.controlContainerDate.Name = "controlContainerDate";
+            this.controlContainerDate.Text = "controlContainerItem6";
+            // 
+            // txtPath
+            // 
+            this.txtPath.ButtonCustom.Text = "...";
+            this.txtPath.ButtonCustom.Visible = true;
+            this.txtPath.Name = "txtPath";
+            this.txtPath.TextBoxHeight = 17;
+            this.txtPath.TextBoxWidth = 118;
+            this.txtPath.WatermarkColor = System.Drawing.SystemColors.GrayText;
+            this.txtPath.ButtonCustomClick += new System.EventHandler(this.textBoxItemBounce_ButtonCustomClick);
+            // 
+            // itemContainerQCComments
+            // 
+            // 
+            // 
+            // 
+            this.itemContainerQCComments.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainerQCComments.HorizontalItemAlignment = DevComponents.DotNetBar.eHorizontalItemsAlignment.Center;
+            this.itemContainerQCComments.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
+            this.itemContainerQCComments.Name = "itemContainerQCComments";
+            this.itemContainerQCComments.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.lblQCComments,
+            this.controlContainertxtQcComments});
+            // 
+            // 
+            // 
+            this.itemContainerQCComments.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainerQCComments.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
+            // 
+            // lblQCComments
+            // 
+            this.lblQCComments.Name = "lblQCComments";
+            this.lblQCComments.Text = "QC Comments";
+            // 
+            // controlContainertxtQcComments
+            // 
+            this.controlContainertxtQcComments.AllowItemResize = true;
+            this.controlContainertxtQcComments.Control = this.txtQcComments;
+            this.controlContainertxtQcComments.MenuVisibility = DevComponents.DotNetBar.eMenuVisibility.VisibleAlways;
+            this.controlContainertxtQcComments.Name = "controlContainertxtQcComments";
+            this.controlContainertxtQcComments.Text = "controlContainerItem5";
+            // 
+            // itemContainerImport
+            // 
+            // 
+            // 
+            // 
+            this.itemContainerImport.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainerImport.LayoutOrientation = DevComponents.DotNetBar.eOrientation.Vertical;
+            this.itemContainerImport.Name = "itemContainerImport";
+            this.itemContainerImport.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.btnImport});
+            // 
+            // 
+            // 
+            this.itemContainerImport.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.itemContainerImport.VerticalItemAlignment = DevComponents.DotNetBar.eVerticalItemsAlignment.Middle;
+            // 
+            // btnImport
+            // 
+            this.btnImport.ButtonStyle = DevComponents.DotNetBar.eButtonStyle.ImageAndText;
+            this.btnImport.Image = global::GCC.Properties.Resources.Load_icon;
+            this.btnImport.ImagePosition = DevComponents.DotNetBar.eImagePosition.Top;
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Text = "Import";
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
             // btnStart
             // 
@@ -2611,6 +2621,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictUserAccess)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictProjectSelection)).EndInit();
             this.rbnBarError.ResumeLayout(false);
+            this.ribbonPanelProcess.ResumeLayout(false);
+            this.rbnBarAction.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtID)).EndInit();
             this.rbnPanelProcess.ResumeLayout(false);
             this.rbnBarQCSampling.ResumeLayout(false);
             this.panelQCSampling.ResumeLayout(false);
@@ -2619,9 +2632,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dateQCSampleDate)).EndInit();
             this.rbnBarProcess.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dateRejectionImport)).EndInit();
-            this.ribbonPanelProcess.ResumeLayout(false);
-            this.rbnBarAction.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtID)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barStatus)).EndInit();
             this.ResumeLayout(false);
 
@@ -2795,5 +2805,6 @@
         public System.ComponentModel.BackgroundWorker bWorkerRDP;
         private DevComponents.DotNetBar.ButtonItem btnRemote;
         private DevComponents.Editors.ComboItem comboItem3;
+        public DevComponents.DotNetBar.ButtonItem btnHunter;
     }
 }

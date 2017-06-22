@@ -28,7 +28,7 @@ namespace GCC
             set { _sCompanyName = value; }
         }
 
-        //BAL_GlobalMySQL objBALGlobalMySQL = new BAL_GlobalMySQL();
+        //BAL_GlobalMySfdQL objBALGlobalMyfdSQL = new BAL_GlobalMfdySQL();
         DataTable dtCompany = new DataTable();
         Regex rNumeric = new Regex(@"[^\d]", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
@@ -41,7 +41,7 @@ namespace GCC
             cmbSearchin.Items.Add("ADDRESS_2");
             cmbSearchin.Items.Add("SWITCHBOARD");
             cmbSearchin.SelectedIndex = 0;
-            //dtCompany = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,CITY,COUNTRY,REPLACE(SWITCHBOARD,' ','') as SWITCHBOARD FROM " + GV.sCompanyTable + ";");
+            //dtCompany = GV.MYsdfSQL.BAL_ExecuteQueryMyfdSQL("SELECT MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,CITY,COUNTRY,REPLACE(SWITCHBOARD,' ','') as SWITCHBOARD FROM " + GV.sCompanyTable + ";");
             
             //foreach (DataRow dr in dtCompany.Rows)//Remove empty in Telephone number.. Useful in searching
             //    dr["SWITCHBOARD"] = dr["SWITCHBOARD"].ToString().Replace(" ","");
@@ -157,7 +157,7 @@ namespace GCC
                                     dtCompany.Rows.Clear();
                                 
                                 dtCompany =
-                                    GV.MYSQL.BAL_ExecuteQueryMySQL(
+                                    GV.MSSQL1.BAL_ExecuteQuery(
                                         "SELECT MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,CITY,COUNTRY,REPLACE(SWITCHBOARD,' ','') as SWITCHBOARD FROM " +
                                         GV.sCompanyTable + " WHERE SWITCHBOARD_TRIMMED = '" + sSearchText + "';");
                             }
@@ -167,10 +167,9 @@ namespace GCC
                                     dtCompany.Rows.Clear();
 
                                 dtCompany =
-                                    GV.MYSQL.BAL_ExecuteQueryMySQL(
-                                        "SELECT MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,CITY,COUNTRY,REPLACE(SWITCHBOARD,' ','') as SWITCHBOARD FROM " +
-                                        GV.sCompanyTable + " WHERE " + cmbSearchin.Text + " LIKE '%" + sSearchText +
-                                        "%' Limit 100;");
+                                    GV.MSSQL1.BAL_ExecuteQuery(
+                                        "SELECT TOP 100 MASTER_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2,CITY,COUNTRY,REPLACE(SWITCHBOARD,' ','') as SWITCHBOARD FROM " +
+                                        GV.sCompanyTable + " WHERE " + cmbSearchin.Text + " LIKE '%" + sSearchText + "%';");
 
                                 if (dtCompany.Rows.Count == 100)
                                     ToastNotification.Show(this, "Showing only top 100 records.",

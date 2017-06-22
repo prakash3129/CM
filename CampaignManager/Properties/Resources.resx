@@ -163,6 +163,9 @@
   <data name="Actions-stock-save-as-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Actions-stock-save-as-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="move-icon (2)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\move-icon (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Button-Next-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Button-Next-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -172,6 +175,9 @@
   <data name="Load-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Load-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="mail-check-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mail-check-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="delete-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\delete-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -180,9 +186,6 @@
   </data>
   <data name="phone-icon_dashboard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\phone-icon_dashboard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="thumbsup32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\thumbsup32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,14 +205,14 @@
   <data name="Actions-document-preview-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Actions-document-preview-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Search-2-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Search-2-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Sign-Info-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Sign-Info-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="profile-check-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\profile-check-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="edit-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\edit-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="database-add-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\database-add-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -262,6 +265,9 @@
   <data name="email-not-validated-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\email-not-validated-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Actions-edit-clear-list-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Actions-edit-clear-list-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="129396005132x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\129396005132x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -277,8 +283,8 @@
   <data name="HangupICO_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HangupICO_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="archive-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\archive-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Button-Next-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Button-Next-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Email_check" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Email_check.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -286,14 +292,11 @@
   <data name="pencil-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pencil-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="foundation_microphone_flat-circle-white-on-silver_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\foundation_microphone_flat-circle-white-on-silver_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="erase-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\erase-icon1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Red.JPG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="edit-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\edit-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="addicon16x16_dash" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\addicon16x16_dash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -328,6 +331,9 @@
   <data name="Calling_dash" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Calling_dash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Windows_Turn_Off_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Windows-Turn-Off-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="voice-search-icon - idle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\voice-search-icon - idle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -355,8 +361,8 @@
   <data name="Phone_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Phone-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="thumbsupbutton32x32 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\thumbsupbutton32x32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Earth-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Earth-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="dic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\dic.dic;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -372,9 +378,6 @@
   </data>
   <data name="foundation_microphone_flat-circle-white-on-silver_32x32 - Copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\foundation_microphone_flat-circle-white-on-silver_32x32 - Copy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ezgif-3008983895" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ezgif-3008983895.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Actions-application-exit-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Actions-application-exit-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -406,14 +409,14 @@
   <data name="phone_call_reject_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\phone-call-reject-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="identity-card-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\identity-card-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="1414168537_filter_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\1414168537_filter_add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Ok-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ok-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Red.JPG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Grey-Ball-icon (2)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Grey-Ball-icon (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -426,9 +429,6 @@
   </data>
   <data name="SendKeys" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SendKeys.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Help-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Help-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="reload-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\reload-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -457,9 +457,6 @@
   <data name="Button-info-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Button-info-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="1383132635_preferences-contact-list" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1383132635_preferences-contact-list.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="headphones-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\headphones-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -471,6 +468,9 @@
   </data>
   <data name="ok-icon Small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ok-icon Small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Apps-preferences-desktop-user-password-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Apps-preferences-desktop-user-password-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Mail_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Mail-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -484,8 +484,8 @@
   <data name="Actions-view-filter-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Actions-view-filter-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Mail-aaicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Mail-aaicon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="thumbsupbutton32x32 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\thumbsupbutton32x32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Yello" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Yello.JPG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -496,8 +496,8 @@
   <data name="back-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\back-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Calling" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Calling.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Excel-icon (3)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Excel-icon (3)1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ThumbsUpIcon1286x30032x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ThumbsUpIcon1286x30032x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -514,14 +514,11 @@
   <data name="Grey-Ball-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Grey-Ball-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Search-2-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Search-2-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="foundation_microphone_flat-circle-white-on-silver_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\foundation_microphone_flat-circle-white-on-silver_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Misc-Stats-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Misc-Stats-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Excel-icon (3)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Excel-icon (3)1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Button-hint-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Button-hint-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -541,17 +538,17 @@
   <data name="sand-glass-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sand-glass-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="duplicate32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\duplicate32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="alphab_sort" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\alphab-sort.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="shape-rotate-clockwise-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\shape-rotate-clockwise-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ScreenAddon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ScreenAddon.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Mail-aaicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Mail-aaicon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="search-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\search-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="callmeback24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\callmeback24x24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -574,6 +571,9 @@
   <data name="phone-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\phone-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="foundation_microphone_flat-circle-white-on-red_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\foundation_microphone_flat-circle-white-on-red_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="chart-icon small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\chart-icon small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -585,6 +585,9 @@
   </data>
   <data name="Status-dialog-warning-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Status-dialog-warning-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Devices-audio-headset-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Devices-audio-headset-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -598,8 +601,8 @@
   <data name="syn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\syn.syn;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Apps-preferences-desktop-user-password-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Apps-preferences-desktop-user-password-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="new-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\new-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="credit-cards-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\credit-cards-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -607,8 +610,8 @@
   <data name="conference-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\conference-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="foundation_microphone_flat-circle-white-on-red_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\foundation_microphone_flat-circle-white-on-red_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="identity-card-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\identity-card-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Chat-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Chat-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -640,8 +643,8 @@
   <data name="Windows_Turn_Off_icon__1_" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Windows-Turn-Off-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Button-Next-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Button-Next-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Search-2-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Search-2-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="move-icon (2)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\move-icon (2)1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -673,14 +676,14 @@
   <data name="Excel-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Excel-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="search-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\search-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="duplicate32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\duplicate32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="rsz_speaker" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\rsz_speaker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Actions-edit-clear-list-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Actions-edit-clear-list-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="archive-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\archive-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Downloads-Black-Folder-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Downloads-Black-Folder-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -751,6 +754,9 @@
   <data name="en_US1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\en_US.dic;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="voice-search-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\voice-search-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="abstract-design - Copy1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\abstract-design - Copy.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -760,8 +766,8 @@
   <data name="television-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\television-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Search-2-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Search-2-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="1383132635_preferences-contact-list" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1383132635_preferences-contact-list.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="send-icon Small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\send-icon Small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -817,8 +823,8 @@
   <data name="Male-user-remove-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Male-user-remove-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ScreenAddon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ScreenAddon.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="user-group-icon Small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\user-group-icon Small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -832,14 +838,14 @@
   <data name="button-round-reload-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\button-round-reload-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Earth-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Earth-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Actions-application-exit-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Actions-application-exit-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="move-icon (2)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\move-icon (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Calling" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Calling.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="129396005132x3220x20_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\129396005132x3220x20_new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -895,11 +901,11 @@
   <data name="edit-copy-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\edit-copy-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="new-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\new-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ezgif-3008983895" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ezgif-3008983895.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Windows_Turn_Off_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Windows-Turn-Off-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Help-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Help-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="chat-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\chat-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -916,7 +922,7 @@
   <data name="telefono-icon big" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\telefono-icon big.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="voice-search-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\voice-search-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="audio16x16 - Copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\audio16x16 - Copy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

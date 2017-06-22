@@ -593,6 +593,16 @@ namespace GCC.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap audio16x16___Copy {
+            get {
+                object obj = ResourceManager.GetObject("audio16x16 - Copy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap back_icon {
             get {
                 object obj = ResourceManager.GetObject("back-icon", resourceCulture);
@@ -1686,6 +1696,16 @@ namespace GCC.Properties {
         public static System.Drawing.Bitmap Mail_aaicon {
             get {
                 object obj = ResourceManager.GetObject("Mail-aaicon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap mail_check_icon {
+            get {
+                object obj = ResourceManager.GetObject("mail-check-icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

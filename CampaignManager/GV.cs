@@ -18,7 +18,7 @@ namespace GCC
         public static string sProjectID = string.Empty;
         public static string sDashBoardID = string.Empty;
         public static string sEmployeeName = string.Empty;
-        public static string sEmployeePassword = string.Empty;
+        public static string sEmployeePassword = string.Empty;  
         public static string sEmployeeNo = string.Empty;
         public static string sCompanyTable = string.Empty;
         public static string sContactTable = string.Empty;
@@ -129,6 +129,9 @@ namespace GCC
         public static string sTRContactstatusTobeMailChecked = string.Empty;
         public static string sWRContactstatusTobeMailChecked = string.Empty;
 
+        public static List<string> lstTRContactstatusTobeMailChecked = new List<string>();
+        public static List<string> lstWRContactstatusTobeMailChecked = new List<string>();
+
         public static string sSQLCECompanyTable = string.Empty;
         public static string sSQLCEContactTable = string.Empty;
 
@@ -146,21 +149,26 @@ namespace GCC
         
 
 
-        public static string sMySQL = Connection.Connection.Getstring("CM_MYSQL");
-        
+//        public static string sMySQhjL = Connection.Connection.Getstring("CM_MYjhSQL");
+        public static string sMySQL = "";
+        public static string sMSSQL1 = "user id=sa;password=Merit123;data source=CH1020BDSM02;initial catalog=MVC_latest;Application Name=Campaign Manager;";
+
 
         public static SqlConnection conMSSQL = new SqlConnection(Connection.Connection.Getstring("CM_MSSQL"));
-        
-        
-       // public static MySqlConnection conMYSQL = new MySqlConnection(Connection.Connection.Getstring("CM_MYSQL"));
 
-        //public static MySqlConnection conMYSQLReader = new MySqlConnection(Connection.Connection.Getstring("CM_MYSQL"));
+        public static SqlConnection conMSSQL1 = new SqlConnection(sMSSQL1);
 
-        
+
+        // public static MyShqlConnection conMYjSQL = new MhjySqlConnection(Connection.Connection.Getstring("CM_MYhjSQL"));
+
+        //public static MyShjqlConnection conMYhjSQLReader = new MyhjSqlConnection(Connection.Connection.Getstring("CM_MYShjQL"));
+
+
         //public static SqlCeConnection conSQLCE = new SqlCeConnection("Data Source=" + AppDomain.CurrentDomain.BaseDirectory + "\\Backup.sdf;Persist Security Info=False;");
 
         public static BAL.BAL_GlobalMSSQL MSSQL = new BAL.BAL_GlobalMSSQL();
-        public static BAL.BAL_GlobalMySQL MYSQL = new BAL.BAL_GlobalMySQL();
+        public static BAL.BAL_GlobalMSSQL1 MSSQL1 = new BAL.BAL_GlobalMSSQL1();
+        //public static BAL.BAL_GlobalMyfgSQL MYfgSQL = new BAL.BAL_GlobalMyfgSQL();
         //public static BAL.BAL_GobalSQLCE SQLCE = new BAL.BAL_GobalSQLCE();
 
         public static Image imgEmployeeImage = null;
@@ -201,9 +209,7 @@ namespace GCC
 
         public static bool RDP = false;
 
-        public static bool GSpeech = false;
-
-        public static Google.Apis.CloudSpeechAPI.v1beta1.CloudSpeechAPIService GSpeechCloudAPI;
+        public static bool GSpeech = false;        
 
         public static string sSoftwareVersion = string.Empty;
 
@@ -212,6 +218,7 @@ namespace GCC
         public static bool HasAdminPermission = false;
 
         public static bool IsApplicationinBeta = false;
+        public static bool IsApplicationinAlpha = false;
 
         public static bool ExcludeEmailBounceInCompleteContactCount = false;
 

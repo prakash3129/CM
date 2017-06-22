@@ -24,14 +24,12 @@ namespace GCC
             GridColumn ColStatus = new GridColumn("Action");
             ColStatus.DataPropertyName = "Action";
             ColStatus.ReadOnly = false;
-            ColStatus.EditorType = typeof(GridStateEditControl);
+            //ColStatus.EditorType = typeof(GridStateEditControl);
             sdgvScrapedContacts.PrimaryGrid.Columns.Add(ColStatus);
 
             dateLoad.Value = DateTime.Today;
             
-            //GridColumn ColID = new GridColumn("MASTER_ID");
-            //ColStatus.DataPropertyName = "MASTER_ID";            
-            //sdgvScrapedContacts.PrimaryGrid.Columns.Add(ColID);
+   
 
         }
 
@@ -47,11 +45,11 @@ namespace GCC
             try
             {
                 dtScraped =
-                    GV.MYSQL.BAL_ExecuteQueryMySQL(
+                    GV.MSSQL1.BAL_ExecuteQuery(
                         "SELECT B.MASTER_ID, B.COMPANY_NAME, A.CONTACT_ID_P, A.DM_CompanyName, A.FIRST_NAME, A.LAST_NAME,A.TITLE,A.JOB_TITLE, A.OTHERS_JOBTITLE,A.CONTACT_EMAIL,A.CONTACT_LINK,A.CONTACT_CITY,A.CONTACT_STATE,A.CONTACT_COUNTRY,A.CREATED_BY,A.CREATED_DATE,A.Scrape_Date,A.Contact_Industry FROM " +
                         GV.sProjectID + "_mastercontacts A INNER JOIN " + GV.sProjectID +
                         "_mastercompanies B ON A.MASTER_ID = B.MASTER_ID WHERE A.SCRAPE_STATUS = 1 AND A.CREATED_BY = '" +
-                        GV.sEmployeeName + "' AND DATE(A.CREATED_DATE) = '" + dateLoad.Value.ToString("yyyy-MM-dd") + "';");
+                        GV.sEmployeeName + "' AND CAST(A.CREATED_DATE AS DATE) = '" + dateLoad.Value.ToString("yyyy-MM-dd") + "';");
 
                 dtScraped.Columns.Add("Action");
                 dtScraped.Columns.Add("Color");
@@ -132,7 +130,7 @@ namespace GCC
                     try
                     {
                         List<int> lstDeleteContactStatus = new List<int>();
-                        DataTable dtRejectedContacts = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_RejectedContacts WHERE 1 = 0;");
+                        DataTable dtRejectedContacts = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_RejectedContacts WHERE 1 = 0;");
                         foreach (DataRow drScraped in drrScraped)
                         {
                             lstDeleteContactStatus.Add(Convert.ToInt32(drScraped["CONTACT_ID_P"]));
@@ -167,12 +165,12 @@ namespace GCC
                             dtRejectedContacts.Rows.Add(drNewRow);
                         }
 
-                        if (GV.MYSQL.BAL_SaveToTableMySQL(dtRejectedContacts, "c_RejectedContacts", "New", true))
+                        if (GV.MSSQL1.BAL_SaveToTable(dtRejectedContacts, "c_RejectedContacts", "New", true))
                         {
                             string sDeleteString = GM.ListToQueryString(lstDeleteContactStatus, "Int");
                             if (sDeleteString.Length > 0)
                             {
-                                GV.MYSQL.BAL_ExecuteQueryMySQL("DELETE FROM " + GV.sProjectID + "_mastercontacts WHERE CONTACT_ID_P IN (" + sDeleteString + ") AND Scrape_status = 1;");
+                                GV.MSSQL1.BAL_ExecuteQuery("DELETE FROM " + GV.sProjectID + "_mastercontacts WHERE CONTACT_ID_P IN (" + sDeleteString + ") AND Scrape_status = 1;");
                                 ToastNotification.Show(this, "Contacts removed successfully.", eToastPosition.TopRight);
                                 Load_Tables();
                             }

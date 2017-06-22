@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Net;
+using System.Data.SqlClient;
 using System.Net.Sockets;
 using RemoteViewing.Vnc;
 using RemoteViewing.Vnc.Server;
 using RemoteViewing.Windows.Forms.Server;
-using MySql.Data.MySqlClient;
 
 namespace GCC
 {
@@ -21,7 +21,7 @@ namespace GCC
         static void SessionConnected(object sender, EventArgs e)
         {
             //Thread.Sleep(60000);
-            ExecuteQuery("UPDATE c_machines set STATUS = 'Active Session',LastUpdatedDate = NOW() WHERE MachineID='" + GV.sMachineID + "';");
+            ExecuteQuery("UPDATE c_machines set STATUS = 'Active Session',LastUpdatedDate = GETDATE() WHERE MachineID='" + GV.sMachineID + "';");
           //  Listen();
         }
 
@@ -46,13 +46,13 @@ namespace GCC
         
         static void ExecuteQuery(string sQuery)
         {
-            using (MySqlConnection con = new MySqlConnection(GV.sMySQL))
+            using (SqlConnection con = new SqlConnection(GV.sMSSQL1))
             {
                 try
                 {
                     if (con.State != System.Data.ConnectionState.Open)
                         con.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(sQuery, con))
+                    using (SqlCommand cmd = new SqlCommand(sQuery, con))
                     {
                         cmd.ExecuteNonQuery();
                     }
@@ -77,7 +77,7 @@ namespace GCC
                         int iPort = Rand.Next(10000, 60000);//Max 65535
                         listener = new TcpListener(IPAddress.Any, iPort);
                         listener.Start();
-                        ExecuteQuery("UPDATE c_machines set STATUS = 'Online', SystemState = '' ,RDPPort='" + iPort + "',CMVersion = '" + GV.sSoftwareVersion + "',LastSession='" + GV.sSessionID + "',LastUpdatedDate = NOW(), LastLoggedProjectID='" + GV.sProjectID + "' WHERE MachineID='" + GV.sMachineID + "';");
+                        ExecuteQuery("UPDATE c_machines set STATUS = 'Online', SystemState = '' ,RDPPort='" + iPort + "',CMVersion = '" + GV.sSoftwareVersion + "',LastSession='" + GV.sSessionID + "',LastUpdatedDate = GETDATE(), LastLoggedProjectID='" + GV.sProjectID + "' WHERE MachineID='" + GV.sMachineID + "';");
                         break;
                     }
                     catch (Exception ex)
@@ -107,7 +107,7 @@ namespace GCC
                 }
                 catch(Exception ex)
                 {
-                    ExecuteQuery("UPDATE c_machines set STATUS = 'Connection Error',RDPPort='',LastUpdatedDate = NOW() WHERE MachineID='" + GV.sMachineID + "';");
+                    ExecuteQuery("UPDATE c_machines set STATUS = 'Connection Error',RDPPort='',LastUpdatedDate = GETDATE() WHERE MachineID='" + GV.sMachineID + "';");
                     GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, false);
                 }
             }

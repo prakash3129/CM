@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,7 +12,6 @@ using Microsoft.VisualBasic.FileIO;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using MySql.Data.MySqlClient;
 
 namespace GCC
 {
@@ -25,7 +25,7 @@ namespace GCC
             ToastNotification.DefaultTimeoutInterval = 2000;
             ToastNotification.ToastFont = new System.Drawing.Font(this.Font.FontFamily, 22);
 
-            cmbServerID.DataSource = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT SERVER_ID FROM c_email_server WHERE SERVER_TYPE='MANUAL' AND ACTIVE = 'Y' ORDER BY SERVER_ID;");
+            cmbServerID.DataSource = GV.MSSQL1.BAL_ExecuteQuery("SELECT SERVER_ID FROM c_email_server WHERE SERVER_TYPE='MANUAL' AND ACTIVE = 'Y' ORDER BY SERVER_ID;");
             cmbServerID.DisplayMember = "SERVER_ID";
             cmbServerID.ValueMember = "SERVER_ID";            
             dTimeMonthRange.Value = GM.GetDateTime();
@@ -37,13 +37,13 @@ namespace GCC
         
         void Reload()
         {
-            string sQuery = @"SELECT A.ID,A.PROCESS_SERVER_ID,A.BATCH_NAME,A.STARTED_DATE,A.COMPLETED_DATE,A.FILE_NAME,A.LOADED_DATE,A.LOADED_BY,A.EXPORTED_DATE,A.EXPORTED_BY, COUNT(*) `Loaded`,(SELECT COUNT(*) FROM c_email_checks C WHERE C.PROJECT_ID = '0' AND C.CONTACT_ID = 0 AND C.EMAIL_SOURCE = B.EMAIL_SOURCE AND C.DESCRIPTION IS NOT NULL) `Processed`
-                            FROM c_email_batch_setting A INNER JOIN c_email_checks B ON A.ID = B.EMAIL_SOURCE WHERE A.ID > 0 AND B.PROJECT_ID='0' AND B.CONTACT_ID = 0 AND MONTH(LOADED_DATE) = '" + dTimeMonthRange.Value.Month +"' AND YEAR(LOADED_DATE) = '"+ dTimeMonthRange.Value.Year + "' GROUP BY  A.ID, A.PROCESS_SERVER_ID, A.BATCH_NAME, A.STARTED_DATE, A.COMPLETED_DATE, A.FILE_NAME, A.LOADED_DATE, A.LOADED_BY, A.EXPORTED_DATE, A.EXPORTED_BY ORDER BY IFNULL(A.STARTED_DATE,'2099-01-01 00:00:00') DESC;";
+            string sQuery = @"SELECT A.ID,A.PROCESS_SERVER_ID,A.BATCH_NAME,A.STARTED_DATE,A.COMPLETED_DATE,A.FILE_NAME,A.LOADED_DATE,A.LOADED_BY,A.EXPORTED_DATE,A.EXPORTED_BY, COUNT(*) [Loaded],(SELECT COUNT(*) FROM c_email_checks C WHERE C.PROJECT_ID = '0' AND C.CONTACT_ID = 0 AND C.EMAIL_SOURCE = B.EMAIL_SOURCE AND C.DESCRIPTION IS NOT NULL) [Processed]
+                            FROM c_email_batch_setting A INNER JOIN c_email_checks B ON A.ID = B.EMAIL_SOURCE WHERE A.ID > 0 AND B.PROJECT_ID='0' AND B.CONTACT_ID = 0 AND MONTH(LOADED_DATE) = '" + dTimeMonthRange.Value.Month +"' AND YEAR(LOADED_DATE) = '"+ dTimeMonthRange.Value.Year + "' GROUP BY  A.ID, A.PROCESS_SERVER_ID, A.BATCH_NAME, A.STARTED_DATE, A.COMPLETED_DATE, A.FILE_NAME, A.LOADED_DATE, A.LOADED_BY, A.EXPORTED_DATE, A.EXPORTED_BY ORDER BY ISNULL(A.STARTED_DATE,'2099-01-01 00:00:00') DESC;";
 
-            dtBatch = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+            dtBatch = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
             sdgvManualChecks.PrimaryGrid.DataSource = dtBatch;
 
-            DataTable dtServerLoad = GV.MYSQL.BAL_ExecuteQueryMySQL(@"SELECT CONVERT(CONCAT('Server', PROCESS_SERVER_ID,' : ', SUM(PENDING)),char) AS `Load` FROM (                                                                    
+            DataTable dtServerLoad = GV.MSSQL1.BAL_ExecuteQuery(@"SELECT CONVERT(CONCAT('Server', PROCESS_SERVER_ID,' : ', SUM(PENDING)),char) AS [Load] FROM (                                                                    
                                                                     SELECT * FROM (SELECT C1.PROCESS_SERVER_ID, C1.ID,(SELECT COUNT(*) FROM c_email_checks C2 WHERE C2.PROJECT_ID='0' AND C2.CONTACT_ID = 0 AND C1.ID=C2.EMAIL_SOURCE AND C2.DESCRIPTION IS NULL) PENDING                                                                       
                                                                     FROM c_email_batch_setting C1 UNION SELECT '3' AS PROCESS_SERVER_ID, 'X' AS ID, COUNT(*) FROM c_email_checks C3 WHERE C3.DESCRIPTION IS NULL AND C3.EMAIL_SOURCE > 0) AS X 
                                                                     GROUP BY X.PROCESS_SERVER_ID,X.ID) T GROUP BY PROCESS_SERVER_ID;");
@@ -69,7 +69,7 @@ namespace GCC
                 {
                     if(txtBatchName.Text.Trim().Length > 0)
                     {
-                        if(GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT 1 FROM c_email_batch_setting WHERE BATCH_NAME = '" + txtBatchName.Text.Trim().Replace("'", "''") + "';").Rows.Count > 0)
+                        if(GV.MSSQL1.BAL_ExecuteQuery("SELECT 1 FROM c_email_batch_setting WHERE BATCH_NAME = '" + txtBatchName.Text.Trim().Replace("'", "''") + "';").Rows.Count > 0)
                         {
                             ToastNotification.Show(this, "Batch Name already exist", eToastPosition.TopRight);
                             return;
@@ -130,17 +130,17 @@ namespace GCC
                             }
 
                             //Insert for new source
-                            string sBatchID = GV.MYSQL.BAL_InsertAndGetIdentityMySQL("INSERT INTO c_email_batch_setting (PROCESS_SERVER_ID, BATCH_NAME, FILE_NAME, LOADED_BY, LOADED_DATE)VALUES ('" + cmbServerID.Text + "','" + txtBatchName.Text.Trim().Replace("'", "''") + "', '" + Path.GetFileNameWithoutExtension(txtFileImport.Text) + "', '" + GV.sEmployeeName + "', NOW());");
+                            string sBatchID = GV.MSSQL1.BAL_InsertAndGetIdentity("INSERT INTO c_email_batch_setting (PROCESS_SERVER_ID, BATCH_NAME, FILE_NAME, LOADED_BY, LOADED_DATE)VALUES ('" + cmbServerID.Text + "','" + txtBatchName.Text.Trim().Replace("'", "''") + "', '" + Path.GetFileNameWithoutExtension(txtFileImport.Text) + "', '" + GV.sEmployeeName + "', getdate());");
                             foreach (DataRow drImport in dtEmailCSV.Rows)
                             {
                                 if (drImport["EMAIL"].ToString().Trim().Length > 0 && GM.Email_Check(drImport["EMAIL"].ToString().Trim()))
-                                    sInsertString += ",('0',0,'" + sBatchID + "', '" + drImport["EMAIL"].ToString().Trim().Replace("'", "''").Replace("..", ".").Replace("__", "_").Replace("--", "-") + "','" + GV.sEmployeeName + "', NOW())";
+                                    sInsertString += ",('0',0,'" + sBatchID + "', '" + drImport["EMAIL"].ToString().Trim().Replace("'", "''").Replace("..", ".").Replace("__", "_").Replace("--", "-") + "','" + GV.sEmployeeName + "', GETDATE())";
                             }
                             
                             sInsertString = "INSERT INTO c_email_checks (PROJECT_ID, CONTACT_ID, EMAIL_SOURCE, EMAIL, CREATED_BY, CREATED_DATE) Values " + sInsertString.Substring(1);
-                            GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(sInsertString);
+                            GV.MSSQL1.BAL_ExecuteNonReturnQuery(sInsertString);
 
-                            dtBatch = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_email_batch_setting");
+                            dtBatch = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_email_batch_setting");
                             sdgvManualChecks.PrimaryGrid.DataSource = dtBatch;
 
 
@@ -177,20 +177,21 @@ namespace GCC
             double iRowCounter = 0;
             try
             {
-                using (MySqlConnection conMYSQL = new MySqlConnection(GV.sMySQL))
+                using (SqlConnection conMSSQL1 = new SqlConnection(GV.sMSSQL1))
                 {
                     string sQueryData = "SELECT " + sColumns + sQueryString;
                     string sQueryCount = "SELECT COUNT(*) " + sQueryString;
                     lblExportDisplayPercent.Invoke((MethodInvoker)delegate { lblExportDisplayPercent.Text = "Fetching data..."; });
-                    DataTable dtRowCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sQueryCount);
+                    DataTable dtRowCount = GV.MSSQL1.BAL_ExecuteQuery(sQueryCount);
                     double iTotalRowCount = Convert.ToDouble(dtRowCount.Rows[0][0]);
-                    conMYSQL.Open();
-                    MySqlCommand cmdExport = new MySqlCommand("SET GLOBAL   net_read_timeout = 100;" + sQueryData, conMYSQL);
+                    conMSSQL1.Open();
+                    //SqlCommand cmdExport = new SqlCommand("SET GLOBAL   net_read_timeout = 100;" + sQueryData, conMSSQL1);
+                    SqlCommand cmdExport = new SqlCommand(sQueryData, conMSSQL1);
                     lblExportDisplayPercent.Invoke(
                         (MethodInvoker)delegate { lblExportDisplayPercent.Text = "Estimated Row count :" + iTotalRowCount; });
-                    //if (GV.conMYSQL.State != ConnectionState.Open)
-                    //    GV.conMYSQL.Open();
-                    MySqlDataReader rdrExport = cmdExport.ExecuteReader();
+                    //if (GV.conMYSdfQL.State != ConnectionState.Open)
+                    //    GV.conMYSdfQL.Open();
+                    SqlDataReader rdrExport = cmdExport.ExecuteReader();
 
                     int iRowsPerSheetCounter = 0;
                     int iRowPerSheet = 100000;
@@ -335,7 +336,7 @@ namespace GCC
 
                         lblExportDisplayPercent.Invoke((MethodInvoker)delegate { lblExportDisplayPercent.Text = "Closing Worksheet..."; });
                         rdrExport.Close();
-                        //GV.conMYSQL.Close();
+                        //GV.conMYSfdQL.Close();
                         lblExportDisplayPercent.Invoke(
                             (MethodInvoker)delegate { lblExportDisplayPercent.Text = "Worksheet saved sucessfully..."; });
                         //sWatch.Stop();

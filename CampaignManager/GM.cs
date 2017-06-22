@@ -19,9 +19,9 @@ using System.Xml;
 using System.Runtime.InteropServices;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using Google.Apis.CloudSpeechAPI.v1beta1;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
+//using Google.Apis.CloudSpeechAPI.v1beta1;
+//using Google.Apis.Auth.OAuth2;
+//using Google.Apis.Services;
 
 
 namespace GCC
@@ -43,46 +43,46 @@ namespace GCC
             lstTwoLetterWords.Add("as");
         }
 
-        static public CloudSpeechAPIService CreateAuthorizedClient()
-        {
-            try
-            {
-                GoogleCredential credential = GoogleCredential.GetApplicationDefaultAsync().Result;
-                // Inject the Cloud Storage scope if required.
-                if (credential.IsCreateScopedRequired)
-                {
-                    credential = credential.CreateScoped(new[]
-                    {
-                    CloudSpeechAPIService.Scope.CloudPlatform
-                });
-                }
-                return new CloudSpeechAPIService(new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = "Campaign Manager",
-                });
-            }
-            catch(Exception ex)
-            {
-               GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
-                return null;
-            }
-        }
+        //static public CloudSpeechAPIService CreateAuthorizedClient()
+        //{
+        //    try
+        //    {
+        //        GoogleCredential credential = GoogleCredential.GetApplicationDefaultAsync().Result;
+        //        // Inject the Cloud Storage scope if required.
+        //        if (credential.IsCreateScopedRequired)
+        //        {
+        //            credential = credential.CreateScoped(new[]
+        //            {
+        //            CloudSpeechAPIService.Scope.CloudPlatform
+        //        });
+        //        }
+        //        return new CloudSpeechAPIService(new BaseClientService.Initializer()
+        //        {
+        //            HttpClientInitializer = credential,
+        //            ApplicationName = "Campaign Manager",
+        //        });
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //       GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
+        //        return null;
+        //    }
+        //}
 
-        public static bool InitilizeGSpeech()
-        {
-            try
-            {
-                GV.GSpeechCloudAPI = CreateAuthorizedClient();
-                return GV.GSpeechCloudAPI != null;
+        //public static bool InitilizeGSpeech()
+        //{
+        //    try
+        //    {
+        //        GV.GSpeechCloudAPI = CreateAuthorizedClient();
+        //        return GV.GSpeechCloudAPI != null;
                 
-            }
-            catch (Exception ex)
-            {
-                GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
-                return false;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
+        //        return false;
+        //    }
+        //}
 
 
         public static string ProperCaseLeaveCapital(string sText)
@@ -178,7 +178,7 @@ namespace GCC
         public static DateTime GetDateTime(bool IsDBTime)
         {
             if (IsDBTime)
-                return GV.MYSQL.BAL_GetDateTime();
+                return GV.MSSQL1.BAL_GetDateTime();
             else
                 return GetDateTime();
         }
@@ -343,6 +343,7 @@ namespace GCC
                     Regex regex1 = new Regex(@"^[a-zA-Z0-9_@.'-]+$");//Check for invalid chars
                     Match m = regex1.Match(sEmail.Trim());
                     return m.Success;
+
                     //return true;
                 }
                 else
@@ -592,7 +593,9 @@ namespace GCC
                 }
                 else if (GV.sDialerType == "X-Lite")
                 {
-                    Process[] xLiteProcess = Process.GetProcessesByName("X-Lite");
+                    Process[] runningProcesses = Process.GetProcesses();
+                    var currentSessionID = Process.GetCurrentProcess().SessionId;                    
+                    Process[] xLiteProcess = (from c in runningProcesses where c.ProcessName.ToLower() == "x-lite" && c.SessionId == currentSessionID select c).ToArray();
                     //Process[] CMProcess = Process.GetProcessesByName("Campaign Manager");
                     if (xLiteProcess.Length > 0)
                     {
@@ -617,7 +620,7 @@ namespace GCC
                 }
                 else if (GV.sDialerType == "Vortex")
                 {
-                    GV.VorteX.Hangup();
+                    GV.VorteX.Hangup(0);
                 }
 
                 GM.Moniter("Post Call");
@@ -681,7 +684,9 @@ namespace GCC
                 }
                 else if (GV.sDialerType == "X-Lite")
                 {
-                    Process[] xLiteProcess = Process.GetProcessesByName("X-Lite");
+                    Process[] runningProcesses = Process.GetProcesses();
+                    var currentSessionID = Process.GetCurrentProcess().SessionId;
+                    Process[] xLiteProcess = (from c in runningProcesses where c.ProcessName.ToLower() == "x-lite" && c.SessionId == currentSessionID select c).ToArray();                    
                     if (xLiteProcess.Length > 0)
                     {
                         Process.Start(xLiteProcess[0].MainModule.FileName, "-dial=sip:" + sTelephoneNumber);
@@ -693,8 +698,8 @@ namespace GCC
                 }
                 else if (GV.sDialerType == "Vortex")
                 {
-                    string sState = GV.VorteX.Call(sTelephoneNumber, GV.sProjectID, "GCC", GV.sEmployeeNo, false, Convert.ToInt32(sMasterID));
-                    return (sState.Length == 0);
+                    string sState = GV.VorteX.Call(sTelephoneNumber, GV.sProjectID, "GCC", GV.sEmployeeNo, false, Convert.ToInt32(sMasterID), 0);
+                    return !(sState.Length > 1);
                 }
 
                 return false;
@@ -715,7 +720,7 @@ namespace GCC
                 if (GV.dtMailConfig != null && GV.dtMailConfig.Rows.Count > 0)
                 { }
                 else
-                    GV.dtMailConfig = GV.MYSQL.BAL_FetchTableMySQL("c_picklists", "PicklistCategory = 'MailConfig'");//Load only for first Time
+                    GV.dtMailConfig = GV.MSSQL1.BAL_FetchTable("c_picklists", "PicklistCategory = 'MailConfig'");//Load only for first Time
 
                 if (GV.dtMailConfig.Select("PicklistField = '" + sField + "'").Length > 0)
                     return GV.dtMailConfig.Select("PicklistField = '" + sField + "'")[0]["PicklistValue"].ToString();
@@ -797,7 +802,7 @@ namespace GCC
 
                 Process[] runningProcesses = Process.GetProcesses();
                 var currentSessionID = Process.GetCurrentProcess().SessionId;
-                Process[] pName = (from c in runningProcesses where c.ProcessName == "TimeSheetOnline" && c.SessionId == currentSessionID select c).ToArray();
+                Process[] pName = (from c in runningProcesses where c.ProcessName.ToLower() == "timesheetonline" && c.SessionId == currentSessionID select c).ToArray();
 
                 //Process[] pName = Process.GetProcessesByName("TimeSheetOnline");
                 if (pName.Length == 0)
@@ -862,7 +867,7 @@ namespace GCC
         //public static void Log(string sAction, string sDescription1, string sDescription2, string sDescription3, string sDescription4, string sDescription5, string sDescription6)
         public static void Log(string sAction, string sTable_Name = "", string sField = "", string sReferenceID = "", string sOldValue = "", string sNewValue = "", string sDescription1 = "", string sDescription2 = "", string sDescription3 = "", string sDescription4 = "", string sDescription5 = "", string sDescription6 = "")
         {
-            GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("INSERT INTO c_log (WHO, `WHEN`, SYSTEMNAME, USERTYPE, RESEARCHTYPE, REFERENCE_ID, ACTION, TABLE_NAME, FIELD, OLD_VALUE, NEW_VALUE, DESCRIPTION1, DESCRIPTION2, DESCRIPTION3, DESCRIPTION4, DESCRIPTION5, DESCRIPTION6, PROJECTID, SOFTWARE_VERSION, SESSIONID) VALUES ('" + GV.sEmployeeName + "', NOW(), '" + Environment.MachineName + "', '" + GV.sUserType + "', '" + GV.sAccessTo + "', '" + sReferenceID + "', '" + sAction + "', '" + sTable_Name + "', '" + sField + "', '" + sOldValue + "', '" + sNewValue + "', '" + sDescription1 + "', '" + sDescription2 + "', '" + sDescription3 + "', '" + sDescription4 + "', '" + sDescription5 + "', '" + sDescription6 + "', '" + GV.sProjectID + "', '" + GV.sSoftwareVersion + "' , '" + GV.sSessionID + "')");
+            GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO c_log ([WHO], [WHEN], SYSTEMNAME, USERTYPE, RESEARCHTYPE, REFERENCE_ID, ACTION, TABLE_NAME, FIELD, OLD_VALUE, NEW_VALUE, DESCRIPTION1, DESCRIPTION2, DESCRIPTION3, DESCRIPTION4, DESCRIPTION5, DESCRIPTION6, PROJECTID, SOFTWARE_VERSION, SESSIONID) VALUES ('" + GV.sEmployeeName + "', GETDATE(), '" + Environment.MachineName + "', '" + GV.sUserType + "', '" + GV.sAccessTo + "', '" + sReferenceID + "', '" + sAction + "', '" + sTable_Name + "', '" + sField + "', '" + sOldValue + "', '" + sNewValue + "', '" + sDescription1 + "', '" + sDescription2 + "', '" + sDescription3 + "', '" + sDescription4 + "', '" + sDescription5 + "', '" + sDescription6 + "', '" + GV.sProjectID + "', '" + GV.sSoftwareVersion + "' , '" + GV.sSessionID + "')");
 
         }
 
@@ -875,7 +880,7 @@ namespace GCC
                 if (dtNewTable != null && dtOldTable != null)
                 {
 
-                    DataTable dtC_Log = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_log WHERE 1=0;");
+                    DataTable dtC_Log = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_log WHERE 1=0;");
                     foreach (DataRow drOldTable in dtOldTable.Rows)
                     {
                         string sID = drOldTable[sIDColumn].ToString();
@@ -933,7 +938,7 @@ namespace GCC
                     }
 
                     if (dtC_Log.GetChanges(DataRowState.Added) != null && dtC_Log.GetChanges(DataRowState.Added).Rows.Count > 0)
-                        GV.MYSQL.BAL_SaveToTableMySQL(dtC_Log, "c_log", "New", false);
+                        GV.MSSQL1.BAL_SaveToTable(dtC_Log, "c_log", "New", false);
                 }
             }
             catch (Exception ex)
@@ -1096,7 +1101,7 @@ namespace GCC
                 sExceptionHandeled = "Yes";
             else
                 sExceptionHandeled = "No";
-            //BAL.BAL_GlobalMySQL objBAL_Global = new BAL.BAL_GlobalMySQL();
+            //BAL.BAL_GlobalMydSQL objBAL_Global = new BAL.BAL_GlobalMydSQL();
             DataTable dtError = null;
             string sOS = JCS.OSVersionInfo.VersionString + " " + JCS.OSVersionInfo.Edition + " " + JCS.OSVersionInfo.OSBits;
 
@@ -1134,7 +1139,7 @@ namespace GCC
                 sProcessesTable += "</table>";
                 if (GM.MailSettings("SendEmail").ToUpper() == "YES")
                 {
-                    dtError = GV.MYSQL.BAL_FetchTableMySQL("error_log", "ProjectID = '" + GV.sProjectID + "' AND ErrorTrace ='" + Regex.Replace(ex.StackTrace.Trim(), @"\\", @"\\") + "' AND CONVERT(Error_Date,date) = CONVERT(NOW(),date)");
+                    dtError = GV.MSSQL1.BAL_FetchTable("c_error_log", "ProjectID = '" + GV.sProjectID + "' AND ErrorTrace ='" + Regex.Replace(ex.StackTrace.Trim(), @"\\", @"\\") + "' AND CAST(Error_Date AS date) = CAST(GETDATE() AS date)");
                     if (dtError == null || dtError.Rows.Count == 0)//Send Email
                     {
                         using (MailMessage mMessage = new MailMessage())
@@ -1221,7 +1226,7 @@ namespace GCC
                 if (GM.MailSettings("LogToDB").ToUpper() == "YES")
                 {
                     if (dtError == null)
-                        dtError = GV.MYSQL.BAL_FetchTableMySQL("error_log", "1=0");
+                        dtError = GV.MSSQL1.BAL_FetchTable("c_error_log", "1=0");
 
                     DataRow drNewError = dtError.NewRow();
                     drNewError["ProjectID"] = GV.sProjectID;
@@ -1247,7 +1252,7 @@ namespace GCC
                     drNewError["Handled"] = sExceptionHandeled;
                     drNewError["SoftwareVersion"] = GV.sSoftwareVersion;
                     dtError.Rows.Add(drNewError);
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtError.GetChanges(DataRowState.Added), "error_log", "New", false);
+                    GV.MSSQL1.BAL_SaveToTable(dtError.GetChanges(DataRowState.Added), "c_error_log", "New", false);
                 }
             }
             catch (Exception ex1)
@@ -1296,11 +1301,11 @@ namespace GCC
         {
             DataTable dt = new DataTable();
             if (GV.sUserType == "Admin" || GV.Override_UserAccess)
-                dt = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "'");
+                dt = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "'");
             else if (GV.Override_UserAccess)
-                dt = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' AND FLAG IN ('TR','WR')");
+                dt = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' AND FLAG IN ('TR','WR')");
             else
-                dt = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' AND FLAG = '" + GV.sAccessTo + "'");
+                dt = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' AND FLAG = '" + GV.sAccessTo + "'");
             return dt;
         }
 
@@ -1370,14 +1375,14 @@ namespace GCC
                                 return;
                             }
                             #endregion
-                            dtRecordCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "MASTER_ID = " + sID);
+                            dtRecordCheck = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, "MASTER_ID = " + sID);
                         }
                         else
                         {
                             if (GV.Override_UserAccess)
-                                dtRecordCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' AND FLAG IN ('TR','WR')");
+                                dtRecordCheck = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' AND FLAG IN ('TR','WR')");
                             else
-                                dtRecordCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' AND FLAG = '" + GV.sAccessTo + "'");
+                                dtRecordCheck = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' AND FLAG = '" + GV.sAccessTo + "'");
                         }
 
                         if (dtRecordCheck.Rows.Count > 0)
@@ -1445,7 +1450,7 @@ namespace GCC
                             }
                             else
                             {
-                                GV.MYSQL.BAL_ExecuteQueryMySQL("UPDATE " + GV.sCompanyTable + " SET " + GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' WHERE GROUP_ID = " + dtRecordCheck.Rows[0]["GROUP_ID"] + ";");
+                                GV.MSSQL1.BAL_ExecuteQuery("UPDATE " + GV.sCompanyTable + " SET " + GV.sAccessTo + "_AGENTNAME = 'Current_" + GV.sEmployeeName + "' WHERE GROUP_ID = " + dtRecordCheck.Rows[0]["GROUP_ID"] + ";");
                                 FrmContactsUpdate objfrmContactsUpdate = new FrmContactsUpdate(null, frmCurrent.MdiParent, "ListOpen", IsNewCompany, Companylist);
                                 objfrmContactsUpdate.Show();
                             }
@@ -1457,7 +1462,7 @@ namespace GCC
                     else
                     {
                         #region Non Agent Open
-                        DataTable dtAdminCheck = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "MASTER_ID = " + sID + ";");
+                        DataTable dtAdminCheck = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, "MASTER_ID = " + sID + ";");
                         if (dtAdminCheck.Rows.Count > 0)
                         {
                             if (GV.sUserType != "Admin")

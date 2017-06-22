@@ -8,7 +8,6 @@ using System.Linq;
 using System.Windows.Forms;
 using DevComponents.DotNetBar;
 using DevComponents.DotNetBar.SuperGrid;
-using MySql.Data.MySqlClient;
 using System.IO;
 
 using DevComponents.DotNetBar.SuperGrid.Style;
@@ -27,7 +26,7 @@ namespace GCC
             MessageBoxEx.EnableGlass = false;
         }
 
-        //BAL.BAL_GlobalMySQL objBAL_GlobalMySQL = new BAL.BAL_GlobalMySQL();
+        //BAL.BAL_GlobalMghySQL objBAL_GlobalMyhSQL = new BAL.BAL_GlobalMyhgSQL();
         //BAL.BAL_Global objBAL_Global = new BAL.BAL_Global();
 
         DataTable dtProjectSettings = new DataTable();
@@ -188,33 +187,33 @@ namespace GCC
 
         private void ProjectDetailsLoad()
         {
-            dtProjectSettings = GV.MYSQL.BAL_FetchTableMySQL("c_project_settings", "PROJECT_ID = '" + GV.sProjectID + "'");
+            dtProjectSettings = GV.MSSQL1.BAL_FetchTable("c_project_settings", "PROJECT_ID = '" + GV.sProjectID + "'");
             GV.sCompanyTable = dtProjectSettings.Rows[0]["COMPANY_TABLE"].ToString();
             GV.sContactTable = dtProjectSettings.Rows[0]["CONTACTS_TABLE"].ToString();
             //if (IsNewProject)
             //{
-            //    dtFieldCompany = GV.MYSQL.BAL_FetchTableMySQL("c_field_master", "PROJECT_ID = 'Template' AND TABLE_NAME = 'Master' AND FIELD_TYPE = 'UserDefined'");
-            //    dtFieldContact = GV.MYSQL.BAL_FetchTableMySQL("c_field_master", "PROJECT_ID = 'Template' AND TABLE_NAME = 'MasterContacts' AND FIELD_TYPE = 'UserDefined'");
+            //    dtFieldCompany = GV.gfMYSjhQL.BAL_FetchTableMyjhSQL("c_field_master", "PROJECT_ID = 'Template' AND TABLE_NAME = 'Master' AND FIELD_TYPE = 'UserDefined'");
+            //    dtFieldContact = GV.MYSgfQL.BAL_FetchTableMhjySQL("c_field_master", "PROJECT_ID = 'Template' AND TABLE_NAME = 'MasterContacts' AND FIELD_TYPE = 'UserDefined'");
             //}
             //else
             //{
-                dtFieldCompany = GV.MYSQL.BAL_FetchTableMySQL("c_field_master", "PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME = 'Master' AND FIELD_TYPE = 'UserDefined'");
-                dtFieldContact = GV.MYSQL.BAL_FetchTableMySQL("c_field_master", "PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME = 'MasterContacts' AND FIELD_TYPE = 'UserDefined'");
+                dtFieldCompany = GV.MSSQL1.BAL_FetchTable("c_field_master", "PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME = 'Master' AND FIELD_TYPE = 'UserDefined'");
+                dtFieldContact = GV.MSSQL1.BAL_FetchTable("c_field_master", "PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME = 'MasterContacts' AND FIELD_TYPE = 'UserDefined'");
             //}
             //dtValidations = 
-            dtPickList = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID+"_picklists", "1=1");
+            dtPickList = GV.MSSQL1.BAL_FetchTable(GV.sProjectID+"_picklists", "1=1");
             dtProjectMaster = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM Timesheet..ProjectMaster WHERE Active = 'Y'");
-            dtCM_FieldConfig = GV.MYSQL.BAL_FetchTableMySQL("cm_fieldconfig", "1=1");
-            dtFieldMasterAllProjects = GV.MYSQL.BAL_FetchTableMySQL("c_field_master", "FIELD_TYPE = 'UserDefined'");
-            dtValidationsCompany = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_validations_New", "Table_Name='" + GV.sProjectID + "_Mastercompanies'");
-            dtValidationsContact = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_validations_New", "Table_Name='" + GV.sProjectID + "_Mastercontacts'");
+            dtCM_FieldConfig = GV.MSSQL1.BAL_FetchTable("c_fieldconfig", "1=1");
+            dtFieldMasterAllProjects = GV.MSSQL1.BAL_FetchTable("c_field_master", "FIELD_TYPE = 'UserDefined'");
+            dtValidationsCompany = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_validations", "Table_Name='" + GV.sProjectID + "_Mastercompanies'");
+            dtValidationsContact = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_validations", "Table_Name='" + GV.sProjectID + "_Mastercontacts'");
           
         }
 
         void Load_ClonableProjects()
         {
             dtProjectMaster = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM Timesheet..ProjectMaster WHERE Active = 'Y'");
-            dtExistingProjects = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT T2.* FROM information_schema.TABLES AS T1 INNER JOIN c_project_settings AS T2 ON T1.TABLE_NAME =T2.COMPANY_TABLE WHERE T1.TABLE_SCHEMA = 'mvc' AND T2.STATUS = 'ACTIVE' AND T1.TABLE_TYPE = 'BASE TABLE'");
+            dtExistingProjects = GV.MSSQL1.BAL_ExecuteQuery("SELECT T2.* FROM information_schema.TABLES AS T1 INNER JOIN c_project_settings AS T2 ON T1.TABLE_NAME =T2.COMPANY_TABLE WHERE T1.TABLE_SCHEMA = DB_NAME() AND T2.STATUS = 'ACTIVE' AND T1.TABLE_TYPE = 'BASE TABLE'");
             dtClonableProjects.Columns.Add("ProjectID", typeof(string));
             dtClonableProjects.Columns.Add("ProjectName", typeof(string));
 
@@ -398,38 +397,38 @@ namespace GCC
                         if (gr["FIELD_SIZE"].Value.ToString().Length > 0 && Convert.ToInt32(gr["FIELD_SIZE"].Value) > 0)
                         {
                             if (sNewColumnsQuery.Trim().Length == 0)
-                                sNewColumnsQuery += "ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " varchar(" + Convert.ToInt32(gr["FIELD_SIZE"].Value) + ")";
-                            else if (!sNewColumnsQuery.Contains("ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " varchar(" + Convert.ToInt32(gr["FIELD_SIZE"].Value) + ")"))
-                                sNewColumnsQuery += ", ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " varchar(" + Convert.ToInt32(gr["FIELD_SIZE"].Value) + ")";
+                                sNewColumnsQuery += "ADD " + gr["FIELD_NAME_TABLE"].Value + " varchar(" + Convert.ToInt32(gr["FIELD_SIZE"].Value) + ")";
+                            else if (!sNewColumnsQuery.Contains("ADD " + gr["FIELD_NAME_TABLE"].Value + " varchar(" + Convert.ToInt32(gr["FIELD_SIZE"].Value) + ")"))
+                                sNewColumnsQuery += ", ADD " + gr["FIELD_NAME_TABLE"].Value + " varchar(" + Convert.ToInt32(gr["FIELD_SIZE"].Value) + ")";
                         }
                         else
                         {
                             if (sNewColumnsQuery.Trim().Length == 0)
-                                sNewColumnsQuery += "ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " varchar(4000)";
-                            else if (!sNewColumnsQuery.Contains("ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " varchar(4000)"))
-                                sNewColumnsQuery += ", ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " varchar(4000)";
+                                sNewColumnsQuery += "ADD " + gr["FIELD_NAME_TABLE"].Value + " varchar(4000)";
+                            else if (!sNewColumnsQuery.Contains("ADD " + gr["FIELD_NAME_TABLE"].Value + " varchar(4000)"))
+                                sNewColumnsQuery += ", ADD " + gr["FIELD_NAME_TABLE"].Value + " varchar(4000)";
                         }
                     }
                     else if (gr["ColumnStatus"].Value.ToString() == "Number")
                     {
                         if (sNewColumnsQuery.Trim().Length == 0)
-                            sNewColumnsQuery += "ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " int";
-                        else if (!sNewColumnsQuery.Contains("ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " int"))
-                            sNewColumnsQuery += ", ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " int";
+                            sNewColumnsQuery += "ADD " + gr["FIELD_NAME_TABLE"].Value + " int";
+                        else if (!sNewColumnsQuery.Contains("ADD " + gr["FIELD_NAME_TABLE"].Value + " int"))
+                            sNewColumnsQuery += ", ADD " + gr["FIELD_NAME_TABLE"].Value + " int";
                     }
                     else if (gr["ColumnStatus"].Value.ToString() == "Decimal Number")
                     {
                         if (sNewColumnsQuery.Trim().Length == 0)
-                            sNewColumnsQuery += "ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " decimal(18,3)";
-                        else if (!sNewColumnsQuery.Contains("ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " decimal(18,3)"))
-                            sNewColumnsQuery += ", ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " decimal(18,3)";
+                            sNewColumnsQuery += "ADD " + gr["FIELD_NAME_TABLE"].Value + " decimal(18,3)";
+                        else if (!sNewColumnsQuery.Contains("ADD " + gr["FIELD_NAME_TABLE"].Value + " decimal(18,3)"))
+                            sNewColumnsQuery += ", ADD " + gr["FIELD_NAME_TABLE"].Value + " decimal(18,3)";
                     }
                     else if (gr["ColumnStatus"].Value.ToString() == "Date and Time")
                     {
                         if (sNewColumnsQuery.Trim().Length == 0)
-                            sNewColumnsQuery += "ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " datetime";
-                        else if (!sNewColumnsQuery.Contains("ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " datetime"))
-                            sNewColumnsQuery += ", ADD COLUMN " + gr["FIELD_NAME_TABLE"].Value + " datetime";
+                            sNewColumnsQuery += "ADD " + gr["FIELD_NAME_TABLE"].Value + " datetime";
+                        else if (!sNewColumnsQuery.Contains("ADD " + gr["FIELD_NAME_TABLE"].Value + " datetime"))
+                            sNewColumnsQuery += ", ADD " + gr["FIELD_NAME_TABLE"].Value + " datetime";
                     }
 
                     drNewRow["PROJECT_ID"] = GV.sProjectID;
@@ -456,7 +455,7 @@ namespace GCC
 
             if ((sCompanyQuery + sContactQuery).Length > 0)
             {
-                DataTable dCompanyCurrent = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "TR_AGENTNAME LIKE 'CURRENT%' OR WR_AGENTNAME LIKE 'CURRENT%'");                
+                DataTable dCompanyCurrent = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, "TR_AGENTNAME LIKE 'CURRENT%' OR WR_AGENTNAME LIKE 'CURRENT%'");                
 
                 if (dCompanyCurrent.Rows.Count > 0)
                 {
@@ -465,9 +464,9 @@ namespace GCC
                 else
                 {
                     if (sCompanyQuery.Trim().Length > 0)
-                        GV.MYSQL.BAL_ExecuteQueryMySQL(sCompanyQuery);
+                        GV.MSSQL1.BAL_ExecuteQuery(sCompanyQuery);
                     if (sContactQuery.Trim().Length > 0)
-                        GV.MYSQL.BAL_ExecuteQueryMySQL(sContactQuery);
+                        GV.MSSQL1.BAL_ExecuteQuery(sContactQuery);
                     return true;
                 }
             }
@@ -966,13 +965,13 @@ namespace GCC
                     Populate_Settings(true);
 
                     if (dtProjectSettings.GetChanges(DataRowState.Modified) != null)
-                        GV.MYSQL.BAL_SaveToTableMySQL(dtProjectSettings.GetChanges(DataRowState.Modified), "c_project_settings", "Update", true);
+                        GV.MSSQL1.BAL_SaveToTable(dtProjectSettings.GetChanges(DataRowState.Modified), "c_project_settings", "Update", true);
 
                     string sCompanyQuery = Synch_GridnTable(sdgvCompany.PrimaryGrid, dtFieldCompany, "Master");
                     string sContactQuery = Synch_GridnTable(sdgvContact.PrimaryGrid, dtFieldContact, "MasterContacts");
                     bool IsAlterPassed = false;
                     
-                    DataTable dCompanyCurrent = GV.MYSQL.BAL_FetchTableMySQL(GV.sCompanyTable, "TR_AGENTNAME LIKE 'CURRENT%' OR WR_AGENTNAME LIKE 'CURRENT%'");
+                    DataTable dCompanyCurrent = GV.MSSQL1.BAL_FetchTable(GV.sCompanyTable, "TR_AGENTNAME LIKE 'CURRENT%' OR WR_AGENTNAME LIKE 'CURRENT%'");
                     if (dCompanyCurrent.Rows.Count > 0)
                             ToastNotification.Show(this, "Cannot alter. Table still in use.", eToastPosition.TopRight);
                     else
@@ -981,10 +980,10 @@ namespace GCC
                         try
                         {
                             if (sCompanyQuery.Trim().Length > 0)
-                                GV.MYSQL.BAL_ExecuteQueryMySQL(sCompanyQuery);
+                                GV.MSSQL1.BAL_ExecuteQuery(sCompanyQuery);
 
                             if (sContactQuery.Trim().Length > 0)
-                                GV.MYSQL.BAL_ExecuteQueryMySQL(sContactQuery);
+                                GV.MSSQL1.BAL_ExecuteQuery(sContactQuery);
 
                             IsAlterPassed = true;
                         }
@@ -1000,23 +999,23 @@ namespace GCC
                         if (IsAlterPassed)
                         {
                             if (dtFieldCompany.GetChanges(DataRowState.Modified) != null)
-                                GV.MYSQL.BAL_SaveToTableMySQL(dtFieldCompany.GetChanges(DataRowState.Modified), "c_field_master", "Update", true);
+                                GV.MSSQL1.BAL_SaveToTable(dtFieldCompany.GetChanges(DataRowState.Modified), "c_field_master", "Update", true);
 
                             if (dtFieldCompany.GetChanges(DataRowState.Added) != null)
-                                GV.MYSQL.BAL_SaveToTableMySQL(dtFieldCompany.GetChanges(DataRowState.Added), "c_field_master", "New", true);
+                                GV.MSSQL1.BAL_SaveToTable(dtFieldCompany.GetChanges(DataRowState.Added), "c_field_master", "New", true);
 
                             if (dtFieldCompany.GetChanges(DataRowState.Deleted) != null)
-                                GV.MYSQL.BAL_SaveToTableMySQL(dtFieldCompany.GetChanges(DataRowState.Deleted), "c_field_master", "Delete", true);
+                                GV.MSSQL1.BAL_SaveToTable(dtFieldCompany.GetChanges(DataRowState.Deleted), "c_field_master", "Delete", true);
 
 
                             if (dtFieldContact.GetChanges(DataRowState.Modified) != null)
-                                GV.MYSQL.BAL_SaveToTableMySQL(dtFieldContact.GetChanges(DataRowState.Modified), "c_field_master", "Update", true);
+                                GV.MSSQL1.BAL_SaveToTable(dtFieldContact.GetChanges(DataRowState.Modified), "c_field_master", "Update", true);
 
                             if (dtFieldContact.GetChanges(DataRowState.Added) != null)
-                                GV.MYSQL.BAL_SaveToTableMySQL(dtFieldContact.GetChanges(DataRowState.Added), "c_field_master", "New", true);
+                                GV.MSSQL1.BAL_SaveToTable(dtFieldContact.GetChanges(DataRowState.Added), "c_field_master", "New", true);
 
                             if (dtFieldContact.GetChanges(DataRowState.Deleted) != null)
-                                GV.MYSQL.BAL_SaveToTableMySQL(dtFieldContact.GetChanges(DataRowState.Deleted), "c_field_master", "Delete", true);
+                                GV.MSSQL1.BAL_SaveToTable(dtFieldContact.GetChanges(DataRowState.Deleted), "c_field_master", "Delete", true);
 
                             ToastNotification.Show(this, "Updated Sucessfully", eToastPosition.TopRight);
                             this.Close();
@@ -1228,7 +1227,7 @@ namespace GCC
             frmPickList objfrmPickList = new frmPickList();
             if (objfrmPickList.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
             {
-                dtPickList = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_picklists", "1=1");
+                dtPickList = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_picklists", "1=1");
                 ToastNotification.Show(this, "Selection List Updated");
             }
         }
@@ -1252,15 +1251,15 @@ namespace GCC
                         dtClonableProjects.Select("ProjectName = '" + cmbProjectsSelect.Text.Replace("'", "") + "'")
                             .Length > 0)
                     {
-                        MySqlConnection connection = new MySqlConnection(GV.sMySQL);
-                        //MySqlDataAdapter da = new MySqlDataAdapter();
-                        MySqlCommand cmd = new MySqlCommand("USP_Project_Tables_Creations", connection);
+                        SqlConnection connection = new SqlConnection(GV.sMSSQL1);
+                        //MyjSqlDataAdapter da = new MyhSqlDataAdapter();
+                        SqlCommand cmd = new SqlCommand("USP_Project_Tables_Creations", connection);
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add("PROJECT_ID", MySqlDbType.VarChar).Value = GV.sProjectID;
-                        cmd.Parameters.Add("DEFAULTPROJECTID", MySqlDbType.VarChar).Value =
+                        cmd.Parameters.AddWithValue("PROJECT_ID", SqlDbType.VarChar).Value = GV.sProjectID;
+                        cmd.Parameters.AddWithValue("DEFAULTPROJECTID", SqlDbType.VarChar).Value =
                             dtClonableProjects.Select("ProjectName = '" + cmbProjectsSelect.Text.Replace("'", "") + "'")
                                 [0]["ProjectID"].ToString(); // cmbProjectsSelect.Text;
-                        cmd.Parameters.Add("NEW_PROJECTNAME", MySqlDbType.VarChar).Value = GV.sProjectName;
+                        cmd.Parameters.AddWithValue("NEW_PROJECTNAME", SqlDbType.VarChar).Value = GV.sProjectName;
                         if (connection.State != ConnectionState.Open)
                             connection.Open();
                         cmd.ExecuteNonQuery();
@@ -1288,13 +1287,13 @@ namespace GCC
                 {
                     if (cmbProjectsSelect.Text.Length > 0 && GV.sProjectID.Length > 0)
                     {
-                        MySqlConnection connection = new MySqlConnection(GV.sMySQL);
-                        //MySqlDataAdapter da = new MySqlDataAdapter();
-                        MySqlCommand cmd = new MySqlCommand("USP_Project_Tables_Creations", connection);
+                        SqlConnection connection = new SqlConnection(GV.sMSSQL1);
+                        //MyjhSqlDataAdapter da = new MySjhqlDataAdapter();
+                        SqlCommand cmd = new SqlCommand("USP_Project_Tables_Creations", connection);
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add("PROJECT_ID", MySqlDbType.VarChar).Value = GV.sProjectID;
-                        cmd.Parameters.Add("DEFAULTPROJECTID", MySqlDbType.VarChar).Value = "CRUCRU005";
-                        cmd.Parameters.Add("NEW_PROJECTNAME", MySqlDbType.VarChar).Value = GV.sProjectName;
+                        cmd.Parameters.AddWithValue("PROJECT_ID", SqlDbType.VarChar).Value = GV.sProjectID;
+                        cmd.Parameters.AddWithValue("DEFAULTPROJECTID", SqlDbType.VarChar).Value = "CRUCRU005";
+                        cmd.Parameters.AddWithValue("NEW_PROJECTNAME", SqlDbType.VarChar).Value = GV.sProjectName;
                         if (connection.State != ConnectionState.Open)
                             connection.Open();
                         cmd.ExecuteNonQuery();
@@ -1346,7 +1345,7 @@ namespace GCC
                     case "Geography":
                         objFrmComboList.lstColumnsToDisplay.Add("Region");
                         objFrmComboList.sColumnToSearch = "Region";
-                        objFrmComboList.dtItems = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT 'Global' AS Region UNION (SELECT DISTINCT Region FROM country WHERE Region IS NOT NULL ORDER BY Region LIMIT 1000) UNION (SELECT DISTINCT CountryName FROM country);");
+                        objFrmComboList.dtItems = GV.MSSQL1.BAL_ExecuteQuery("SELECT 'Global' AS Region UNION (SELECT TOP 1000 DISTINCT Region FROM c_country WHERE Region IS NOT NULL ORDER BY Region) UNION (SELECT DISTINCT CountryName FROM c_country);");
                         objFrmComboList.IsMultiSelect = true;
                         break;
 

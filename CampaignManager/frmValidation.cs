@@ -25,7 +25,7 @@ namespace GCC
         private void frmValidation_Load(object sender, EventArgs e)
         {
 
-            dtFieldMaster = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * from c_field_master where project_id='crucru005'");
+            dtFieldMaster = GV.MSSQL1.BAL_ExecuteQuery("SELECT * from c_field_master where project_id='crucru005'");
 
             DataTable dtTable = dtFieldMaster.DefaultView.ToTable(true, "Table_Name");
 
@@ -55,7 +55,7 @@ namespace GCC
             sdgvValidation.PrimaryGrid.DefaultRowHeight = 150;
             sdgvValidation.PrimaryGrid.Columns[0].Width = sdgvValidation.Width;
             sdgvValidation.PrimaryGrid.Columns[0].HeaderText = "Rules";
-            dtValidation = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_validations_new", "VALIDATION_NAME IS NOT NULL");
+            dtValidation = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_validations", "VALIDATION_NAME IS NOT NULL");
 
 
             for (int i = 0; i < dtValidation.Rows.Count; i++)

@@ -29,7 +29,7 @@ namespace GCC
             InitializeComponent();
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);//Gets the icon for current window            
         }
-        //BAL.BAL_GlobalMySQL objBal_GlobalMySQL = new BAL.BAL_GlobalMySQL();
+        //BAL.BAL_GlobalMydSQL objBal_GlobalMyfdSQL = new BAL.BAL_GlobalMySfdQL();
 
         private void frmUserMaster_Load(object sender, EventArgs e) // Text box hidden for close
         {
@@ -181,27 +181,27 @@ namespace GCC
             {
                 this.BindingContext[dtGCCUsers].EndCurrentEdit();
 
-                GM.Logging(dtGCCUsers, dtGCCUsers_log, "USERS", "ID");
+                GM.Logging(dtGCCUsers, dtGCCUsers_log, "C_USERS", "ID");
 
                 bool IsDBAffected = false;
                 if (dtGCCUsers.GetChanges(DataRowState.Added) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtGCCUsers.GetChanges(DataRowState.Added), "USERS", "New", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtGCCUsers.GetChanges(DataRowState.Added), "C_USERS", "New", true);
                     IsDBAffected = true;
                 }
                 if (dtGCCUsers.GetChanges(DataRowState.Modified) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtGCCUsers.GetChanges(DataRowState.Modified), "USERS", "Update", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtGCCUsers.GetChanges(DataRowState.Modified), "C_USERS", "Update", true);
                     IsDBAffected = true;
                 }
                 if (dtGCCUsers.GetChanges(DataRowState.Deleted) != null)
                 {
-                    GV.MYSQL.BAL_SaveToTableMySQL(dtGCCUsers.GetChanges(DataRowState.Deleted), "USERS", "Delete", true);
+                    GV.MSSQL1.BAL_SaveToTable(dtGCCUsers.GetChanges(DataRowState.Deleted), "C_USERS", "Delete", true);
                     IsDBAffected = true;
                 }
                 if (IsDBAffected)
                 {
-                    dtGCCUsers = GV.MYSQL.BAL_FetchTableMySQL("USERS", "1=1");
+                    dtGCCUsers = GV.MSSQL1.BAL_FetchTable("C_USERS", "1=1");
                     dtGCCUsers_log = dtGCCUsers.Copy();
                     dgvUser.DataSource = dtGCCUsers;
                 }                

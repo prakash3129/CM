@@ -24,15 +24,14 @@ namespace GCC
             ToastNotification.DefaultToastGlowColor = eToastGlowColor.None;
             ToastNotification.DefaultTimeoutInterval = 2000;
             ToastNotification.ToastFont = new Font(Font.FontFamily, 22);
-            //ExpanelArchive.Parent = this;
-            //ExpanelArchive.Dock = DockStyle.Left;
+
             ExpanelQueue.Parent = this;
             sdgvArchive.PrimaryGrid.Columns.Clear();
             GridColumn ColStatus = new GridColumn("Action");
             ColStatus.DataPropertyName = "Action";
-            //ColStatus.ReadOnly = true;
+       
             ColStatus.FillWeight = 20;            
-            ColStatus.EditorType = typeof(GridStateEditControl);
+            //ColStatus.EditorType = typeof(GridStateEditControl);
             sdgvArchive.PrimaryGrid.Columns.Add(ColStatus);
             lblCurrentCompany.Text = string.Empty;
             lblCount.Text = string.Empty;
@@ -146,15 +145,15 @@ namespace GCC
 
 
                 dtImportedCompanies =
-                    GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_mastercompanies WHERE CREATED_BY = '" +
+                    GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_mastercompanies WHERE CREATED_BY = '" +
                                                    GV.sEmployeeName +
                                                    "' AND PROJECTID = '" + GV.sProjectID +
-                                                   "' AND (RECORD_STATUS='IMPORTPROGRESS' OR (RECORD_STATUS = 'REJECTED' AND DATE(CREATED_DATE) = CURDATE()));");
+                                                   "' AND (RECORD_STATUS='IMPORTPROGRESS' OR (RECORD_STATUS = 'REJECTED' AND CAST(CREATED_DATE AS DATE) = cast(GETDATE() as date)));");
                 dtImportedCompanies.Columns.Add("Action");
                 dtImportedCompanies.Columns.Add("UserStatus");
 
                 dtArchived =
-                    GV.MYSQL.BAL_ExecuteQueryMySQL(
+                    GV.MSSQL1.BAL_ExecuteQuery(
                         "SELECT COMPANY_ID,COMPANY_NAME,ADDRESS_1,ADDRESS_2 FROM c_mastercompanies WHERE CREATED_BY = '" +
                         GV.sEmployeeName +
                         "' AND PROJECTID = '" + GV.sProjectID +
@@ -164,7 +163,7 @@ namespace GCC
                     drArchive["Action"] = "5";
 
                 dtQueue =
-                    GV.MYSQL.BAL_ExecuteQueryMySQL(
+                    GV.MSSQL1.BAL_ExecuteQuery(
                         "SELECT MASTER_ID, COMPANY_NAME,ADDRESS_1,ADDRESS_2,city,POST_CODE,country FROM " +
                         GV.sProjectID +
                         "_mastercompanies WHERE Scrape_Status=1 AND " + GV.sAccessTo + "_AGENTNAME = '" +
@@ -477,19 +476,15 @@ namespace GCC
                 GridColumn ColStatus = new GridColumn("Action");
                 ColStatus.DataPropertyName = "Action";
                 ColStatus.FillWeight = 30;
-
-
                 ColStatus.MinimumWidth = 50;
-                //ColStatus.ReadOnly = true;
-                ColStatus.EditorType = typeof (GridStateEditControl);
+                //ColStatus.EditorType = typeof (GridStateEditControl);
                 GP.Columns.Add(ColStatus);
-
                 GridColumn ColID = new GridColumn("COMPANY_ID");
                 ColID.DataPropertyName = "COMPANY_ID";
                 ColID.ReadOnly = true;
-                //ColID.HeaderText = "ID";
+                
                 ColID.Visible = false;
-                //ColID.FillWeight = 30;
+                
                 GP.Columns.Add(ColID);
 
                 GridColumn ColUserStatus = new GridColumn("UserStatus");
@@ -592,11 +587,10 @@ namespace GCC
 
                     string sMasterIDs = GM.ListToQueryString(lstExistingIDsToScrape, "Int");
 
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE " + GV.sProjectID +
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE " + GV.sProjectID +
                                                             "_mastercompanies set Scrape_Status = 1, UPDATED_BY = '" +
                                                             GV.sEmployeeName +
-                                                            "', UPDATED_DATE = NOW() WHERE MASTER_ID IN (" +
-                                                            sMasterIDs + ") AND FLAG IN ('TR','WR');");
+                                                            "', UPDATED_DATE = GETDATE() WHERE MASTER_ID IN (" + sMasterIDs + ") AND FLAG IN ('TR','WR');");
                     RecordAvailableForScrapping = true;
                 }
 
@@ -620,8 +614,8 @@ namespace GCC
                         sInsertValues += " '" + drImport["COMPANY_NAME_ALPHA"] + "'," +
                                          (drImport["SWITCHBOARD_TRIMMED"].ToString().Length > 0
                                              ? drImport["SWITCHBOARD_TRIMMED"].ToString()
-                                             : "NULL") + ", NOW(), '" + GV.sEmployeeName + "' ,'" + GV.sEmployeeName +
-                                         "', '" + GV.sAccessTo + "', NOW(), '" + GV.sEmployeeName + "', 1,'NEW'," +
+                                             : "NULL") + ", GETDATE(), '" + GV.sEmployeeName + "' ,'" + GV.sEmployeeName +
+                                         "', '" + GV.sAccessTo + "', GETDATE(), '" + GV.sEmployeeName + "', 1,'NEW'," +
                                          dtCountry.Select("CountryName = '" + drImport["COUNTRY"] + "'")[0][
                                              "HoursFromGMT"] + " , 'L_COMPANY','L_COMPANY','L_COMPANY','L_COMPANY')";
                     }
@@ -631,16 +625,16 @@ namespace GCC
                     {
                         sInsertColumns += sCols + ",";
                     }
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("INSERT INTO " + GV.sProjectID + "_mastercompanies (" +
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO " + GV.sProjectID + "_mastercompanies (" +
                                                             sInsertColumns + " COMPANY_NAME_ALPHA,SWITCHBOARD_TRIMMED, " +
                                                             sDateColumn + "," + GV.sAccessTo + "_AGENTNAME," +
                                                             GV.sAccessTo +
                                                             "_PREVIOUS_AGENTNAME, FLAG,CREATED_DATE,CREATED_BY, Scrape_Status,NEW_OR_EXISTING,HoursFromGMT,TR_PRIMARY_DISPOSAL,TR_SECONDARY_DISPOSAL,WR_PRIMARY_DISPOSAL,WR_SECONDARY_DISPOSAL) VALUES " +
                                                             sInsertValues);
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE " + GV.sProjectID +
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE " + GV.sProjectID +
                                                             "_mastercompanies set GROUP_ID = MASTER_ID WHERE GROUP_ID IS NULL AND CREATED_BY = '" +
                                                             GV.sEmployeeName + "';");
-                    GV.MYSQL.BAL_ExecuteQueryMySQL(
+                    GV.MSSQL1.BAL_ExecuteQuery(
                         "UPDATE c_mastercompanies set RECORD_STATUS = 'IMPORTED' WHERE COMPANY_ID IN (" +
                         sUpdateScrapeStatus + ") AND PROJECTID = '" + GV.sProjectID + "' AND CREATED_BY = '" +
                         GV.sEmployeeName + "';");
@@ -648,7 +642,7 @@ namespace GCC
                 }
 
                 DataTable dtCheckRecordExsitForScraping =
-                    GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT 1 FROM " + GV.sProjectID + "_mastercompanies WHERE " +
+                    GV.MSSQL1.BAL_ExecuteQuery("SELECT 1 FROM " + GV.sProjectID + "_mastercompanies WHERE " +
                                                    GV.sAccessTo + "_AGENTNAME = '" + GV.sEmployeeName +
                                                    "' AND Scrape_Status = 1");
 
@@ -661,7 +655,7 @@ namespace GCC
                     IsInvalidRecordsExist = true;
                     string sUpdateScrapeStatus = GM.ColumnToQString("COMPANY_ID", drrInvalidRecords.CopyToDataTable(),
                         "String");
-                    GV.MYSQL.BAL_ExecuteQueryMySQL(
+                    GV.MSSQL1.BAL_ExecuteQuery(
                         "UPDATE c_mastercompanies set RECORD_STATUS = 'REJECTED',COMPANY_STATUS = 'REJECTED' WHERE COMPANY_ID IN (" +
                         sUpdateScrapeStatus + ") AND PROJECTID = '" + GV.sProjectID + "' AND CREATED_BY = '" +
                         GV.sEmployeeName + "';");
@@ -768,7 +762,7 @@ namespace GCC
                     psi.CreateNoWindow = true;
                     psi.WindowStyle = ProcessWindowStyle.Hidden;
 
-                    List<string> lst = GV.sMySQL.Split(';').ToList();
+                    List<string> lst = GV.sMSSQL.Split(';').ToList();
                     string sServerIP = string.Empty;
                     string sServerUID = string.Empty;
                     string sServerPwd = string.Empty;
@@ -787,9 +781,7 @@ namespace GCC
                                              ") OR WR_CONTACT_STATUS IN(" +
                                              GM.ListToQueryString(GV.lstWRContactStatusToBeValidated, "String") + "))";
 
-                    psi.Arguments = "\"" + sServerIP + "\" \"" + sServerUID + "\" \"" + sServerPwd + "\" \"" +
-                                    GV.sProjectID +
-                                    "\" \"" + GV.sEmployeeName + "\" \"" + txtLinkedInUserName.Text + "\" \"" +
+                    psi.Arguments = "\"" + sServerIP + "\" \"" + sServerUID + "\" \"" + sServerPwd + "\" \"" + GV.sProjectID + "\" \"" + GV.sEmployeeName + "\" \"" + txtLinkedInUserName.Text + "\" \"" +
                                     txtLinkedInPassword.Text + "\" \"" + sCompleteStatus + "\" \"" + GV.sAccessTo + "\"";
                     Process ps = new Process();
                     ps.StartInfo = psi;
@@ -819,8 +811,8 @@ namespace GCC
                 if (sUpdateStatus.Trim() == "1")
                 {
                     DataTable dtScrapper_Log =
-                        GV.MYSQL.BAL_ExecuteQueryMySQL(
-                            "SELECT * FROM c_scrapper_log WHERE  DATE(START_TIME) = CURDATE() AND PROJECTID='" +
+                        GV.MSSQL1.BAL_ExecuteQuery(
+                            "SELECT * FROM c_scrapper_log WHERE  CAST(START_TIME as DATE) = cast(GETDATE() as date) AND PROJECTID='" +
                             GV.sProjectID + "' AND AGENTNAME = '" + GV.sEmployeeName + "' AND RESEARCH_TYPE='" +
                             GV.sAccessTo + "' AND (STATUS IS NULL OR STATUS = 'Researched');");
 
@@ -832,7 +824,7 @@ namespace GCC
                         if (sCompanyIDs.Length > 0)
                         {
                             dtScrappedContact =
-                                GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sProjectID +
+                                GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM " + GV.sProjectID +
                                                                "_mastercontacts WHERE MASTER_ID IN (" + sCompanyIDs +
                                                                ");");
 
@@ -908,11 +900,11 @@ namespace GCC
                         }
                     }
 
-                    if (GV.MYSQL.BAL_SaveToTableMySQL(dtScrapper_Log, "c_scrapper_log", "Update", true))
+                    if (GV.MSSQL1.BAL_SaveToTable(dtScrapper_Log, "c_scrapper_log", "Update", true))
                     {
                         if (dtScrappedContact.Rows.Count > 0)
                         {
-                            GV.MYSQL.BAL_SaveToTableMySQL(dtScrappedContact, GV.sProjectID + "_mastercontacts", "Update",
+                            GV.MSSQL1.BAL_SaveToTable(dtScrappedContact, GV.sProjectID + "_mastercontacts", "Update",
                                 true);
                         }
                     }
@@ -934,7 +926,7 @@ namespace GCC
 
                     int inc = 0;
                     if (
-                        GV.MYSQL.BAL_ExecuteQueryMySQL(
+                        GV.MSSQL1.BAL_ExecuteQuery(
                             "SELECT 1 FROM c_mastercompanies WHERE RECORD_STATUS = 'IMPORTPROGRESS' AND PROJECTID = '" +
                             GV.sProjectID + "' AND CREATED_BY = '" + GV.sEmployeeName + "'").Rows.Count > 0)
                     {
@@ -1079,7 +1071,7 @@ namespace GCC
 
                                         if (sCompanyStatus.Length > 0)
                                             sInsertValues += "'" + GV.sProjectID + "', NULL , NULL,'REJECTED', '" +
-                                                             sCompanyStatus + "', NOW(), NOW(), '" + GV.sEmployeeName +
+                                                             sCompanyStatus + "', GETDATE(), GETDATE(), '" + GV.sEmployeeName +
                                                              "')";
                                         else
                                         {
@@ -1088,14 +1080,14 @@ namespace GCC
                                                 if (IsArchiveEnabled)
                                                     sInsertValues += "'" + GV.sProjectID + "', '" + sCompanyAlphaNumeric +
                                                                      "'," + sSwitchBoardTrim +
-                                                                     ",'ARCHIVED', NULL , NOW(), NOW(), '" +
+                                                                     ",'ARCHIVED', NULL , GETDATE(), GETDATE(), '" +
                                                                      GV.sEmployeeName + "')";
                                                 else
                                                 {
                                                     sInsertValues += "'" + GV.sProjectID + "', '" + sCompanyAlphaNumeric +
                                                                  "'," +
                                                                  sSwitchBoardTrim +
-                                                                 ",'IMPORTPROGRESS', NULL , NOW(), NOW(), '" +
+                                                                 ",'IMPORTPROGRESS', NULL , GETDATE(), GETDATE(), '" +
                                                                  GV.sEmployeeName + "')";
                                                     break;
                                                 }
@@ -1104,7 +1096,7 @@ namespace GCC
                                                 sInsertValues += "'" + GV.sProjectID + "', '" + sCompanyAlphaNumeric +
                                                                  "'," +
                                                                  sSwitchBoardTrim +
-                                                                 ",'IMPORTPROGRESS', NULL , NOW(), NOW(), '" +
+                                                                 ",'IMPORTPROGRESS', NULL , GETDATE(), GETDATE(), '" +
                                                                  GV.sEmployeeName + "')";
                                         }
 
@@ -1122,11 +1114,11 @@ namespace GCC
                                         sInsertColumns += sCols + ",";
                                     }
 
-                                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("INSERT INTO c_mastercompanies (" +
+                                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO c_mastercompanies (" +
                                                                             sInsertColumns +
                                                                             " PROJECTID,COMPANY_NAME_ALPHA,SWITCHBOARD_TRIMMED, RECORD_STATUS,COMPANY_STATUS,IMPORT_DATE,CREATED_DATE,CREATED_BY) VALUES " +
                                                                             sInsertValues);
-                                    GV.MYSQL.BAL_Procedure("C_Dupes_Check", GV.sProjectID, GV.sEmployeeName);
+                                    GV.MSSQL1.BAL_Procedure("C_Dupes_Check", GV.sProjectID, GV.sEmployeeName);
 
                                     ReloadTables();
 
@@ -1140,7 +1132,7 @@ namespace GCC
                                     ToastNotification.Show(this, "No data found.", eToastPosition.TopRight);
                                 }
 
-                                //objMYSQL.Procedure("L_DUPE_CHECK", sProjectID, sAgentName, dateLoad_Research.Value.ToString("yyyy-MM-dd"));
+                                //objMYfSQL.Procedure("L_DUPE_CHECK", sProjectID, sAgentName, dateLoad_Research.Value.ToString("yyyy-MM-dd"));
                                 //panelInfo.Enabled = false;
                                 //picImport.Visible = true;
 
@@ -1171,12 +1163,12 @@ namespace GCC
                         {
                             string sIDString = GM.ColumnToQString("COMPANY_ID", drrSelectedArchive.CopyToDataTable(),
                                 "Int");
-                            GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(
-                                "UPDATE c_mastercompanies set RECORD_STATUS='IMPORTPROGRESS', IMPORT_DATE = NOW() WHERE COMPANY_ID IN (" +
+                            GV.MSSQL1.BAL_ExecuteNonReturnQuery(
+                                "UPDATE c_mastercompanies set RECORD_STATUS='IMPORTPROGRESS', IMPORT_DATE = GETDATE() WHERE COMPANY_ID IN (" +
                                 sIDString + ") AND PROJECTID = '" + GV.sProjectID + "' AND CREATED_BY = '" +
                                 GV.sEmployeeName +
                                 "' AND RECORD_STATUS='ARCHIVED';");
-                            GV.MYSQL.BAL_Procedure("C_Dupes_Check", GV.sProjectID, GV.sEmployeeName);
+                            GV.MSSQL1.BAL_Procedure("C_Dupes_Check", GV.sProjectID, GV.sEmployeeName);
                             ReloadTables();
                             ReloadGrid();
                             ToastNotification.Show(this, "Records loaded for processing.", eToastPosition.TopRight);
@@ -1226,7 +1218,7 @@ namespace GCC
         {
             try
             {
-                GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL(
+                GV.MSSQL1.BAL_ExecuteNonReturnQuery(
                     "UPDATE c_mastercompanies set RECORD_STATUS = 'CLEARED' WHERE RECORD_STATUS = 'IMPORTPROGRESS' AND PROJECTID = '" +
                     GV.sProjectID + "' AND CREATED_BY = '" + GV.sEmployeeName + "'");
             }
@@ -1258,7 +1250,7 @@ namespace GCC
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question))
                 {
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("DELETE FROM c_mastercompanies WHERE RECORD_STATUS = 'ARCHIVED' AND PROJECTID = '" + GV.sProjectID + "' AND CREATED_BY = '" + GV.sEmployeeName + "'");
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("DELETE FROM c_mastercompanies WHERE RECORD_STATUS = 'ARCHIVED' AND PROJECTID = '" + GV.sProjectID + "' AND CREATED_BY = '" + GV.sEmployeeName + "'");
                     dtArchived.Rows.Clear();
                     sdgvArchive.PrimaryGrid.DataSource = dtArchived;
                     ToastNotification.Show(this, "Archive cleared.", eToastPosition.TopRight);

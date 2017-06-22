@@ -16,8 +16,6 @@ namespace DAL
 {
     public abstract class DAL_GlobalMySQL 
     {
-        //MySqlConnection connection = new MySqlConnection(GlobalVariables.sMySQL);
-        //MySqlCommand cmdtest = new MySqlCommand("SELECT 1 AS Test", GV.conMYSQL);
         protected DataTable DAL_FetchTableMySQL(string sTableName, string sCondition)
         {
             string sSQL = string.Empty;

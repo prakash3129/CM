@@ -30,7 +30,7 @@ namespace GCC
     public partial class frmMain : Office2007Form
     {
         //BAL.BAL_Global objBAL_Global = new BAL.BAL_Global();
-        //BAL.BAL_GlobalMySQL objBAL_GlobalMySQL = new BAL.BAL_GlobalMySQL();
+        //BAL.BAL_GlobalMydSQL objBAL_GlobalMydSQL = new BAL.BAL_GlobalMdySQL();
 
         RegistryKey reg = default(RegistryKey);
 
@@ -88,7 +88,7 @@ namespace GCC
             GM.Log(e.Reason.ToString(), "", "", "", "", "", "SystemEvents", "", "", "", "", "");
 
             if (GV.sMachineID.Length > 0)
-                GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE c_machines SET SystemState = '" + e.Reason.ToString() + "' WHERE MachineID = '" + GV.sMachineID + "';");
+                GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE c_machines SET SystemState = '" + e.Reason.ToString() + "' WHERE MachineID = '" + GV.sMachineID + "';");
         }
 
         //-----------------------------------------------------------------------------------------------------
@@ -133,42 +133,47 @@ namespace GCC
                 Uri uriDeployment = new Uri(sAppDomain.Substring(0, sAppDomain.IndexOf("#")));
                 string sDeploymentPath = uriDeployment.LocalPath;
                 GV.IsApplicationinBeta = sDeploymentPath.ToLower().Contains("campaign manager beta");
+                GV.IsApplicationinAlpha = sDeploymentPath.ToLower().Contains("campaign manager alpha");
                 ApplicationDeployment appDeployment = ApplicationDeployment.CurrentDeployment;
                 GV.sSoftwareVersion = Application.ProductName + " v" + appDeployment.CurrentVersion.Major + "." + appDeployment.CurrentVersion.Minor + "." + appDeployment.CurrentVersion.Build + " Build " + appDeployment.CurrentVersion.Revision;
             }
-            else if (Process.GetCurrentProcess().ProcessName.EndsWith(".vshost"))            
+            else if (Process.GetCurrentProcess().ProcessName.ToLower().EndsWith(".vshost"))            
                 GV.sSoftwareVersion = "Campaign Manager Dev";
             else
             {
                 MessageBoxEx.EnableGlass = false;
+                ribbonMain.Enabled = false;
                 MessageBoxEx.Show("Campaign Manager cannot connect to update server.<br/>Please re-install Campaign Manager.<br/>If you encounter errors in installation, then uninstall all the versions of Campaign Manager first.", "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 Process.Start(@"\\172.27.137.180\Merit Software Deployment\Voice\Campaign Manager\Campaign Manager.application");
-                Process.GetCurrentProcess().Kill();                
+                Process.GetCurrentProcess().Kill();
+                
                 return;
             }
 
 
-            GV.dtErrorMap = GV.MYSQL.BAL_FetchTableMySQL("c_picklists", "PicklistCategory = 'ErrorMap'"); //initilize error handling
+            GV.dtErrorMap = GV.MSSQL1.BAL_FetchTable("c_picklists", "PicklistCategory = 'ErrorMap'"); //initilize error handling
             GV.IsWindowsXP = JCS.OSVersionInfo.VersionString.StartsWith("5.1");
 
-            // GV.IsWindowsXP = true;
+           
 
-            using (DataTable dtIP = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT MachineID FROM c_machines WHERE IP = '" + GV.IP + "'"))
+           
+
+            using (DataTable dtIP = GV.MSSQL1.BAL_ExecuteQuery("SELECT MachineID FROM c_machines WHERE IP = '" + GV.IP + "'"))
             {
                 if (dtIP.Rows.Count > 0)
                 {
                     GV.sMachineID = dtIP.Rows[0][0].ToString();
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE c_machines SET SystemState = '',ESPort = '', ESState = -1 WHERE MachineID = '" + GV.sMachineID + "'");
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE c_machines SET SystemState = '',ESPort = '', ESState = -1 WHERE MachineID = '" + GV.sMachineID + "'");
                 }
                 else
-                    GV.sMachineID = GV.MYSQL.BAL_InsertAndGetIdentityMySQL("INSERT INTO c_machines (HostName,IP,ESState,ESPort) VALUES('" + Environment.MachineName.Replace("'", "''") + "','" + GV.IP + "',-1,'');");
+                    GV.sMachineID = GV.MSSQL1.BAL_InsertAndGetIdentity("INSERT INTO c_machines (HostName,IP,ESState,ESPort) VALUES('" + Environment.MachineName.Replace("'", "''") + "','" + GV.IP + "',-1,'');");
             }
             GV.sScreenAddonPath = WriteFile("ScreenAddon.exe", Properties.Resources.ScreenAddon);
 
 
-            //SqlDependency.Stop("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MVC;Application Name=Campaign Manager;");
-            //SqlDependency.Start("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MVC;Application Name=Campaign Manager;");
-            //SqlConnection con = new SqlConnection("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MVC;Application Name=Campaign Manager;");
+            //SqlDependency.Stop("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MkVC;Application Name=Campaign Manager;");
+            //SqlDependency.Start("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MVkC;Application Name=Campaign Manager;");
+            //SqlConnection con = new SqlConnection("user id=USerUD;password=DummyPWD;data source=Server;initial catalog=MVkC;Application Name=Campaign Manager;");
             //SqlCommand cmd = new SqlCommand("SELECT * FROM EMoniter", con);
             //cmd.Notification = null;
             //con.Open();
@@ -204,6 +209,8 @@ namespace GCC
             GV.pnlGlobalColor.Style.GradientAngle = 90;
 
 
+        
+
             try
             {
                 // MessageBoxEx.Show("Current user: " + WindowsIdentity.GetCurrent().Name);
@@ -233,6 +240,8 @@ namespace GCC
 
             if (GV.IsApplicationinBeta)
                 toolStripStatuslblVersion.Text = GV.sSoftwareVersion + " <font color ='red'>Beta</font>";
+            else if (GV.IsApplicationinAlpha)
+                toolStripStatuslblVersion.Text = GV.sSoftwareVersion + " <font color ='red'>Alpha</font>";
             else
                 toolStripStatuslblVersion.Text = GV.sSoftwareVersion;
             //toolStripStatuslblVersion.Text = Application.ProductName;
@@ -265,7 +274,7 @@ namespace GCC
             //return;
 
 
-            //DataTable dt = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM mvc..gender_info_2;");
+            //DataTable dt = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM mgvc..gender_info_2;");
 
             //foreach (DataRow dr in dt.Rows)
             //{
@@ -301,33 +310,42 @@ namespace GCC
 
             //MessageBoxEx.Show(Environment.StackTrace);
 
-            
+
             //con.Open();
-            //MySqlCommand cmd = new MySqlCommand("Select * from city", con);
+            //MydSqlCommand cmd = new MydSqlCommand("Select * from city", con);
             ////SqlCommand cmd = new SqlCommand("Select * from city", con);
-            //MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+            //MydSqlDataAdapter da = new MydSqlDataAdapter(cmd);
             ////SqlDataAdapter da = new SqlDataAdapter(cmd);
 
             //DataTable dt = new DataTable();
-            //dt = obj.BAL_FetchTableMySQL("ALLOCATION_FILTER", "1=1");
+            //dt = obj.BAL_FetchTableMydSQL("ALLOCATION_FILTER", "1=1");
 
-            //obj.BAL_SaveToTableMySQL(dt.GetChanges(DataRowState.Modified), "city", "Update");
+            //obj.BAL_SaveToTableMydSQL(dt.GetChanges(DataRowState.Modified), "city", "Update");
 
 
 
+           //GV.IsWindowsXP = true;
+            if (GV.IsWindowsXP)
+            {
+                this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); //Gets the icon for current window
+                ToastNotification.DefaultToastGlowColor = eToastGlowColor.Blue;
+                ToastNotification.DefaultTimeoutInterval = 100000;
+                //ToastNotification.ToastBackColor = Color.DarkSlateGray;
+                this.TitleText = "Campaign Manager - <b><font color = 'Red'>Campaign Manager is no more compatible with Windows XP. Please contact System Administrator.</font></b>";
+                ribbonMain.Enabled = false;
+                ToastNotification.ToastFont = new Font(this.Font.FontFamily, 25);
+                MessageBoxEx.EnableGlass = false;
+                CanClose = true;
+                ToastNotification.Show(this, "Campaign Manager is no more compatible with Windows XP." + Environment.NewLine + "Please contact System Administrator.", eToastPosition.MiddleCenter);
+                return;
+            }
+            
 
             Process[] runningProcesses = Process.GetProcesses();
             var currentSessionID = Process.GetCurrentProcess().SessionId;
-            Process[] pName = (from c in runningProcesses where c.ProcessName == "Campaign Manager" && c.SessionId == currentSessionID select c).ToArray();
-
+            Process[] pName = (from c in runningProcesses where c.ProcessName.ToLower() == "campaign manager" && c.SessionId == currentSessionID select c).ToArray();
 
             // Process[] pName = Process.GetProcessesByName("Campaign Manager");
-
-
-
-
-
-
             if (pName.Length > 1)
             {
                 //MessageBoxEx.Show("Campaign Manager already opened.");
@@ -397,10 +415,10 @@ namespace GCC
         private void Single_Load()
         {
             //dtAllUsers = GV.MSSQL.BAL_FetchTable("Timesheet..Users", "Active='Y'");//All active time logger users
-            //dtProjectSettings = GV.MYSQL.BAL_FetchTableMySQL("C_PROJECT_SETTINGS", "STATUS='ACTIVE'");//Settings of All GCC projects
+            //dtProjectSettings = GV.MYsaSQL.BAL_FetchTableMydSQL("C_PROJECT_SETTINGS", "STATUS='ACTIVE'");//Settings of All GCC projects
             //string sActiveProjects = GM.ColumnToQString("PROJECT_ID", dtProjectSettings, "String");
             //dtProjectMaster = GV.MSSQL.BAL_FetchTable("Timesheet..ProjectMaster", "Active='Y' AND PROJECTID IN (" + sActiveProjects + ")");//All active merit projects..Should be filtered
-            //dtGCCUsers = GV.MYSQL.BAL_FetchTableMySQL("USERS", "1=1");//Admins, Managers, QC and some exceptional agents
+            //dtGCCUsers = GV.MYSasQL.BAL_FetchTableMydSQL("USERS", "1=1");//Admins, Managers, QC and some exceptional agents
         }
 
         //-----------------------------------------------------------------------------------------------------
@@ -444,7 +462,7 @@ namespace GCC
 
                 Process[] runningProcesses = Process.GetProcesses();
                 var currentSessionID = Process.GetCurrentProcess().SessionId;
-                Process[] pName = (from c in runningProcesses where c.ProcessName == "TimeSheetOnline" && c.SessionId == currentSessionID select c).ToArray();
+                Process[] pName = (from c in runningProcesses where c.ProcessName.ToLower() == "timesheetonline" && c.SessionId == currentSessionID select c).ToArray();
 
                 //Process[] pName = Process.GetProcessesByName("TimeSheetOnline");
                 reg = Registry.CurrentUser.OpenSubKey("Software\\VB and VBA Program Settings\\Merit\\Time Logger", true); //Get Current Registry Data//
@@ -471,10 +489,10 @@ namespace GCC
                 rbnTabQC.Visible = false;
 
                 dtAllUsers = GV.MSSQL.BAL_FetchTable("Timesheet..Users", "Active='Y'");//All active time logger users
-                dtProjectSettings = GV.MYSQL.BAL_FetchTableMySQL("C_PROJECT_SETTINGS", "STATUS='ACTIVE'");//Settings of All GCC projects
+                dtProjectSettings = GV.MSSQL1.BAL_FetchTable("C_PROJECT_SETTINGS", "STATUS='ACTIVE'");//Settings of All GCC projects
                 string sActiveProjects = GM.ColumnToQString("PROJECT_ID", dtProjectSettings, "String");
                 dtProjectMaster = GV.MSSQL.BAL_FetchTable("Timesheet..ProjectMaster", "Active='Y' AND PROJECTID IN (" + sActiveProjects + ")");//All active merit projects..Should be filtered
-                dtGCCUsers = GV.MYSQL.BAL_FetchTableMySQL("USERS", "1=1");//Admins, Managers, QC and some exceptional agents
+                dtGCCUsers = GV.MSSQL1.BAL_FetchTable("C_USERS", "1=1");//Admins, Managers, QC and some exceptional agents
 
                 GV.sVortexExtension = string.Empty;
                 using (DataTable dtVortex = GV.MSSQL.BAL_ExecuteQuery("SELECT Extension FROM Call_Timesheet..Extensions WHERE IP = '" + GV.IP.Replace("'", "''") + "';"))
@@ -562,8 +580,8 @@ namespace GCC
                     //rbnTabDashboard.Visible = true;
                     //cmbSelectProject.SelectedValue = "CRU_Copper";
                     frmProjectUpdates x = new frmProjectUpdates();
-                    x.dtProjectUpdates = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM mvc.c_project_instructions WHERE PROJECTID IN ('ALL','CRUCRU005');");
-                    //x.dtProjectUpdates = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM mvc.c_project_instructions WHERE DATE(CREATED_DATE) > ADDDATE(CURDATE(),INTERVAL -31 DAY) AND PROJECTID IN ('ALL','CRUCRU005');");
+                    x.dtProjectUpdates = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_project_instructions WHERE PROJECTID IN ('ALL','CRUCRU005');");
+                    //x.dtProjectUpdates = GV.MYSQsaL.BAL_ExecuteQueryMydSQL("SELECT * FROM mlvc.c_project_instructions WHERE DATE(CREATED_DATE) > ADDDATE(CURDATE(),INTERVAL -31 DAY) AND PROJECTID IN ('ALL','CRUCRU005');");
                     x.MdiParent = this;
                     x.Show();
 
@@ -664,7 +682,7 @@ namespace GCC
                         cmbUserType.SelectedItem = "Agent";
                         cmbUserAccess.SelectedItem = "Web Researcher";
                     }
-                    else if (drrAllUsers[0]["Department"].ToString() == "GCC")
+                    else if (drrAllUsers[0]["Department"].ToString().ToUpper() == "GCC" || drrAllUsers[0]["Department"].ToString().ToUpper() == "VOICE")
                     {
                         GV.sUserType = "Agent";
                         GV.sAccessTo = "TR";
@@ -1105,9 +1123,9 @@ namespace GCC
                 DataRow[] drProjectSettings = dtProjectSettings.Select(String.Format("PROJECT_ID = '{0}'", GV.sProjectID));
                 if (drProjectSettings.Length > 0)
                 {
-                    dtFieldMaster = GV.MYSQL.BAL_FetchTableMySQL("C_FIELD_MASTER", "PROJECT_ID = '" + GV.sProjectID + "'");//Gets all list of columns used(master and master contacts)
-                    ProperCaseHelper.dtProperCase = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM c_picklists WHERE PicklistCategory = 'Correction'");
-                    dtRecordStatus = GV.MYSQL.BAL_FetchTableMySQL(GV.sProjectID + "_RecordStatus", "1=1");//Load Contact status and Disposals
+                    dtFieldMaster = GV.MSSQL1.BAL_FetchTable("C_FIELD_MASTER", "PROJECT_ID = '" + GV.sProjectID + "'");//Gets all list of columns used(master and master contacts)
+                    ProperCaseHelper.dtProperCase = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_picklists WHERE PicklistCategory = 'Correction'");
+                    dtRecordStatus = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_RecordStatus", "1=1");//Load Contact status and Disposals
                     GV.sContactTable = drProjectSettings[0]["CONTACTS_TABLE"].ToString().ToUpper();//Mastercontact Table Name
                     GV.sCompanyTable = drProjectSettings[0]["COMPANY_TABLE"].ToString().ToUpper();//Master Table Name
                     GV.sQCTable = GV.sProjectID + "_QC";
@@ -1232,6 +1250,7 @@ namespace GCC
 
                     GV.sTRContactstatusTobeMailChecked = string.Empty;
                     GV.sWRContactstatusTobeMailChecked = string.Empty;
+                    
                     //cmbSelectProject_ButtonCustomClick(sender, e);
 
 
@@ -1294,6 +1313,9 @@ namespace GCC
 
             GV.sTRContactstatusTobeValidated = GM.ListToQueryString(GV.lstTRContactStatusToBeValidated, "String");
             GV.sWRContactstatusTobeValidated = GM.ListToQueryString(GV.lstWRContactStatusToBeValidated, "String");
+            
+            GV.lstTRContactstatusTobeMailChecked = Get_MandatoryColumns("TR", "Contact", "MailCheck");
+            GV.lstWRContactstatusTobeMailChecked = Get_MandatoryColumns("WR", "Contact", "MailCheck");
 
             GV.sTRContactstatusTobeMailChecked = GM.ListToQueryString(Get_MandatoryColumns("TR", "Contact", "MailCheck"), "String");
             GV.sWRContactstatusTobeMailChecked = GM.ListToQueryString(Get_MandatoryColumns("WR", "Contact", "MailCheck"), "String");
@@ -1581,6 +1603,17 @@ namespace GCC
                     sError += "Invalid Extension";
             }
 
+            if (GV.HasAdminPermission || (GV.IsApplicationinAlpha && GV.MSSQL1.BAL_ExecuteQuery("select 1 from c_picklists where PicklistCategory IN ('AlphaAllowed_ProjectID','AlphaAllowed_EmployeeID') and PicklistValue IN ('" + GV.sProjectID + "','" + GV.sEmployeeNo + "')").Rows.Count >= 2))
+            {/* Do Nothing */ } 
+            else
+            {
+                sError += "Access denied to use Alpha edition.";
+            }
+
+            //if(GV.IsApplicationinAlpha && !GV.HasAdminPermission)
+            //{
+            //    sError += "Access denied to use Alpha edition.";
+            //}
 
             return sError;
             /////////////Mode validations to be added//////////////////////////////////////
@@ -1599,13 +1632,12 @@ namespace GCC
             {
                 if (btnLaunchProject.Text == "<div align='center'>Launch<br/>Project</div>")
                 {
+                    GV.HasAdminPermission = (GV.sEmployeeName.Length > 1 && dtGCCUsers.Select("USERTYPE = 'Admin' AND USERNAME = '" + GV.sEmployeeName + "'").Length > 0);
                     string sError = ProjectReadyCheck().Trim();
                     if (sError.Length == 0)
                     {
-                        GV.sSessionID = GV.IP.Replace(".", string.Empty).Reverse() + GM.GetDateTime().ToString("yyMMddHHmmssff");
-                        GV.HasAdminPermission = (GV.sEmployeeName.Length > 1 && dtGCCUsers.Select("USERTYPE = 'Admin' AND USERNAME = '" + GV.sEmployeeName + "'").Length > 0);
+                        GV.sSessionID = GV.IP.Replace(".", string.Empty).Reverse() + GM.GetDateTime().ToString("yyMMddHHmmssff");                        
                         GM.Log("Project LoggedIn");
-
                         progressBar.Visible = true;
                         progressBar.Value = 0;
                         progressBar.Text = string.Empty;
@@ -2131,7 +2163,7 @@ namespace GCC
                 if (DialogResult.Yes != MessageBoxEx.Show("Are you sure you want to close Campaign Manager", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2))
                     e.Cancel = true;
                 else
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE c_machines set STATUS = 'Offline', RDPPort='',ESPort = '' WHERE MachineID='" + GV.sMachineID + "';");
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE c_machines set STATUS = 'Offline', RDPPort='',ESPort = '' WHERE MachineID='" + GV.sMachineID + "';");
             }
         }
 
@@ -2187,9 +2219,9 @@ namespace GCC
                             {
                                 Regex rAlphaNumeric = new Regex(@"[^0-9A-Za-z]+", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
                                 string sCompanyNameAlpha = rAlphaNumeric.Replace(sNewCompanyName, string.Empty);
-                                string sInsertSQL = "INSERT INTO " + GV.sCompanyTable + "(COMPANY_NAME, COMPANY_NAME_ALPHA , " + GV.sAccessTo + "_AGENTNAME, " + GV.sAccessTo + "_PREVIOUS_AGENTNAME, NEW_OR_EXISTING ,COUNTRY, FLAG ,CREATED_BY ,CREATED_DATE)VALUES('" + sNewCompanyName + "', '" + sCompanyNameAlpha + "', '" + GV.sEmployeeName + "','" + GV.sEmployeeName + "','New','Country','" + GV.sAccessTo + "','" + GV.sEmployeeName + "',NOW());";
-                                sInsertSQL += " UPDATE " + GV.sCompanyTable + " set GROUP_ID = MASTER_ID WHERE MASTER_ID = LAST_INSERT_ID();";
-                                string sMasterID = GV.MYSQL.BAL_InsertAndGetIdentityMySQL(sInsertSQL);
+                                string sInsertSQL = "INSERT INTO " + GV.sCompanyTable + "(COMPANY_NAME, COMPANY_NAME_ALPHA , " + GV.sAccessTo + "_AGENTNAME, " + GV.sAccessTo + "_PREVIOUS_AGENTNAME, NEW_OR_EXISTING ,COUNTRY, FLAG ,CREATED_BY ,CREATED_DATE)VALUES('" + sNewCompanyName + "', '" + sCompanyNameAlpha + "', '" + GV.sEmployeeName + "','" + GV.sEmployeeName + "','New','Country','" + GV.sAccessTo + "','" + GV.sEmployeeName + "',GETDATE());";
+                                sInsertSQL += " UPDATE " + GV.sCompanyTable + " set GROUP_ID = MASTER_ID WHERE MASTER_ID = @@IDENTITY;";
+                                string sMasterID = GV.MSSQL1.BAL_InsertAndGetIdentity(sInsertSQL);
                                 GM.OpenContactUpdate(sMasterID, true, true, objFrmCompanyList, objFrmCompanyList);
                             }
                         }
@@ -2381,12 +2413,13 @@ namespace GCC
         //-----------------------------------------------------------------------------------------------------
         private void textBoxItemBounce_ButtonCustomClick(object sender, EventArgs e)
         {
-            if ((swhType.Value && swhType.Visible) || btnImportType.Text == "SendBack")
+            if (dateRejectionImport.Visible && ((swhType.Value && swhType.Visible) || btnImportType.Text == "SendBack"))
             {
+                
                 if (dateRejectionImport.Text.Length > 0)
                 {
 
-                    DataTable dtContactReject = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT DISTINCT " + GV.sAccessTo + "_AGENT_NAME FROM " + GV.sContactTable + " WHERE " + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59';");
+                    DataTable dtContactReject = GV.MSSQL1.BAL_ExecuteQuery("SELECT DISTINCT " + GV.sAccessTo + "_AGENT_NAME FROM " + GV.sContactTable + " WHERE " + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59';");
 
                     if (dtContactReject.Rows.Count > 0)
                     {
@@ -2496,9 +2529,9 @@ namespace GCC
         //            {
         //                DataTable dtContactReject;
         //                if (btnImportType.Text == "OK")
-        //                    dtContactReject = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT b.* FROM " + GV.sContactTable + " a INNER JOIN " + GV.sQCTable + " b ON a.CONTACT_ID_P = b.RecordID WHERE a." + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59' AND b.TableName = 'Contact' AND b.ResearchType = '" + GV.sAccessTo + "' AND (Qc_Status is null OR Qc_Status='Processed');");
+        //                    dtContactReject = GV.MYSsdfQL.BAL_ExecuteQueryMdySQL("SELECT b.* FROM " + GV.sContactTable + " a INNER JOIN " + GV.sQCTable + " b ON a.CONTACT_ID_P = b.RecordID WHERE a." + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59' AND b.TableName = 'Contact' AND b.ResearchType = '" + GV.sAccessTo + "' AND (Qc_Status is null OR Qc_Status='Processed');");
         //                else
-        //                    dtContactReject = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT b.* FROM " + GV.sContactTable + " a INNER JOIN " + GV.sQCTable + " b ON a.CONTACT_ID_P = b.RecordID WHERE a." + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59' AND b.TableName = 'Contact' AND b.ResearchType = '" + GV.sAccessTo + "';");
+        //                    dtContactReject = GV.MYdsSQL.BAL_ExecuteQueryMydSQL("SELECT b.* FROM " + GV.sContactTable + " a INNER JOIN " + GV.sQCTable + " b ON a.CONTACT_ID_P = b.RecordID WHERE a." + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59' AND b.TableName = 'Contact' AND b.ResearchType = '" + GV.sAccessTo + "';");
 
         //                if (dtContactReject.Rows.Count > 0)
         //                {
@@ -2530,7 +2563,7 @@ namespace GCC
         //                    //dr["Rejection_UpdatedBy"] = GV.sEmployeeName;
         //                    //}
 
-        //                    if (GV.MYSQL.BAL_SaveToTableMySQL(dtContactReject.GetChanges(DataRowState.Modified), GV.sContactTable, "Update"))
+        //                    if (GV.MYsaSQL.BAL_SaveToTableMySdsQL(dtContactReject.GetChanges(DataRowState.Modified), GV.sContactTable, "Update"))
         //                        MessageBoxEx.Show(dtContactReject.Rows.Count + " Contacts marked " + btnImportType.Text + " for " + txtPath.Text.Trim(), "Campaign Manager");
         //                    // }
         //                }
@@ -2602,7 +2635,7 @@ namespace GCC
         //    //    {
         //    //        if (txtPath.Text.Trim().Length > 0 && dateRejectionImport.Text.Length > 0)
         //    //        {
-        //    //            DataTable dtContactReject = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT * FROM " + GV.sContactTable + " WHERE " + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59';");
+        //    //            DataTable dtContactReject = GV.MdsYSQL.BAL_ExecuteQueryMySdQL("SELECT * FROM " + GV.sContactTable + " WHERE " + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59';");
         //    //            if (dtContactReject.Rows.Count > 0)
         //    //            {
         //    //                //frmRejectReason objfrmRejectReason = new frmRejectReason();
@@ -2643,7 +2676,7 @@ namespace GCC
         //    //                        //dr["Rejection_UpdatedBy"] = GV.sEmployeeName;
         //    //                    //}
 
-        //    //                    if (GV.MYSQL.BAL_SaveToTableMySQL(dtContactReject.GetChanges(DataRowState.Modified), GV.sContactTable, "Update"))
+        //    //                    if (GV.MYSfdQL.BAL_SaveToTableMydSQL(dtContactReject.GetChanges(DataRowState.Modified), GV.sContactTable, "Update"))
         //    //                        MessageBoxEx.Show(dtContactReject.Rows.Count + " Contacts rejected for " + txtPath.Text.Trim(), "Campaign Manager");
 
         //    //               // }
@@ -2885,6 +2918,7 @@ namespace GCC
                 controlContainerDate.Visible = false;
             }
             txtPath.Text = string.Empty;
+            dateRejectionImport.Text = "";
             itemContainerPathandDate.Refresh();
         }
 
@@ -2903,6 +2937,7 @@ namespace GCC
                     controlContainerDate.Visible = false;
                 }
                 txtPath.Text = string.Empty;
+                dateRejectionImport.Text = "";
                 itemContainerPathandDate.Refresh();
             }
         }
@@ -2982,12 +3017,14 @@ namespace GCC
             {
                 txtPath.Text = "";
                 dateRejectionImport.Visible = false;
+                dateRejectionImport.Text = "";
                 controlContainerDate.Visible = false;
                 swhType.Visible = false;
             }
             else if (btnImportType.Text == "SendBack")
             {
                 txtPath.Text = "";
+                dateRejectionImport.Text = "";
                 dateRejectionImport.Visible = true;
                 controlContainerDate.Visible = true;
                 swhType.Visible = false;
@@ -2995,6 +3032,7 @@ namespace GCC
             else if (btnImportType.Text == "OK")
             {
                 txtPath.Text = "";
+                dateRejectionImport.Text = "";
                 dateRejectionImport.Visible = false;
                 controlContainerDate.Visible = false;
                 swhType.Visible = true;
@@ -3022,8 +3060,8 @@ namespace GCC
                               GV.sEmployeeName + "')  AND b.QC_Status = 'SendBack' AND b.ResearchType = '" +
                               GV.sAccessTo + "';";
 
-                    DataTable dtSendBackCount = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
-                    //DataTable dtSendBackCount = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT COUNT(*) FROM " + GV.sContactTable + " WHERE " + GV.sAccessTo + "_QC_Status = 'SendBack' AND " + GV.sAccessTo + "_AGENT_NAME = '" + GV.sEmployeeName + "';");
+                    DataTable dtSendBackCount = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
+                    //DataTable dtSendBackCount = GV.MYdsSQL.BAL_ExecuteQueryMydSQL("SELECT COUNT(*) FROM " + GV.sContactTable + " WHERE " + GV.sAccessTo + "_QC_Status = 'SendBack' AND " + GV.sAccessTo + "_AGENT_NAME = '" + GV.sEmployeeName + "';");
                     if (dtSendBackCount != null && dtSendBackCount.Rows.Count > 0)
                     {
                         if (dtSendBackCount.Rows[0][0].ToString() == "0")
@@ -3061,14 +3099,16 @@ namespace GCC
                         sQuery += " WHERE a." + GV.sAccessTo + "_UPDATED_DATE BETWEEN '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 00:00:00' AND '" + dateRejectionImport.Value.ToString("yyyy-MM-dd") + " 23:59:59'";
                         sQuery += " AND a." + GV.sAccessTo + "_UNCERTAIN_STATUS = 0 AND a." + GV.sAccessTo + "_AGENT_NAME = '" + txtPath.Text + "'";
 
-                        if (btnImportType.Text == "OK")
-                            sQuery += " AND (b.Qc_Status is null OR b.Qc_Status='Reprocessed')";
+                        
+                        //Prakash::24-04-2017::As per request from QC, they can now OK any records.
+                        //if (btnImportType.Text == "OK")
+                        //    sQuery += " AND (b.Qc_Status is null OR b.Qc_Status='Reprocessed')";
 
-                        dtContactReject = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                        dtContactReject = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                         if (dtContactReject.Rows.Count > 0)
                         {
                             string sContactIDs = GM.ColumnToQString("CONTACT_ID_P", dtContactReject, "Int");
-                            DataTable dtQCTable = GV.MYSQL.BAL_FetchTableMySQL(GV.sQCTable, "RecordID IN (" + sContactIDs + ") AND TableName = 'Contact' AND ResearchType = '" + GV.sAccessTo + "'");
+                            DataTable dtQCTable = GV.MSSQL1.BAL_FetchTable(GV.sQCTable, "RecordID IN (" + sContactIDs + ") AND TableName = 'Contact' AND ResearchType = '" + GV.sAccessTo + "'");
 
                             foreach (DataRow dr in dtContactReject.Rows)
                             {
@@ -3143,11 +3183,11 @@ namespace GCC
             {
                 bool IsSaveSucess = true;
                 if (dtSave.GetChanges(DataRowState.Added) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Added), sTableName, "New", true);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Added), sTableName, "New", true);
                 if (dtSave.GetChanges(DataRowState.Modified) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Modified), sTableName, "Update", true);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Modified), sTableName, "Update", true);
                 if (dtSave.GetChanges(DataRowState.Deleted) != null)
-                    IsSaveSucess = GV.MYSQL.BAL_SaveToTableMySQL(dtSave.GetChanges(DataRowState.Deleted), sTableName, "Delete", true);
+                    IsSaveSucess = GV.MSSQL1.BAL_SaveToTable(dtSave.GetChanges(DataRowState.Deleted), sTableName, "Delete", true);
                 return IsSaveSucess;
             }
             catch (Exception ex)
@@ -3530,8 +3570,8 @@ namespace GCC
 
                 try
                 {
-                    //GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL_ExclusiveCon("DELETE FROM c_sessions WHERE SessionID = '" + GV.sSessionID + "';");
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL_ExclusiveCon("DELETE FROM c_sessions WHERE SessionID = '" + GV.sSessionID + "'; INSERT INTO c_sessions (SessionID, AppTitle, AppProcess, CompanySessionID, TimeTaken) Values " + sInsertValues + ";");
+                    //GV.MYaSQL.BAL_ExecuteNonReturnQueryMydSQL_ExclusiveCon("DELETE FROM c_sessions WHERE SessionID = '" + GV.sSessionID + "';");
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery_ExclusiveCon("DELETE FROM c_sessions WHERE SessionID = '" + GV.sSessionID + "'; INSERT INTO c_sessions (SessionID, AppTitle, AppProcess, CompanySessionID, TimeTaken) Values " + sInsertValues + ";");
                 }
                 catch (Exception ex)
                 {/*Do Nothing - Supress errror for Sessions */ }
@@ -3664,7 +3704,7 @@ namespace GCC
 
         private void timerNotification_Tick(object sender, EventArgs e)
         {
-            //using (DataTable dtNotification = GV.MYSQL.BAL_ExecuteQueryMySQL("SELECT CREATED_BY,SUBJECT FROM c_project_instructions WHERE PROJECTID IN ('" + GV.sProjectID + "', 'ALL') AND USER_LEVEL IN ('" + GV.sUserType.ToUpper() + "','ALL') AND RESEARCH_TYPE IN ('" + GV.sAccessTo + "','ALL') AND NOTIFY_USER = 'Y' AND IFNULL(USER_READ,'') NOT LIKE '%|" + GV.sEmployeeNo + "~%' ORDER BY RAND() LIMIT 1;"))
+            //using (DataTable dtNotification = GV.MYdSQL.BAL_ExecuteQueryMydSQL("SELECT CREATED_BY,SUBJECT FROM c_project_instructions WHERE PROJECTID IN ('" + GV.sProjectID + "', 'ALL') AND USER_LEVEL IN ('" + GV.sUserType.ToUpper() + "','ALL') AND RESEARCH_TYPE IN ('" + GV.sAccessTo + "','ALL') AND NOTIFY_USER = 'Y' AND IFNULL(USER_READ,'') NOT LIKE '%|" + GV.sEmployeeNo + "~%' ORDER BY RAND() LIMIT 1;"))
             //{
             //    if (dtNotification.Rows.Count > 0)                
             //        tNotifier.Show(dtNotification.Rows[0]["CREATED_BY"].ToString(), dtNotification.Rows[0]["Subject"].ToString(), 500, 3000, 500);                
@@ -3833,6 +3873,23 @@ namespace GCC
             }
         }
 
+        private void btnHunter_Click(object sender, EventArgs e)
+        {
+            using (DataTable dtHunterUser = GV.MSSQL1.BAL_ExecuteQuery("select 1 from c_picklists where PicklistCategory='HunterUser' and PicklistValue = '" + GV.sEmployeeName + "';"))
+            {
+                if (dtHunterUser.Rows.Count > 0)
+                {
+                    if (!GM.IsFormExist("frmEmailHunter"))
+                    {
+                        frmEmailHunter objfrmEmailHunter = new frmEmailHunter();
+                        objfrmEmailHunter.MdiParent = this;
+                        objfrmEmailHunter.Show();
+                    }
+                }
+                else
+                    ToastNotification.Show(this, "Access Denied", eToastPosition.TopRight);
+            }
+        }
     }
 }
 

@@ -14,7 +14,7 @@ namespace GCC
     /// GridStateEditControl
     ///</summary>
     [ToolboxItem(false)]
-    public class GridStateEditControl : StateControl, IGridCellEditControl
+    public class GridStateEditControl : StateControl1, IGridCellEditControl
     {
         #region Private variables
 

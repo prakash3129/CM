@@ -51,7 +51,7 @@ namespace GCC
 
         void LoadTable()
         {
-            dtMonitor = GV.MYSQL.BAL_ExecuteQueryMySQL("SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; SELECT M.MachineID, L.WHO AS User,M.HostName AS Host,M.IP, M.Status,M.SystemState,RDPPort,S.PROJECT_NAME AS 'Project Name',L.PROJECTID AS 'Project ID', M.LastUpdatedDate, L.USERTYPE AS Level, L.RESEARCHTYPE AS 'Access To', M.CMVersion AS Version FROM c_machines AS M  INNER JOIN (SELECT USERTYPE,RESEARCHTYPE,SESSIONID,PROJECTID,WHO FROM c_log WHERE ACTION = 'Project LoggedIn' AND DATE(`WHEN`) IN (CURDATE() ,SUBDATE(CURDATE(),1))) as L ON M.LastSession = L.SESSIONID INNER JOIN c_project_settings S ON M.LASTLOGGEDPROJECTID = S.PROJECT_ID ORDER BY M.Status DESC;");
+            dtMonitor = GV.MSSQL1.BAL_ExecuteQuery("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; SELECT M.MachineID, L.WHO AS [User],M.HostName AS Host,M.IP, M.Status,M.SystemState,RDPPort,S.PROJECT_NAME AS 'Project Name',L.PROJECTID AS 'Project ID', M.LastUpdatedDate, L.USERTYPE AS Level, L.RESEARCHTYPE AS 'Access To', M.CMVersion AS Version FROM c_machines AS M  INNER JOIN (SELECT USERTYPE,RESEARCHTYPE,SESSIONID,PROJECTID,WHO FROM c_log WHERE ACTION = 'Project LoggedIn' AND Cast([WHEN] as date) IN (Cast(getdate()-1 as date))) as L ON M.LastSession = L.SESSIONID INNER JOIN c_project_settings S ON M.LASTLOGGEDPROJECTID = S.PROJECT_ID ORDER BY M.Status DESC;");
             dtMonitor.Columns.Add("LastUpdated");
             foreach (DataRow drMonitor in dtMonitor.Rows)
             {
@@ -62,13 +62,13 @@ namespace GCC
             LoadGrid(dtMonitor);
             lblOnline.Text = " Online (" + dtMonitor.Select("Status = 'Online'").Length + ")";
             dLastUpdated = GM.GetDateTime();
-            lblLastUpdated.Text = "Last Updated : Now";            
+            lblLastUpdated.Text = "Last Updated : Now";
         }
 
         void LoadGrid(DataTable dtMonitorGrid)
         {
             try
-            {                    
+            {
                 if(!dtMonitorGrid.Columns.Contains("ColumnPic"))
                     dtMonitorGrid.Columns.Add("ColumnPic", typeof(byte[]));
 
@@ -106,7 +106,7 @@ namespace GCC
             try
             {
                 GridRow gRow = ((GridRow)e.GridRow);
-                DataTable dtMachine = GV.MYSQL.BAL_ExecuteQueryMySQL("SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; SELECT M.MachineID, L.WHO AS User,M.HostName AS Host,M.IP,M.Status, M.SystemState,RDPPort,S.PROJECT_NAME AS 'Project Name',L.PROJECTID AS 'Project ID', M.LastUpdatedDate, L.USERTYPE AS Level, L.RESEARCHTYPE AS 'Access To',L.SESSIONID AS Session, M.CMVersion AS Version FROM c_machines AS M INNER JOIN c_log L ON M.LastSession = L.SESSIONID INNER JOIN c_project_settings S ON M.LASTLOGGEDPROJECTID = S.PROJECT_ID WHERE L.ACTION='Project LoggedIn' AND M.MachineID='" + gRow.Cells["MachineID"].Value + "';");
+                DataTable dtMachine = GV.MSSQL1.BAL_ExecuteQuery("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; SELECT M.MachineID, L.WHO AS [User],M.HostName AS Host,M.IP,M.Status, M.SystemState,RDPPort,S.PROJECT_NAME AS 'Project Name',L.PROJECTID AS 'Project ID', M.LastUpdatedDate, L.USERTYPE AS Level, L.RESEARCHTYPE AS 'Access To',L.SESSIONID AS Session, M.CMVersion AS Version FROM c_machines AS M INNER JOIN c_log L ON M.LastSession = L.SESSIONID INNER JOIN c_project_settings S ON M.LASTLOGGEDPROJECTID = S.PROJECT_ID WHERE L.ACTION='Project LoggedIn' AND M.MachineID='" + gRow.Cells["MachineID"].Value + "';");
                 if (dtMachine.Rows[0]["Status"].ToString() == "Online")
                 {
                     if (!GM.IsFormExist("frmScreen"))

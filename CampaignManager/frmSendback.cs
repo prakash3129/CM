@@ -40,37 +40,37 @@ namespace GCC
                 if (IsLastMonth)
                 {
                     if(GM.GetDateTime().Month == 1)
-                        sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = 12 AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(CURDATE())-1 ";
+                        sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = 12 AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(GETDATE() -1) ";
                     else
-                        sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = MONTH(CURDATE())-1 AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(CURDATE()) ";
+                        sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = MONTH(getdate()-1) AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(getdate()) ";
                 }
                 else                
-                    sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = MONTH(CURDATE()) AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(CURDATE()) ";                
+                    sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = MONTH(getdate()) AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(getdate()) ";                
 
                 string sQuery = @"SELECT * FROM ";
 
 
-                sQuery += "(SELECT CONVERT(cm." + GV.sAccessTo + "_UPDATED_DATE,date) as Date,cm." + GV.sAccessTo + "_AGENT_NAME Agent ,COUNT(*) COUNT,'Processed' Status FROM " + GV.sContactTable + " cm LEFT JOIN " + GV.sProjectID + "_QC QC ON cm.Contact_ID_P = QC.RecordID AND QC.TABLENAME='CONTACT' AND QC.ResearchType ='" + GV.sAccessTo + "' WHERE  ";
+                sQuery += "(SELECT CAST(cm." + GV.sAccessTo + "_UPDATED_DATE as date) as Date,cm." + GV.sAccessTo + "_AGENT_NAME Agent ,COUNT(*) COUNT,'Processed' Status FROM " + GV.sContactTable + " cm LEFT JOIN " + GV.sProjectID + "_QC QC ON cm.Contact_ID_P = QC.RecordID AND QC.TABLENAME='CONTACT' AND QC.ResearchType ='" + GV.sAccessTo + "' WHERE  ";
                 sQuery += sDateCondition + " AND cm." + GV.sAccessTo + "_UNCERTAIN_STATUS = 0 AND cm." + GV.sAccessTo + "_CONTACT_STATUS IN (" + (GV.sAccessTo == "TR" ? GV.sTRContactstatusTobeValidated : GV.sWRContactstatusTobeValidated) + ") ";
                 sQuery += "AND QC.QC_STATUS IS NULL ";
-                sQuery += "GROUP BY CONVERT(cm." + GV.sAccessTo + "_UPDATED_DATE,date) ,cm." + GV.sAccessTo + "_AGENT_NAME UNION ALL ";
+                sQuery += "GROUP BY CAST(cm." + GV.sAccessTo + "_UPDATED_DATE as date) ,cm." + GV.sAccessTo + "_AGENT_NAME UNION ALL ";
 
-                sQuery += "SELECT CONVERT(cm." + GV.sAccessTo + "_UPDATED_DATE,date) as Date,cm." + GV.sAccessTo + "_AGENT_NAME Agent,COUNT(*) COUNT,'ReProcessed' Status FROM " + GV.sContactTable + " cm  INNER JOIN " + GV.sProjectID + "_QC QC ON cm.Contact_ID_P = QC.RecordID AND QC.TABLENAME='CONTACT' AND QC.ResearchType ='" + GV.sAccessTo + "' WHERE ";
+                sQuery += "SELECT CAST(cm." + GV.sAccessTo + "_UPDATED_DATE as date) as Date,cm." + GV.sAccessTo + "_AGENT_NAME Agent,COUNT(*) COUNT,'ReProcessed' Status FROM " + GV.sContactTable + " cm  INNER JOIN " + GV.sProjectID + "_QC QC ON cm.Contact_ID_P = QC.RecordID AND QC.TABLENAME='CONTACT' AND QC.ResearchType ='" + GV.sAccessTo + "' WHERE ";
                 sQuery += sDateCondition + " AND cm." + GV.sAccessTo + "_UNCERTAIN_STATUS = 0 AND cm." + GV.sAccessTo + "_CONTACT_STATUS IN (" + (GV.sAccessTo == "TR" ? GV.sTRContactstatusTobeValidated : GV.sWRContactstatusTobeValidated) + ") ";
                 sQuery += "AND QC.QC_STATUS = 'Reprocessed' ";
                 //sQuery += "AND LENGTH(IFNULL(cm." + GV.sAccessTo + "_QC_STATUS,'')) = 0 AND QC_UpdatedDate IS NOT NULL ";
-                sQuery += "GROUP BY CONVERT(cm." + GV.sAccessTo + "_UPDATED_DATE,date) ,cm." + GV.sAccessTo + "_AGENT_NAME UNION ALL ";
+                sQuery += "GROUP BY CAST(cm." + GV.sAccessTo + "_UPDATED_DATE as date) ,cm." + GV.sAccessTo + "_AGENT_NAME UNION ALL ";
 
-                sQuery += "SELECT CONVERT(cm." + GV.sAccessTo + "_UPDATED_DATE,date) as Date,cm." + GV.sAccessTo + "_AGENT_NAME Agent,COUNT(*) COUNT,'SendBack' Status FROM " + GV.sContactTable + " cm INNER JOIN " + GV.sProjectID + "_QC QC ON cm.Contact_ID_P = QC.RecordID AND QC.TABLENAME='CONTACT' AND QC.ResearchType ='" + GV.sAccessTo + "' WHERE ";
+                sQuery += "SELECT CAST(cm." + GV.sAccessTo + "_UPDATED_DATE as date) as Date,cm." + GV.sAccessTo + "_AGENT_NAME Agent,COUNT(*) COUNT,'SendBack' Status FROM " + GV.sContactTable + " cm INNER JOIN " + GV.sProjectID + "_QC QC ON cm.Contact_ID_P = QC.RecordID AND QC.TABLENAME='CONTACT' AND QC.ResearchType ='" + GV.sAccessTo + "' WHERE ";
                 sQuery += sDateCondition;
                 sQuery += "AND cm." + GV.sAccessTo + "_UNCERTAIN_STATUS = 0 AND QC.QC_STATUS ='SendBack' ";
-                sQuery += "GROUP BY CONVERT(cm." + GV.sAccessTo + "_UPDATED_DATE,date) ,cm." + GV.sAccessTo + "_AGENT_NAME UNION ALL ";
+                sQuery += "GROUP BY CAST(cm." + GV.sAccessTo + "_UPDATED_DATE as date) ,cm." + GV.sAccessTo + "_AGENT_NAME UNION ALL ";
 
-                sQuery += "SELECT CONVERT(cm." + GV.sAccessTo + "_UPDATED_DATE,date) as Date,cm." + GV.sAccessTo + "_AGENT_NAME Agent,COUNT(*) COUNT,'OK' Status FROM " + GV.sContactTable + " cm INNER JOIN " + GV.sProjectID + "_QC QC ON cm.Contact_ID_P = QC.RecordID AND QC.TABLENAME='CONTACT' AND QC.ResearchType ='" + GV.sAccessTo + "' WHERE ";
+                sQuery += "SELECT CAST(cm." + GV.sAccessTo + "_UPDATED_DATE as date) as Date,cm." + GV.sAccessTo + "_AGENT_NAME Agent,COUNT(*) COUNT,'OK' Status FROM " + GV.sContactTable + " cm INNER JOIN " + GV.sProjectID + "_QC QC ON cm.Contact_ID_P = QC.RecordID AND QC.TABLENAME='CONTACT' AND QC.ResearchType ='" + GV.sAccessTo + "' WHERE ";
                 sQuery += sDateCondition + " AND cm." + GV.sAccessTo + "_UNCERTAIN_STATUS = 0 AND cm." + GV.sAccessTo + "_CONTACT_STATUS IN (" + (GV.sAccessTo == "TR" ? GV.sTRContactstatusTobeValidated : GV.sWRContactstatusTobeValidated) + ") ";
                 sQuery += "AND QC.QC_STATUS ='OK' ";
 
-                sQuery += "GROUP BY CONVERT(cm." + GV.sAccessTo + "_UPDATED_DATE,date) ,cm." + GV.sAccessTo + "_AGENT_NAME) AS T ";
+                sQuery += "GROUP BY CAST(cm." + GV.sAccessTo + "_UPDATED_DATE as date) ,cm." + GV.sAccessTo + "_AGENT_NAME) AS T ";
                 sQuery += "ORDER BY T.date ,T.Status,T.Agent;";
 
                 //if (IsLastMonth)
@@ -105,7 +105,7 @@ namespace GCC
 
                 if (sQuery.Length > 0)
                 {
-                    dtSentBack = GV.MYSQL.BAL_ExecuteQueryMySQL(sQuery);
+                    dtSentBack = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                     CalViewSendBack.IsTimeRulerVisible = false;                    
                     backgroundLoader.RunWorkerAsync();
                 }

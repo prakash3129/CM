@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace GCC
 {
-    public partial class StateControl : Control
+    public partial class StateControl1 : Control
     {
         #region Events
 
@@ -37,7 +37,7 @@ namespace GCC
 
         #endregion
 
-        public StateControl()
+        public StateControl1()
         {
             InitializeComponent();
         }

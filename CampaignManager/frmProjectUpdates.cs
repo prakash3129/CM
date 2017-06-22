@@ -114,7 +114,7 @@ namespace GCC
                 tNotifier.Show(drrProjectUpdates[0]["CREATED_BY"].ToString(), drrProjectUpdates[0]["Subject"].ToString(), 500, 3000, 500);
 
                 if (!drrProjectUpdates[0]["USER_READ"].ToString().ToUpper().Contains("|" + GV.sEmployeeNo.ToUpper() + "~"))
-                    GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE c_project_instructions set USER_READ = '" + drrProjectUpdates[0]["USER_READ"].ToString().Replace("'", "''").ToUpper() + "|" + GV.sEmployeeNo.ToUpper() + "~" + GM.GetDateTime().ToString("dd/MM/yyyy hh:mm:ss tt") + "|' WHERE ID = '" + sID + "'");
+                    GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE c_project_instructions set USER_READ = '" + drrProjectUpdates[0]["USER_READ"].ToString().Replace("'", "''").ToUpper() + "|" + GV.sEmployeeNo.ToUpper() + "~" + GM.GetDateTime().ToString("dd/MM/yyyy hh:mm:ss tt") + "|' WHERE ID = '" + sID + "'");
             }
         }
 
@@ -124,7 +124,7 @@ namespace GCC
             string sID = btnAknowledge.Tag.ToString();
             if (sID.Length > 0 && drrProjectUpdates.Length > 0)
             {                
-                GV.MYSQL.BAL_ExecuteNonReturnQueryMySQL("UPDATE c_project_instructions set USER_ACKNOWLEDGEMENT = '"+ drrProjectUpdates[0]["USER_ACKNOWLEDGEMENT"] + "|" + GV.sEmployeeNo.ToUpper() + "~" + GM.GetDateTime().ToString("dd/MM/yyyy hh:mm:ss tt") + "|' WHERE ID = '" + sID + "'");
+                GV.MSSQL1.BAL_ExecuteNonReturnQuery("UPDATE c_project_instructions set USER_ACKNOWLEDGEMENT = '"+ drrProjectUpdates[0]["USER_ACKNOWLEDGEMENT"] + "|" + GV.sEmployeeNo.ToUpper() + "~" + GM.GetDateTime().ToString("dd/MM/yyyy hh:mm:ss tt") + "|' WHERE ID = '" + sID + "'");
                 drrProjectUpdates[0]["USER_ACKNOWLEDGEMENT"] += "|" + GV.sEmployeeNo.ToUpper() + "~" + GM.GetDateTime().ToString("dd/MM/yyyy hh:mm:ss tt");
                 btnAknowledge.Visible = false;
                 foreach (DevComponents.AdvTree.Node nNode in lstNodes)
