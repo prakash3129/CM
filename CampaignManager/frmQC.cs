@@ -224,7 +224,7 @@ namespace GCC
                     else
                         sColumns = "A.*";
                     sQuery = "SELECT A.Contact_ID_P, A.Master_ID," + sColumns + " FROM " + GV.sContactTable + " A INNER JOIN " + GV.sQCTable + " B ON A.CONTACT_ID_P = B.RecordID AND B.TableName='Contact' AND B.ResearchType='" + GV.sAccessTo + "'";
-                    sQuery += " WHERE CONVERT(A." + GV.sAccessTo + "_UPDATED_DATE,DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND A." + GV.sAccessTo + "_CONTACT_STATUS IN ";
+                    sQuery += " WHERE CAST(A." + GV.sAccessTo + "_UPDATED_DATE as DATE) = '" + sSelectedDate + "' AND A." + GV.sAccessTo + "_AGENT_NAME='" + sSelectedAgentName + "' AND A." + GV.sAccessTo + "_CONTACT_STATUS IN ";
                     sQuery += " (" + sValidStatus + ")  AND B.QC_Sample_Status IN (0,1) ORDER BY Master_ID";
                     System.Data.DataTable dtRandomRecord = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
                     if (dtRandomRecord.Rows.Count > 0)
@@ -327,9 +327,6 @@ namespace GCC
                     sQuery += " CAST(CM." + sDateColumn + " AS DATE) = '" + sDate + "' GROUP BY cm." + GV.sAccessTo + "_AGENT_NAME )t Order by T.Processed Desc;";
                 }
 
-
-
-
                 
 
                 dtQCTable = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
@@ -341,8 +338,8 @@ namespace GCC
                     dtQCTable.Columns.Add("QCProcessed");
                     dtQCTable.Columns.Add(dcEmpImage);
                     
-                    sQuery = "SELECT UserName , EmployeeImage FROM MVC..EmployeeImage A INNER JOIN Timesheet..Users B ON A.EmployeeID = B.EmployeeNo WHERE B.Active = 'Y' AND B.UserName IN ("+GM.ColumnToQString("AgentName",dtQCTable,"String")+");";
-                    DataTable dtEmpImage = GV.MSSQL.BAL_ExecuteQuery(sQuery);
+                    sQuery = "SELECT UserName , EmployeeImage FROM RM..EmployeeImage A INNER JOIN CH1020BD02.Timesheet.dbo.Users B ON A.EmployeeID = B.EmployeeNo WHERE B.Active = 'Y' AND B.UserName IN ("+GM.ColumnToQString("AgentName",dtQCTable,"String")+");";
+                    DataTable dtEmpImage = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
 
                     Byte[] bDummyImg = GM.imgToByte(Properties.Resources.Misc_User_icon__1_);
 

@@ -150,7 +150,7 @@ namespace GCC
                             sInsertString = "INSERT INTO c_email_hunter (FirstName, LastName, DomainName,LoadedDate,BatchID) Values " + sInsertString.Substring(1);
                             GV.MSSQL1.BAL_ExecuteNonReturnQuery(sInsertString);
 
-                            GV.MSSQL1.BAL_ExecuteNonReturnQuery(@"update c_email_hunter t1 join (select * from c_email_hunter where batchid <>'"+ sBatchID + "' and status is not null)t2 on t1.firstname=t2.firstname and t1.lastname=t2.lastname and t1.domainname=t2.domainname set t1.email=t2.email,t1.score=t2.score,t1.source=t2.source,t1.emailpattern=t2.emailpattern ,t1.status='COMPLETED',t1.processeddate=getdate() where t1.status is null  and t1.BatchID='" + sBatchID + "'");
+                            GV.MSSQL1.BAL_ExecuteNonReturnQuery(@"update t1 set t1.email=t2.email,t1.score=t2.score,t1.source=t2.source,t1.emailpattern=t2.emailpattern,t1.status='COMPLETED',t1.processeddate=getdate()  from c_email_hunter t1 join (select * from c_email_hunter where batchid <>'" + sBatchID + "' and status is not null)t2 on t1.firstname=t2.firstname and t1.lastname=t2.lastname and t1.domainname=t2.domainname where t1.status is null  and t1.BatchID='" + sBatchID + "'");
 
                             dtBatch = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_email_hunter_batch");
                             sdgvManualChecks.PrimaryGrid.DataSource = dtBatch;

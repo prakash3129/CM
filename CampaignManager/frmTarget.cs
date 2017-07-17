@@ -33,8 +33,8 @@ namespace GCC
             try
             {
                 lblPanelHeader.Text = "Overall Statistics <br/>(" + GM.GetDateTime().ToString("MMMM") + ")";
-                dtAgentSummary = GV.MSSQL.BAL_ExecuteQuery(GetQuery.AgentSummary(GV.sEmployeeName));
-                dtDaily_Agent_Perfoemance = GV.MSSQL.BAL_FetchTable("DAILY_AGENT_PERFORMANCE_V1", "DASHBOARD_ID = " + GV.sDashBoardID + " AND FLAG='"+GV.sAccessTo+"' AND AGENTNAME = '" + GV.sEmployeeName + "' AND DATECALLED = '" + GM.GetDateTime().ToString("yyyyMMdd") + "'");
+                dtAgentSummary = GV.MSSQL1.BAL_ExecuteQuery(GetQuery.AgentSummary(GV.sEmployeeName));
+                dtDaily_Agent_Perfoemance = GV.MSSQL1.BAL_FetchTable("RM..DAILY_AGENT_PERFORMANCE_V1", "DASHBOARD_ID = " + GV.sDashBoardID + " AND FLAG='"+GV.sAccessTo+"' AND AGENTNAME = '" + GV.sEmployeeName + "' AND DATECALLED = '" + GM.GetDateTime().ToString("yyyyMMdd") + "'");
                 if (dtAgentSummary.Rows.Count > 0)
                 {
                     lblMonthlyPoints.Text = "<b>" + dtAgentSummary.Rows[0]["MTDPOINTS"].ToString() + "</b> point(s) accumulated this month.";
@@ -79,7 +79,7 @@ namespace GCC
         {
             try
             {
-                DataTable dtChartData = GV.MSSQL.BAL_ExecuteQuery("SELECT TOP 15 DATECALLED,DATENAME(dw,DATECALLED)AS [Day] ,ISNULL(NO_OF_CONTACTS_VALIDATED,0)NO_OF_CONTACTS_VALIDATED,ISNULL(SELF_TARGET,0)SELF_TARGET,ISNULL(AVERAGE,0) AS Team FROM dbo.DAILY_AGENT_PERFORMANCE_V1 WHERE DASHBOARD_ID=" + GV.sDashBoardID + " AND FLAG='"+GV.sAccessTo+"' AND AGENTNAME='" + GV.sEmployeeName + "' ORDER BY DATECALLED DESC");
+                DataTable dtChartData = GV.MSSQL1.BAL_ExecuteQuery("SELECT TOP 15 DATECALLED,DATENAME(dw,DATECALLED)AS [Day] ,ISNULL(NO_OF_CONTACTS_VALIDATED,0)NO_OF_CONTACTS_VALIDATED,ISNULL(SELF_TARGET,0)SELF_TARGET,ISNULL(AVERAGE,0) AS Team FROM RM..DAILY_AGENT_PERFORMANCE_V1 WHERE DASHBOARD_ID=" + GV.sDashBoardID + " AND FLAG='"+GV.sAccessTo+"' AND AGENTNAME='" + GV.sEmployeeName + "' ORDER BY DATECALLED DESC");
                 foreach (DataRow dr in dtChartData.Rows)
                 {
                     SeriesPoint x1;
@@ -115,7 +115,7 @@ namespace GCC
                     if (dtDaily_Agent_Perfoemance.Rows.Count > 0)
                     {
                         dtDaily_Agent_Perfoemance.Rows[0]["SELF_TARGET"] = txtTarget.Value.ToString();
-                        GV.MSSQL.BAL_SaveToTable(dtDaily_Agent_Perfoemance.GetChanges(DataRowState.Modified), "DAILY_AGENT_PERFORMANCE_V1", "Update", true);
+                        GV.MSSQL_RM.BAL_SaveToTable(dtDaily_Agent_Perfoemance.GetChanges(DataRowState.Modified), "RM..DAILY_AGENT_PERFORMANCE_V1", "Update", true);
                     }
                     else
                     {
@@ -126,7 +126,7 @@ namespace GCC
                         drNewAgentWisePerformance["AGENTNAME"] = GV.sEmployeeName;
                         drNewAgentWisePerformance["SELF_TARGET"] = txtTarget.Value.ToString();
                         dtDaily_Agent_Perfoemance.Rows.Add(drNewAgentWisePerformance);
-                        GV.MSSQL.BAL_SaveToTable(dtDaily_Agent_Perfoemance.GetChanges(DataRowState.Added), "DAILY_AGENT_PERFORMANCE_V1", "New", true);
+                        GV.MSSQL_RM.BAL_SaveToTable(dtDaily_Agent_Perfoemance.GetChanges(DataRowState.Added), "RM..DAILY_AGENT_PERFORMANCE_V1", "New", true);
                     }
                     ToastNotification.Show(this, "Target Updated Sucessfully", eToastPosition.TopRight);
                     txtTarget.Enabled = false;

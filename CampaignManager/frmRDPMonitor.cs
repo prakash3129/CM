@@ -51,7 +51,7 @@ namespace GCC
 
         void LoadTable()
         {
-            dtMonitor = GV.MSSQL1.BAL_ExecuteQuery("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; SELECT M.MachineID, L.WHO AS [User],M.HostName AS Host,M.IP, M.Status,M.SystemState,RDPPort,S.PROJECT_NAME AS 'Project Name',L.PROJECTID AS 'Project ID', M.LastUpdatedDate, L.USERTYPE AS Level, L.RESEARCHTYPE AS 'Access To', M.CMVersion AS Version FROM c_machines AS M  INNER JOIN (SELECT USERTYPE,RESEARCHTYPE,SESSIONID,PROJECTID,WHO FROM c_log WHERE ACTION = 'Project LoggedIn' AND Cast([WHEN] as date) IN (Cast(getdate()-1 as date))) as L ON M.LastSession = L.SESSIONID INNER JOIN c_project_settings S ON M.LASTLOGGEDPROJECTID = S.PROJECT_ID ORDER BY M.Status DESC;");
+            dtMonitor = GV.MSSQL1.BAL_ExecuteQuery("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; SELECT M.MachineID, L.WHO AS [User],M.HostName AS Host,M.IP, M.Status,M.SystemState,RDPPort,S.PROJECT_NAME AS 'Project Name',L.PROJECTID AS 'Project ID', M.LastUpdatedDate, L.USERTYPE AS Level, L.RESEARCHTYPE AS 'Access To', M.CMVersion AS Version FROM c_machines AS M  INNER JOIN (SELECT USERTYPE,RESEARCHTYPE,SESSIONID,PROJECTID,WHO FROM c_log WHERE ACTION = 'Project LoggedIn' AND Cast([WHEN] as date) IN (Cast(getdate()-1 as date), Cast(getdate() as date))) as L ON M.LastSession = L.SESSIONID INNER JOIN c_project_settings S ON M.LASTLOGGEDPROJECTID = S.PROJECT_ID ORDER BY M.Status DESC;");
             dtMonitor.Columns.Add("LastUpdated");
             foreach (DataRow drMonitor in dtMonitor.Rows)
             {

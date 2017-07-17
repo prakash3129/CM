@@ -1,0 +1,6 @@
+#LWP-Cookies-1.0
+Set-Cookie3: bcookie="\"v=2&b3dbdaa8-b309-4da5-804a-cf4b073961be\""; path="/"; domain=.linkedin.com; path_spec; expires="2018-02-24 18:12:26Z"; version=0
+Set-Cookie3: lidc="\"b=LB18:g=485:u=35:i=1457594576:t=1457679691:s=AQEct3qCImF3fTYP6ekIXWx3TwBQ1Ss9\""; path="/"; domain=.linkedin.com; path_spec; expires="2016-03-11 07:01:31Z"; version=0
+Set-Cookie3: JSESSIONID="\"ajax:4536967309823775462\""; path="/"; domain=www.linkedin.com; path_spec; expires="2016-06-08 07:24:34Z"; version=0
+Set-Cookie3: bscookie="\"v=1&20160225063454e1cee891-bf4f-478e-8813-c136cff997e2AQFny_SQ6ErLckIRYnz_N5BLyMHg2W7b\""; path="/"; domain=www.linkedin.com; path_spec; secure; expires="2018-02-24 18:12:26Z"; HttpOnly; version=0
+Set-Cookie3: visit="\"v=1&M\""; path="/"; domain=www.linkedin.com; path_spec; expires="2018-02-24 06:37:06Z"; version=0

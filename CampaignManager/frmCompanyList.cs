@@ -241,8 +241,9 @@ namespace GCC
 
                 //((frmMain)ParantForm).ribbonPanelProcess.Refresh();
 
-                
+
                 //splitContainerCount.BackColor = Color.Transparent;
+                GV.sPreviousLoggedProjectID = GV.sProjectID;
                 splitContainerCount.IsSplitterFixed = true;
                 splitContainerCount.SplitterWidth = 1;
 
@@ -365,8 +366,8 @@ namespace GCC
                     sBlobType = "'CallScript','EAF'";                
 
                 //string sPath = AppDomain.CurrentDomain.BaseDirectory + "\\Campaign Manager", sFileName;
-                string SQL = "SELECT * FROM PROJECT_FILES WHERE ProjectID IN('" + GV.sProjectID + "','ALL') AND FileType IN (" + sBlobType + ");";
-                SqlConnection connection = new SqlConnection(GV.sMSSQL);
+                string SQL = "SELECT * FROM RM..PROJECT_FILES WHERE ProjectID IN('" + GV.sProjectID + "','ALL') AND FileType IN (" + sBlobType + ");";
+                SqlConnection connection = new SqlConnection(GV.sMSSQL1);
                 SqlCommand command = new SqlCommand(SQL, connection);
                 if (connection.State != ConnectionState.Open)
                     connection.Open();
@@ -586,7 +587,7 @@ namespace GCC
             }
 
             ((frmMain)ParantForm).Invoke((MethodInvoker)delegate { ((frmMain)ParantForm).progressBar.Text = "Loading External Assembly"; });
-            DataTable dtEAFBlob = GV.MSSQL.BAL_ExecuteQuery("select BLOB from project_files where filetype='EAF' and ProjectID='" + GV.sProjectID + "'");
+            DataTable dtEAFBlob = GV.MSSQL1.BAL_ExecuteQuery("select BLOB from RM..project_files where filetype='EAF' and ProjectID='" + GV.sProjectID + "'");
             if (dtEAFBlob.Rows.Count > 0)
                 EAF = (byte[])dtEAFBlob.Rows[0]["Blob"];
 
@@ -2486,17 +2487,17 @@ namespace GCC
                         foreach (ListViewItem lstCompany in lstColumnsToExportCompany.Items)
                         {
                             if (sCompanyColumns.Length > 0)
-                                sCompanyColumns += ", Company." + lstCompany.Text + " AS Company_" + lstCompany.Text.Replace("Company_", "");
+                                sCompanyColumns += ", Company.[" + lstCompany.Text + "] AS [Company_" + lstCompany.Text.Replace("Company_", "") + "]";
                             else
-                                sCompanyColumns = "Company." + lstCompany.Text + " AS Company_" + lstCompany.Text.Replace("Company_", "");
+                                sCompanyColumns = "Company.[" + lstCompany.Text + "] AS [Company_" + lstCompany.Text.Replace("Company_", "") + "]";
                         }
 
                         foreach (ListViewItem lstContact in lstColumnsToExportContact.Items)
                         {
                             if (sContactColumns.Length > 0)
-                                sContactColumns += ", Contact." + lstContact.Text + " AS Contact_" + lstContact.Text.Replace("Contact_", "");
+                                sContactColumns += ", Contact.[" + lstContact.Text + "] AS [Contact_" + lstContact.Text.Replace("Contact_", "") + "]";
                             else
-                                sContactColumns = "Contact." + lstContact.Text + " AS Contact_" + lstContact.Text.Replace("Contact_", "");
+                                sContactColumns = "Contact.[" + lstContact.Text + "] AS [Contact_" + lstContact.Text.Replace("Contact_", "") + "]";
                         }
 
                         if (sCompanyColumns.Length > 0)

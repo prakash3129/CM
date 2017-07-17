@@ -36,8 +36,8 @@ namespace GCC
 
             sSQLText +=     @" ;WITH CTE AS ( SELECT   D1.PROJECT_NAME,D2.DATECALLED ,D2.AGENTNAME ,D3.Fullname AgentFullName ,NO_OF_CONTACTS_VALIDATED AchievedContacts ,LastSeen LastSeen ,POINTS POINTS ,ISNULL(SELF_TARGET, 0) SELF_TARGET,
                             ROW_NUMBER() OVER (ORDER BY DateCalled DESC ) ROW_NUM 
-                            FROM DASHBOARD D1 
-                            INNER JOIN DAILY_AGENT_PERFORMANCE_V1 D2 ON D2.DASHBOARD_ID = D1.ID AND D2.AGENTNAME = '" + sAgentName + "' INNER JOIN Timesheet..Users D3 ON D3.UserName = D2.AGENTNAME AND D2.FLAG = '" + GV.sAccessTo + "'";
+                            FROM RM..DASHBOARD D1 
+                            INNER JOIN RM..DAILY_AGENT_PERFORMANCE_V1 D2 ON D2.DASHBOARD_ID = D1.ID AND D2.AGENTNAME = '" + sAgentName + "' INNER JOIN CH1020BD02.Timesheet.dbo.Users D3 ON D3.UserName = D2.AGENTNAME AND D2.FLAG = '" + GV.sAccessTo + "'";
 
             sSQLText +=     @"WHERE D2.DATECALLED BETWEEN @FromDate AND @ToDate
                             and D3.ACTIVE = 'Y' group by D1.PROJECT_NAME , D2.DATECALLED , D2.AGENTNAME , D3.Fullname , NO_OF_CONTACTS_VALIDATED , LastSeen ,POINTS , SELF_TARGET), 

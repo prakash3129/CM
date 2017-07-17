@@ -238,9 +238,10 @@ namespace DAL
             string sSql = "";
             try
             {
+            
                 sSql = "SELECT * FROM " + sTableName + " Where 1=0";
-                //SqlConnection connection = new SqlConnection(GlobalVariables.sMSSQL);
-                SqlDataAdapter da = new SqlDataAdapter(sSql, GV.conMSSQL1);
+               SqlDataAdapter da = new SqlDataAdapter(sSql, GV.conMSSQL1);
+                //SqlDataAdapter da = new SqlDataAdapter(sSql, conMSSQLRM);
                 SqlCommandBuilder cb = new SqlCommandBuilder(da);
                 MSSQLConOpen();
 
@@ -292,10 +293,10 @@ namespace DAL
                 //else
                 //    //MessageBoxEx.Show(ex.Message, "Campaign Manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-        }
+        }        
 
         public bool MSSQLConOpen()//Bring back the connection if connection pool dropped
-        {
+        {           
             if (GV.conMSSQL1.State == ConnectionState.Open)
             {
                 try
@@ -307,13 +308,16 @@ namespace DAL
                 {
                     try
                     {
+                        GV.conMSSQL1.Close();
                         GV.conMSSQL1.Open();
                         cmdtest.ExecuteNonQuery();
                         return true;
                     }
                     catch (Exception ex1)
                     {
+                        GV.conMSSQL1 = new SqlConnection(GV.sMSSQL1);
                         GV.conMSSQL1.Open();
+                        cmdtest.Connection = GV.conMSSQL1;
                         cmdtest.ExecuteNonQuery();
                         return true;
                     }
@@ -323,6 +327,7 @@ namespace DAL
             {
                 try
                 {
+                    GV.conMSSQL1.Close();
                     GV.conMSSQL1.Open();
                     cmdtest.ExecuteNonQuery();
                     return true;
@@ -331,13 +336,16 @@ namespace DAL
                 {
                     try
                     {
+                        GV.conMSSQL1.Close();
                         GV.conMSSQL1.Open();
                         cmdtest.ExecuteNonQuery();
                         return true;
                     }
                     catch (Exception ex1)
                     {
+                        GV.conMSSQL1 = new SqlConnection(GV.sMSSQL1);
                         GV.conMSSQL1.Open();
+                        cmdtest.Connection = GV.conMSSQL1;
                         cmdtest.ExecuteNonQuery();
                         return true;
                     }

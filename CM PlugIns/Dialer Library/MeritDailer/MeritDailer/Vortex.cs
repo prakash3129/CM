@@ -15,6 +15,7 @@ using RestSharp;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Deployment.Application;
 
 namespace VortexDial
 {
@@ -145,7 +146,7 @@ namespace VortexDial
         string sCodecs = "G.711 mu-law|G.711 a-law|RFC4733 DTMF tones|H.263-1998|G.729A";
         string sSoftLicUser = "Trial6cb9-90F2-577A-6BAF3881-61F2-0E9E-8739-4577AA869540";
         string sSoftLicKey = "XBdftFtO2xrtUMCqeearoOyqwda+xbPl3E6oPeGX7+L8gU5LBd/0f4VuKfFqfSzMONQmztJVJzw5SmfWtdlFMA==";
-        static string sSystemLogPath = @"\\172.27.137.182\Campaign Manager\Vortex";
+        static string sSystemLogPath = @"\\CH1031SF02\Campaign Manager\Vortex";
         
 
         string sExtension = string.Empty;
@@ -337,7 +338,7 @@ namespace VortexDial
                 if(sSystemLogPath.Length > 0)
                     WriteLog(sSystemLogPath + "\\" + sLogName, sWriteError, true);
                 else
-                    WriteLog(@"\\172.27.137.182\Campaign Manager\Vortex\" + sLogName, sWriteError, true);
+                    WriteLog(@"\\CH1031SF02\Campaign Manager\Vortex\" + sLogName, sWriteError, true);
                 
             }
             catch (Exception ex11)
@@ -399,7 +400,9 @@ namespace VortexDial
             { return Environment.MachineName; }
         }
 
-        public string Connect(string ClientIP, string ApplicationName, bool HardPhone, bool ConcurrentDialing)
+        string ApplicationName = string.Empty;
+
+        public string Connect(string ClientIP, bool HardPhone, bool ConcurrentDialing)
         {
             try
             {
@@ -411,7 +414,8 @@ namespace VortexDial
                 if (ClientIP.Trim().Length == 0)
                     return "Invalid Client IP.";
 
-                using (DataTable dtExt = ExecuteTable("UPDATE TOP (1) Extensions SET LastConnected = GETDATE(), LastUsedApplication = '" + ApplicationName.Replace("'", "''").Trim() + "' WHERE IP='"+ ClientIP.Replace("'", "''").Trim() + "';SELECT ID,Extension FROM Call_Timesheet..Extensions WHERE IP = '" + ClientIP.Replace("'", "''").Trim() + "' AND Active = 'Y';", sConString))
+                //UPDATE TOP (1) Extensions SET LastConnected = GETDATE(), LastUsedApplication = '" + ApplicationName.Replace("'", "''").Trim() + "' WHERE IP='"+ ClientIP.Replace("'", "''").Trim() + "';
+                using (DataTable dtExt = ExecuteTable("SELECT ID,Extension FROM Call_Timesheet..Extensions WHERE IP = '" + ClientIP.Replace("'", "''").Trim() + "' AND Active = 'Y';", sConString))
                 {
                     if (dtExt != null && dtExt.Rows.Count > 0 && dtExt.Rows[0][1].ToString().Length > 0)
                     {
@@ -422,11 +426,21 @@ namespace VortexDial
                     {
                         sExtension = string.Empty;
                         sExtID = string.Empty;
-
                         if (sExtension.Trim().Length == 0)
                             return "Extension not assigned to this machine (or) Invalid Client IP.";
                     }
                 }
+
+                
+                    string sAppName = Assembly.GetEntryAssembly().GetName().Name;
+                    if (ApplicationDeployment.IsNetworkDeployed)
+                    {
+                        ApplicationDeployment appDeployment = ApplicationDeployment.CurrentDeployment;
+                        ApplicationName = sAppName + " v" + appDeployment.CurrentVersion.Major + "." + appDeployment.CurrentVersion.Minor + "." + appDeployment.CurrentVersion.Build + " Build " + appDeployment.CurrentVersion.Revision;
+                    }
+                    else
+                        ApplicationName = sAppName + " Dev";
+                
 
                 using (DataTable dtConfig = ExecuteTable("SELECT * FROM Call_Timesheet..Vortex_Config;", sConString))
                 {                    
@@ -481,13 +495,16 @@ namespace VortexDial
                 {
                     socket.Connect(sDialerIP, iDialerPort);
                     _bIsConnected = true;
+
+                    if(sExtID.Length > 0)
+                        ExecuteQuery("UPDATE TOP (1) Extensions SET LastActive = GETDATE(), ActiveEmployeeID = NULL, CallStatus = NULL, ActiveNumber = NULL,ActiveProjectID = NULL, LastUsedApplication = '" + ApplicationName.Replace("'", "''").Trim() + "' WHERE ID='" + sExtID + "';", sConString);
                 }
 
                 if (!HardPhone)
                 {
                     if (SoftPhoneState.Length == 0)
                     {
-                        SPhone = new VortexPhone();
+                        SPhone = new VortexPhone();                        
                         SPhone.OnInitialized += new _IVortexPhoneEvents_OnInitializedEventHandler(this.VortexPhone_OnInitialized);
                         SPhone.OnLineSwiched += new _IVortexPhoneEvents_OnLineSwichedEventHandler(this.VortexPhone_OnLineSwiched);
                         SPhone.OnEstablishedCall += new _IVortexPhoneEvents_OnEstablishedCallEventHandler(this.VortexPhone_OnEstablishedCall);
@@ -521,6 +538,13 @@ namespace VortexDial
                         phoneCfg.EchoCancelationEnabled = 1;
                         phoneCfg.NoiseReductionEnabled = 0;
                         phoneCfg.AutoGainControlEnabled = 0;
+
+                        
+
+
+
+
+
                         phoneCfg.DialToneEnabled = 0;
                         string sVersion = SPhone.RetrieveVersion();
                         string sPath = SPhone.SDKPath();
@@ -822,7 +846,7 @@ namespace VortexDial
 
 
 
-
+                
                 SPhone.RecordVolume = 100;
                 SPhone.PlaybackVolume = 100;
 
@@ -1060,7 +1084,7 @@ namespace VortexDial
                         if (sSystemLogPath.Length > 0)
                             WriteLog(sSystemLogPath + "\\" + sLogName, ex.Message, true);
                         else
-                            WriteLog(@"\\172.27.137.182\Campaign Manager\Vortex\" + sLogName, ex.Message, true);
+                            WriteLog(@"\\CH1031SF02\Campaign Manager\Vortex\" + sLogName, ex.Message, true);
                     }
                     return string.Empty;
                 }
@@ -1303,6 +1327,9 @@ namespace VortexDial
                     byte[] buffer = new byte[20000];
                     stringBuilder.Clear();
                     int num = socket.Receive(buffer);
+
+                    
+
                     for (int index = 0; index < num; ++index)
                         stringBuilder.Append(Convert.ToChar(buffer[index]));
 
@@ -1333,6 +1360,10 @@ namespace VortexDial
                                                 drrLog[0]["CallState"] = "INITIATED";                                                
                                                 drrLog[0]["RecordName"] = InsertAndGetIdentity("INSERT INTO Call_Timesheet..Call_Log (CallID, Extension, TelephoneNumber, InitiateTime, TeamName, ProjectID, ReferenceID, EmployeeID, CallType, CallStatus) VALUES('" + drrLog[0]["UniqueID"] + "', '" + sExtension + "', '" + drrLog[0]["Telephone"] + "', '" + jSon.calltime + "', '" + drrLog[0]["TeamName"] + "', '" + drrLog[0]["ProjectID"] + "', '" + drrLog[0]["ReferenceID"] + "', '" + drrLog[0]["EmployeeID"] + "', '" + drrLog[0]["CallType"] + "','INITIATED'); ", sConString);
                                                 //bWorker.ReportProgress(0, "Call Initiated:" + drrLog[0]["Telephone"] + "||ID:" + jSon.uniqueid + "||Ext:" + sExtension + "||CallTime:" + jSon.calltime);
+
+                                                if (sExtID.Length > 0)
+                                                    ExecuteQuery("UPDATE TOP (1) Extensions SET CallStatus ='INITIATED', ActiveEmployeeID = '"+ drrLog[0]["EmployeeID"] + "', LastActive = GETDATE(), ActiveNumber = '"+ drrLog[0]["Telephone"] + "', ActiveProjectID = '"+ drrLog[0]["ProjectID"] + "' WHERE ID='" + sExtID + "';", sConString);
+
                                                 bWorker.ReportProgress(0, stringBuilder.ToString());
 
                                                 if (drrLog[0]["RecordName"].ToString().Length > 0 && sPreAnswerRecordingPath.Length > 0)
@@ -1352,6 +1383,9 @@ namespace VortexDial
 
                                                 if (drrLog[0]["RecordName"].ToString().Length > 0 && sAnsweredRecordingPath.Length > 0)
                                                     SPhone.StartRecording(sAnsweredRecordingPath + "\\" + drrLog[0]["RecordName"]);
+
+                                                if (sExtID.Length > 0)
+                                                    ExecuteQuery("UPDATE TOP (1) Extensions SET CallStatus ='ANSWERED', LastActive = GETDATE(), ActiveNumber = '" + drrLog[0]["Telephone"] + "' WHERE ID='" + sExtID + "';", sConString);
 
                                                 //bWorker.ReportProgress(0, "Call Answered:" + drrLog[0]["Telephone"] + "||ID:" + jSon.uniqueid + "||Ext:" + sExtension + "||AnswerTime:" + jSon.answer_time);
                                                 bWorker.ReportProgress(0, stringBuilder.ToString());
@@ -1375,7 +1409,9 @@ namespace VortexDial
 
                                                 if (SupportiDialer)
                                                     ExecuteQuery("INSERT INTO Call_Timesheet..AspectDialerLogger (AgentName, LoginID, StationID, TelephoneNumber, RecordingID, Duration, DateTimeStamp, ProjectName, CampaignID, Company_ID) VALUES ('" + drrLog[0]["EmployeeID"] + "','" + drrLog[0]["EmployeeID"] + "','" + sExtension + "','" + drrLog[0]["Telephone"] + "','1','" + jSon.duration.ToString() + "',GETDATE(),'" + drrLog[0]["ProjectID"] + "','" + drrLog[0]["TeamName"] + "','" + drrLog[0]["ReferenceID"] + "');", sConString);
-                                                
+
+                                                if (sExtID.Length > 0)
+                                                    ExecuteQuery("UPDATE TOP (1) Extensions SET CallStatus =NULL, LastActive = GETDATE(), ActiveNumber = NULL WHERE ID='" + sExtID + "';", sConString);
                                                 //bWorker.ReportProgress(0, "Call HangUp:" + drrLog[0]["Telephone"] + "||ID:" + jSon.uniqueid + "||CallEndTime:" + jSon.endtime + "||TalkTime:" + jSon.talktime + "||TotalDuration:" + jSon.duration + "||CallStatus:" + jSon.status);
                                                 bWorker.ReportProgress(0, stringBuilder.ToString());
                                             }

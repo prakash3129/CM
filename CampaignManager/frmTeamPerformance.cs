@@ -54,7 +54,7 @@ namespace GCC
                     //DataTable dtAgentWisePerformence = GV.MSSQL.BAL_ExecuteQuery("SELECT U.Fullname,SELF_TARGET,NO_OF_CONTACTS_VALIDATED,CASE WHEN DATEDIFF(YEAR, DateOfJoin,GETDATE())>1 THEN CONVERT(VARCHAR(100), DATEDIFF(YEAR, DateOfJoin,GETDATE())) +' Years' WHEN DATEDIFF(YEAR, DateOfJoin,GETDATE())=1 THEN CONVERT(VARCHAR(100), DATEDIFF(YEAR, DateOfJoin,GETDATE())) +' Year' WHEN (DATEDIFF(YEAR, DateOfJoin,GETDATE())<1 AND DATEDIFF(MONTH, DateOfJoin,GETDATE())>1)  THEN CONVERT(VARCHAR(100), DATEDIFF(MONTH, DateOfJoin,GETDATE())) +' Months' WHEN (DATEDIFF(YEAR, DateOfJoin,GETDATE())<1 AND DATEDIFF(MONTH, DateOfJoin,GETDATE())=1)  THEN CONVERT(VARCHAR(100), DATEDIFF(MONTH, DateOfJoin,GETDATE())) +' Month' WHEN (DATEDIFF(YEAR, DateOfJoin,GETDATE())<1 AND DATEDIFF(MONTH, DateOfJoin,GETDATE())<1)  THEN CONVERT(VARCHAR(100), DATEDIFF(DAY, DateOfJoin,GETDATE())) +' Days' END Tenure, LastSeen FROM DAILY_AGENT_PERFORMANCE D INNER JOIN Timesheet.dbo.USERS U ON D.AGENTNAME = U.UserName WHERE D.DASHBOARD_ID=174 AND U.Active = 'Y' AND DATECALLED='" + GlobalMethods.GetDateTime().ToString("yyyyMMdd") + "'");
                     //byte[] image = ReadImageFile(@"C:\Users\thangaprakashm\Desktop\Road\3759007_orig.jpg");
                     // Image img = Image.FromFile(@"C:\Users\thangaprakashm\Desktop\Road\3759007_orig.jpg");
-                    dtImages = GV.MSSQL.BAL_ExecuteQuery("SELECT A.* FROM MVC..EmployeeImage A INNER JOIN Timesheet..Users B ON A.EmployeeID = B.EmployeeNo WHERE B.Active = 'Y'");
+                    dtImages = GV.MSSQL_RM.BAL_ExecuteQuery("SELECT A.* FROM RM..EmployeeImage A INNER JOIN CH1020BD02.Timesheet.DBO.Users B ON A.EmployeeID = B.EmployeeNo WHERE B.Active = 'Y'");
                     Load_ProjectPerformance();
                     Load_OverAllPerformance();
                     GridPanel panel1 = sdgvProjectPerformance.PrimaryGrid;
@@ -118,8 +118,8 @@ namespace GCC
         {
             try
             {
-                dtAgentSummary = GV.MSSQL.BAL_ExecuteQuery(GetQuery.AgentSummary(GV.sEmployeeName));
-                dtDaily_Agent_Perfoemance = GV.MSSQL.BAL_FetchTable("DAILY_AGENT_PERFORMANCE_V1", "DASHBOARD_ID = " + GV.sDashBoardID + " AND FLAG='"+GV.sAccessTo+"' AND AGENTNAME = '" + GV.sEmployeeName + "' AND DATECALLED = '" + GM.GetDateTime().ToString("yyyyMMdd") + "'");
+                dtAgentSummary = GV.MSSQL1.BAL_ExecuteQuery(GetQuery.AgentSummary(GV.sEmployeeName));
+                dtDaily_Agent_Perfoemance = GV.MSSQL1.BAL_FetchTable("RM..DAILY_AGENT_PERFORMANCE_V1", "DASHBOARD_ID = " + GV.sDashBoardID + " AND FLAG='"+GV.sAccessTo+"' AND AGENTNAME = '" + GV.sEmployeeName + "' AND DATECALLED = '" + GM.GetDateTime().ToString("yyyyMMdd") + "'");
 
                 if (dtAgentSummary.Rows.Count > 0)
                 {
@@ -174,18 +174,18 @@ namespace GCC
             try
             {
                 string sProjectWiseSQL = @";WITH CTE AS ( SELECT  D3.EmployeeNo ,D3.Fullname AgentFullName ,NO_OF_CONTACTS_VALIDATED AchievedContacts ,LastSeen LastSeen ,POINTS ,
-                                        SELF_TARGET ,Project_rank , CASE  WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=0 THEN 'Below 1 Month'
-                                        WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))>=6 THEN '6 Months & Above'
-                                        WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=1 THEN '1 Month'
-                                        WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=2 THEN '2 Months'
-                                        WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=3 THEN '3 Months'
-                                        WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE())) IN (4,5) THEN '4 & 5 Months'
-                                        END TENURE FROM DASHBOARD D1 INNER JOIN DAILY_AGENT_PERFORMANCE_V1 D2 ON D2.DASHBOARD_ID = D1.ID                                       
-                                        AND D2.DASHBOARD_ID = "+GV.sDashBoardID+" AND D2.DATECALLED = CONVERT(DATE, GETDATE()) AND D2.FLAG = '"+GV.sAccessTo+"'INNER JOIN Timesheet..Users D3 ON D3.UserName = D2.AGENTNAME )";
+                                        SELF_TARGET ,Project_rank , CASE  WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=0 THEN 'Below 1 Month'
+                                        WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))>=6 THEN '6 Months & Above'
+                                        WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=1 THEN '1 Month'
+                                        WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=2 THEN '2 Months'
+                                        WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=3 THEN '3 Months'
+                                        WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE())) IN (4,5) THEN '4 & 5 Months'
+                                        END TENURE FROM RM.DBO.DASHBOARD D1 INNER JOIN RM.DBO.DAILY_AGENT_PERFORMANCE_V1 D2 ON D2.DASHBOARD_ID = D1.ID                                       
+                                        AND D2.DASHBOARD_ID = " + GV.sDashBoardID+" AND D2.DATECALLED = CONVERT(DATE, GETDATE()) AND D2.FLAG = '"+GV.sAccessTo+ "'INNER JOIN CH1020BD02.Timesheet.dbo.Users D3 ON D3.UserName = D2.AGENTNAME )";
                 sProjectWiseSQL += @"SELECT EmployeeNo,AgentFullName,AchievedContacts,LastSeen,POINTS,SELF_TARGET,PROJECT_RANK OVERALLRANKING,TENURE,ROW_NUMBER() OVER (PARTITION BY TENURE ORDER BY POINTS DESC) TenurebasedRanking
                                         FROM CTE ORDER BY PROJECT_RANK";
 
-                dtProjectPerformence = GV.MSSQL.BAL_ExecuteQuery(sProjectWiseSQL);
+                dtProjectPerformence = GV.MSSQL1.BAL_ExecuteQuery(sProjectWiseSQL);
                 ProjectPerformance_FillGrid();
             }
             catch (Exception ex)
@@ -335,23 +335,23 @@ namespace GCC
                   -(CASE WHEN DATENAME(dw, @FromDate) = 'Sunday' THEN 1 ELSE 0 END)
                   -(CASE WHEN DATENAME(dw, @ToDate) = 'Saturday' THEN 1 ELSE 0 END)
                   -(SELECT COUNT(*)
-                FROM Timesheet..PickLists
+                FROM CH1020BD02.Timesheet.dbo.PickLists
                 WHERE Field = 'Holidays_Voice'
                 AND Data BETWEEN CONVERT(VARCHAR(10), @FromDate, 111) AND CONVERT(VARCHAR(10), @ToDate, 111)
                 ));WITH CTE AS (
                 SELECT AGENTNAME,TARGET,NO_OF_CONTACTS_VALIDATED,POINTS POINTS_AS_PER_AVG,NO_OF_CONTACTS_VALIDATED - (ISNULL(EMAIL_REJECTION,0)+ISNULL(JOB_TITLE_REJECTION,0)+ISNULL(INCORRECT_DISPOSAL,0)+ISNULL(MATCHED_WITH_EXCLUSION,0)+ISNULL(MATCHED_WITH_PREVIOUS_SET,0)+ISNULL(OTHERS_REJECTION,0)) CONT,
                 CAST ( (NO_OF_CONTACTS_VALIDATED - (ISNULL(EMAIL_REJECTION,0)+ISNULL(JOB_TITLE_REJECTION,0)+ISNULL(INCORRECT_DISPOSAL,0)+ISNULL(MATCHED_WITH_EXCLUSION,0)+ISNULL(MATCHED_WITH_PREVIOUS_SET,0)+ISNULL(OTHERS_REJECTION,0)))/NULLIF(ISNULL(TARGET,0),0) AS NUMERIC(12,2)) POINTS
-                FROM MVC..DAILY_AGENT_PERFORMANCE_V1
+                FROM RM..DAILY_AGENT_PERFORMANCE_V1
                 WHERE  DATECALLED BETWEEN @FromDate AND @ToDate
                 AND AGENTNAME<>'TOTAL' AND FLAG='" + GV.sAccessTo+"'),CTEAGENTPOINTS AS (SELECT AGENTNAME, SUM(CONT) CONTACT_ACHIEVED,SUM(POINTS) POINTS FROM CTE GROUP BY AGENTNAME),";
                 sOverallSQL += @"CTEAGENTSUM AS (SELECT D1.*,d2.Fullname,d2.EmployeeNo,CASE 
-                WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=0 THEN 'Below 1 Month'
-                WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))>=6 THEN '>= 6 MONTHS'
-                WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=1 THEN '1 Month'
-                WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=2 THEN '2 Months'
-                WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=3 THEN '3 Months'
-                WHEN MVC.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE())) IN (4,5) THEN '4 & 5 Months'
-                END TENURE FROM CTEAGENTPOINTS D1 INNER JOIN Timesheet..Users D2 ON d1.AGENTNAME=D2.UserName WHERE Active='Y'), CTEFINAL AS (
+                WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=0 THEN 'Below 1 Month'
+                WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))>=6 THEN '>= 6 MONTHS'
+                WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=1 THEN '1 Month'
+                WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=2 THEN '2 Months'
+                WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE()))=3 THEN '3 Months'
+                WHEN RM.DBO.FullMonthsSeparation(DATEADD(MONTH,1, DateOfJoin) ,DATEADD(DD,0,GETDATE())) IN (4,5) THEN '4 & 5 Months'
+                END TENURE FROM CTEAGENTPOINTS D1 INNER JOIN CH1020BD02.Timesheet.dbo.Users D2 ON d1.AGENTNAME=D2.UserName WHERE Active='Y'), CTEFINAL AS (
                 SELECT fullname AgentFullName,contact_achieved AchievedContacts,points MTDPoints,EmployeeNo,C1.Tenure,ROW_NUMBER() OVER ( PARTITION BY C1.TENURE ORDER BY POINTS DESC) Ranking
                 ,CASE WHEN POINTS >= [80% TARGET] AND POINTS < [90% TARGET] THEN '80% Target'
                 WHEN POINTS >= [90% TARGET] AND POINTS < [100% TARGET] THEN '90% Target'
@@ -363,11 +363,11 @@ namespace GCC
                 WHEN POINTS >= [150% TARGET]  THEN '150% Target'     
                 ELSE 'Not Qualified' END BUCKET ,
                 ROW_NUMBER() OVER ( ORDER BY POINTS  DESC) [OVERALL RANKING] FROM CTEAGENTSUM C1
-                LEFT OUTER JOIN dbo.UDF_GET_INCENTIVE_PLAN(@TOTAL_WORKING_DAYS) C2 ON C2.TENURE=C1.TENURE)
+                LEFT OUTER JOIN RM.dbo.UDF_GET_INCENTIVE_PLAN(@TOTAL_WORKING_DAYS) C2 ON C2.TENURE=C1.TENURE)
                 SELECT C1.AgentFullName,C1.AchievedContacts,C1.MTDPoints,C1.EmployeeNo,case when C1.TENURE ='>= 6 MONTHS' then '6 Months & Above' else C1.TENURE END Tenure,C1.Ranking [TenurebasedRanking],C1.[Overall Ranking] [OVERALLRANKING],ISNULL(C2.AMOUNT,0) IncentiveAmount
-                FROM CTEFINAL C1 LEFT OUTER JOIN GCC_INCENTIVE_PLAN C2 ON C1.BUCKET=C2.BUCKET AND C2.RESEARCH_TYPE='" + GV.sAccessTo+"' order by [OVERALL RANKING],[TenurebasedRanking]";
+                FROM CTEFINAL C1 LEFT OUTER JOIN RM..GCC_INCENTIVE_PLAN C2 ON C1.BUCKET=C2.BUCKET AND C2.RESEARCH_TYPE='" + GV.sAccessTo+"' order by [OVERALL RANKING],[TenurebasedRanking]";
 
-                dtOverallPerformence = GV.MSSQL.BAL_ExecuteQuery(sOverallSQL);
+                dtOverallPerformence = GV.MSSQL1.BAL_ExecuteQuery(sOverallSQL);
                 OverAllPerformance_FillGrid();
             }
             catch (Exception ex)
@@ -577,7 +577,7 @@ namespace GCC
                     if (dtDaily_Agent_Perfoemance.Rows.Count > 0)
                     {
                         dtDaily_Agent_Perfoemance.Rows[0]["SELF_TARGET"] = txtTarget.Value.ToString();
-                        GV.MSSQL.BAL_SaveToTable(dtDaily_Agent_Perfoemance.GetChanges(DataRowState.Modified), "DAILY_AGENT_PERFORMANCE_V1", "Update", true);
+                        GV.MSSQL1.BAL_SaveToTable(dtDaily_Agent_Perfoemance.GetChanges(DataRowState.Modified), "RM..DAILY_AGENT_PERFORMANCE_V1", "Update", true);
                     }
                     else
                     {
@@ -588,7 +588,7 @@ namespace GCC
                         drNewAgentWisePerformance["AGENTNAME"] = GV.sEmployeeName;
                         drNewAgentWisePerformance["SELF_TARGET"] = txtTarget.Value.ToString();
                         dtDaily_Agent_Perfoemance.Rows.Add(drNewAgentWisePerformance);
-                        GV.MSSQL.BAL_SaveToTable(dtDaily_Agent_Perfoemance.GetChanges(DataRowState.Added), "DAILY_AGENT_PERFORMANCE_V1", "New", true);
+                        GV.MSSQL1.BAL_SaveToTable(dtDaily_Agent_Perfoemance.GetChanges(DataRowState.Added), "RM..DAILY_AGENT_PERFORMANCE_V1", "New", true);
                     }
                     ToastNotification.Show(this, "Target Updated Sucessfully", eToastPosition.TopRight);
                     txtTarget.Enabled = false;

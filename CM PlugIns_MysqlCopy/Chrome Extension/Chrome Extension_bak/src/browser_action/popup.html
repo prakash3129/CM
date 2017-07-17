@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link href="../shared/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../shared/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../shared/css/fonts.css" rel="stylesheet" type="text/css">
+    <link href="../shared/css/emailhunter-theme.min.css" rel="stylesheet" type="text/css">
+    <link href="popup.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <div class="header">
+      <a href="https://emailhunter.co/search?utm_source=chrome_extension&utm_medium=extension&utm_campaign=extension&utm_content=browser_popup" target="_blank">
+        <img class="logo" src="../shared/img/white_transparent_logo.png" alt="Email Hunter" />
+      </a>
+      <a id="completeSearch" target="_blank" href="">
+        Complete search
+      </a>
+    </div>
+    <div class="body">
+
+      <div class="linkedin-notification">
+        <i class="fa fa-linkedin"></i>To find email addresses on LinkedIn, click on Email Hunter's button on profiles! If this button doesn't appear, please contact us at contact@emailhunter.co.
+      </div>
+
+      <div class="feedback-notification">
+        <p>Hey! Are you satisfied by Email Hunter's Chrome extension?</p>
+        <a class="orange-btn feedback_link" href="#" id="open-rate-notification">Yes</a>
+        <a class="orange-btn feedback_link" href="#" id="open-contact-notification">No</a>
+      </div>
+
+      <div class="rate-notification">
+        <p>Glad to hear this! Please help us rating it in Chrome Web Store :)</p>
+        <a class="orange-btn" href="https://chrome.google.com/webstore/detail/email-hunter/hgmhmanijnjhaffoampdlllchpolkdnj/reviews" target="_blank">Add a rating</a>
+      </div>
+
+      <div class="contact-notification">
+        <p>Sorry to hear this :(</p>
+        <p>Please drop us a line at <strong>contact@emailhunter.co</strong> if you want to give us a feedback or ask any question. We answer to every email.</p>
+      </div>
+
+      <i class="fa fa-spinner fa-spin loader"></i>
+      <h1 id="currentDomain"></h1>
+
+      <div class="error">
+        <div class="error-message light-grey"></div>
+      </div>
+
+      <div class="connect-container light-grey">
+        <div class="connect-message">You've reached your daily limit! Please connect to your Email Hunter account to use the extension. It's free and takes 30 seconds.</div>
+        <a href="https://emailhunter.co/users/sign_up?utm_source=chrome_extension&utm_medium=extension&utm_campaign=extension&utm_content=browser_popup" target="_blank" class="orange-btn">Create a free account</a>
+        <a href="https://emailhunter.co/users/sign_in?utm_source=chrome_extension&utm_medium=extension&utm_campaign=extension&utm_content=browser_popup" target="_blank" class="signin_link">Sign in</a>
+      </div>
+
+      <div class="connect-again-container light-grey">
+        <div class="connect-message">Email Hunter Chrome extension seems not to be associated to your account. Please sign in to continue.</div>
+        <a href="https://emailhunter.co/users/sign_in?utm_source=chrome_extension&utm_medium=extension&utm_campaign=extension&utm_content=browser_popup" target="_blank" class="orange-btn">Sign in</a>
+      </div>
+
+      <div class="upgrade-container light-grey">
+        <div class="upgrade-message">You've reached your monthly quota. Please upgrade your account to continue using Email Hunter.</div>
+        <a href="https://emailhunter.co/subscription?utm_source=chrome_extension&utm_medium=extension&utm_campaign=extension&utm_content=browser_popup" target="_blank" class="orange-btn">Upgrade</a>
+      </div>
+
+      <div class="results">
+        <div id="resultsNumber" class="light-grey"></div>
+      </div>
+
+      <div class="account-information light-grey"></div>
+    </div>
+    <script type="text/javascript" src="../shared/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../shared/js/bootstrap-tooltip.min.js"></script>
+    <script type="text/javascript" src="../shared/js/use-counter.js"></script>
+    <script type="text/javascript" src="../shared/js/utilities.js"></script>
+    <script type="text/javascript" src="../shared/js/account.js"></script>
+    <script type="text/javascript" src="../shared/js/analytics.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+  </body>
+</html>

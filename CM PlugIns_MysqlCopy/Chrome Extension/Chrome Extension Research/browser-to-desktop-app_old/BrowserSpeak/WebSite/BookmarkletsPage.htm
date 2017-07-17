@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>BrowserSpeak Bookmarklets</title>
+</head>
+<body>
+<h3>BrowserSpeak Commands</h3>
+<p>Drag the links below to your bookmarks toolbar or right-click a link and bookmark it.</p>
+<ul>
+<li><a href='javascript:var server="localhost:60024";var maxreqlength=1500;var selectedText=_getSelectedText();if(selectedText){_bufferText(escape(selectedText));_speakText()}void 0;function _getSelectedText(){if(window.getSelection){return window.getSelection().toString()}else{if(document.getSelection){return document.getSelection()}else{if(document.selection){return document.selection.createRange().text}}}return null}function _formatCommand(b,a){return"http://"+server+"/"+b+"/dummy.gif"+a+"&timestamp="+new Date().getTime()}function _speakText(){var a=new Image(1,1);a.onerror=function(){_showerror()};a.src=_formatCommand("speaktext","?source="+document.URL)}function _bufferText(f){var c="true";var b=Math.floor((f.length+maxreqlength-1)/maxreqlength);for(var d=0;d<b;d++){var g=d*maxreqlength;var a=Math.min(f.length,g+maxreqlength);var e=new Image(1,1);e.onerror=function(){_showerror()};e.src=_formatCommand("buffertext","?totalreqs="+b+"&req="+(d+1)+"&text="+f.substring(g,a)+"&clear="+c);c="false"}}function _showerror(){alert("BrowserSpeak is not running. You must start BrowserSpeak first.")}' title="Speak the selected text">Speak Selected</a></li>
+<li><a href='javascript:var server="localhost:60024";_stopSpeaking();void 0;function _stopSpeaking(){var a=new Image(1,1);a.onerror=function(){_showerror()};a.src=_formatCommand("stopspeaking")}function _formatCommand(a){return"http://"+server+"/"+a+"/dummy.gif?timestamp="+new Date().getTime()}function _showerror(){alert("BrowserSpeak is not running. You must start BrowserSpeak first.")}' title="Stop Speaking">Stop</a></li>
+<li><a href='javascript:var server="localhost:60024";_pauseSpeaking();void 0;function _pauseSpeaking(){var a=new Image(1,1);a.onerror=function(){_showerror()};a.src=_formatCommand("pausespeaking")}function _formatCommand(a){return"http://"+server+"/"+a+"/dummy.gif?timestamp="+new Date().getTime()}function _showerror(){alert("BrowserSpeak is not running. You must start BrowserSpeak first.")}' title="Pause Speaking">Pause</a></li>
+<li><a href='javascript:var server="localhost:60024";_resumeSpeaking();void 0;function _resumeSpeaking(){var a=new Image(1,1);a.onerror=function(){_showerror()};a.src=_formatCommand("resumespeaking")}function _formatCommand(a){return"http://"+server+"/"+a+"/dummy.gif?timestamp="+new Date().getTime()}function _showerror(){alert("BrowserSpeak is not running. You must start BrowserSpeak first.")}' title="Resume Speaking">Resume</a></li>
+</ul>
+</body>
+</html>

@@ -63,6 +63,8 @@ namespace GCC
 
         public static bool AudioComments = false;
 
+        public static string sPreviousLoggedProjectID = string.Empty;
+
         public static string TR_Switchboard_Mandate = string.Empty;
         public static int iPreCallLimit = 0;
         public static int iPostCallLimit = 0;
@@ -141,22 +143,25 @@ namespace GCC
         //public static string sEAFLibararyPath = string.Empty;
 
         public static List<string> lstSortableContactColumn = new List<string>();
-
-        public static string sMSSQL = Connection.Connection.Getstring("CM_MSSQL");
-        
-
         public static string sDialerExt = string.Empty;
-        
-
-
-//        public static string sMySQhjL = Connection.Connection.Getstring("CM_MYjhSQL");
+               
+//      public static string sMySQhjL = Connection.Connection.Getstring("CM_MYjhSQL");
         public static string sMySQL = "";
-        public static string sMSSQL1 = "user id=sa;password=Merit123;data source=CH1020BDSM02;initial catalog=MVC_latest;Application Name=Campaign Manager;";
 
 
-        public static SqlConnection conMSSQL = new SqlConnection(Connection.Connection.Getstring("CM_MSSQL"));
+       // public static string sVFD = Connection.Connection.Getstring("VFD_Audit");
+
+        public static string sMSSQL1 = Connection.Connection.Getstring("CM1");
+        public static string sMSSQL = Connection.Connection.Getstring("CM2");
+        public static string sMSSQL_RM = Connection.Connection.Getstring("CM3");
+        //public static string sMSSQL1 = "user id=sa;password=Merit123;data source=CH1020BDSM02;initial catalog=MVC_latest;Application Name=Campaign Manager;";
+
+
+        public static SqlConnection conMSSQL = new SqlConnection(sMSSQL);
 
         public static SqlConnection conMSSQL1 = new SqlConnection(sMSSQL1);
+
+        public static SqlConnection conMSSQL_RM = new SqlConnection(sMSSQL_RM);
 
 
         // public static MyShqlConnection conMYjSQL = new MhjySqlConnection(Connection.Connection.Getstring("CM_MYhjSQL"));
@@ -168,6 +173,7 @@ namespace GCC
 
         public static BAL.BAL_GlobalMSSQL MSSQL = new BAL.BAL_GlobalMSSQL();
         public static BAL.BAL_GlobalMSSQL1 MSSQL1 = new BAL.BAL_GlobalMSSQL1();
+        public static BAL.BAL_GlobalMSSQL_RM MSSQL_RM = new BAL.BAL_GlobalMSSQL_RM();
         //public static BAL.BAL_GlobalMyfgSQL MYfgSQL = new BAL.BAL_GlobalMyfgSQL();
         //public static BAL.BAL_GobalSQLCE SQLCE = new BAL.BAL_GobalSQLCE();
 

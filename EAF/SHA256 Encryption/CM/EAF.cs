@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using System.Text;
 using System.Security.Cryptography;
 
@@ -167,21 +167,21 @@ namespace EAF
                 dtMessage.Columns.Add("Message");
                 dtMessage.Rows.Add("ER", string.Empty);
                 dtMessage.Rows.Add("EX", string.Empty);
-                MySqlConnection connection = new MySqlConnection(sConstring);
+                SqlConnection connection = new SqlConnection(sConstring);
                 //MySqlConnection connection = new MySqlConnection(GlobalVariables.sMySQL);
-                MySqlDataAdapter da = new MySqlDataAdapter();
+                SqlDataAdapter da = new SqlDataAdapter();
                 DataTable dt = new DataTable();
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
 
-                da.SelectCommand = new MySqlCommand(sSQLText, connection);
+                da.SelectCommand = new SqlCommand(sSQLText, connection);
                 da.Fill(dt);
                 //GlobalVariables.conMYSQL.Close();
                 return dt;
             }
             catch (Exception ex)
             {
-                dtMessage.Rows.Add("EX", "MySQL Connection Error");
+                dtMessage.Rows.Add("EX", "MSSQL Connection Error");
                 return null;
             }
         }
@@ -202,7 +202,7 @@ namespace EAF
                 string sProjectID = dtProjectInfo.Select("Key = 'ProjectID'")[0]["Value"].ToString();
                 string sEmailCheckContactStatus = dtProjectInfo.Select("Key = 'EmailCheckContactStatus'")[0]["Value"].ToString();
                 string sFreezedCIDs = dtProjectInfo.Select("Key = 'FreezedContactIDs'")[0]["Value"].ToString();
-                string sConstring = dtProjectInfo.Select("Key = 'MYSQLConString'")[0]["Value"].ToString();
+                string sConstring = dtProjectInfo.Select("Key = 'MSSQLConString_CM'")[0]["Value"].ToString();
                 string sMaster_ID = dtMasterCompanies.Rows[0]["Master_ID"].ToString();
                 
                 List<string> lstFreezedContactIDString = new List<string>();

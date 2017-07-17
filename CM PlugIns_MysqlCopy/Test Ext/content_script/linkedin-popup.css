@@ -1,0 +1,456 @@
+/**
+ * Linkedin popup
+ **/
+
+
+#eh_popup {
+  font-family: "Open Sans", Helvetica, Ubuntu, Arial, sans-serif;
+  background-color: #fff;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.eh_popup_drag {
+  position: absolute;
+  top: 17px;
+  right: 110px;
+  font-size: 18px;
+  padding: 10px;
+  color: #888;
+}
+
+.eh_popup_drag:hover {
+  cursor: grab;
+  cursor: -webkit-grab;
+}
+
+.eh_popup_drag:active,
+.eh_popup_drag:focus {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.eh_popup_question {
+  position: absolute;
+  top: 17px;
+  right: 65px;
+  font-size: 18px;
+  padding: 10px;
+  color: #888;
+}
+
+.eh_popup_question:hover {
+  cursor: pointer;
+  color: #555;
+}
+
+.eh_popup_close {
+  position: absolute;
+  top: 17px;
+  right: 23px;
+  font-size: 26px;
+  line-height: 16px;
+  padding: 10px;
+  color: #888;
+}
+
+.eh_popup_close:hover {
+  cursor: pointer;
+  color: #555;
+}
+
+#eh_popup_legal_mention {
+  color: #bbb;
+  margin-top: 30px;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+#eh_popup_legal_mention a {
+  color: #bbb;
+  border-bottom: 1px dotted #aaa;
+}
+
+#eh_popup_legal_mention a {
+  text-decoration: none;
+}
+
+.eh_popup_name {
+  margin-top: -10px;
+  font-size: 30px;
+  line-height: 33px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.eh_popup_email_intro {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+#eh_popup_content_container {
+  height: 20px;
+  color: #e86240;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 15px 0 0 0;
+  border: 1px solid #eee;
+  background-color: #fcfcfc;
+  padding: 25px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+#eh_popup_content_container .loader {
+  margin-right: 10px;
+  color: #888;
+}
+
+#eh_popup_content_container:hover {
+  border: 1px solid #e7e7e7;
+}
+
+#eh_popup_content {
+  float: left;
+}
+
+.eh_popup_results_message {
+  color: #999;
+  margin-top: 25px;
+}
+
+.eh_popup_results_link {
+  color: #999;
+  border-bottom: 1px dotted #999;
+  display: inline-block;
+  margin-top: 25px;
+  text-decoration: none;
+  height: 19px;
+}
+
+.eh_popup_results_link:hover,
+.eh_popup_results_link:focus,
+.eh_popup_results_link:active
+ {
+  color: #999 !important;
+  text-decoration: none;
+}
+
+.eh_popup_results_link .fa-external-link {
+  font-size: 10px;
+  margin-left: 5px;
+}
+
+#eh_popup_error {
+  font-size: 16px;
+  line-height: 22px;
+  margin: 30px 0 0 0;
+}
+
+.clear_cta {
+  text-decoration: none;
+  display: inline-block;
+  padding: 12px 25px;
+  color: #fff !important;
+  background: #e86240;
+  -webkit-transition: background-color 200ms ease-in-out;
+  -moz-transition: background-color 200ms ease-in-out;
+  -o-transition: background-color 200ms ease-in-out;
+  -ms-transition: background-color 200ms ease-in-out;
+  transition: background-color 200ms ease-in-out;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.clear_cta:hover,
+.clear_cta:focus,
+.clear_cta:active {
+  background: #db411a;
+  color: #fff;
+  text-decoration: none;
+}
+
+#eh_popup_ask_domain {
+  display: none;
+  padding-bottom: 10px;
+}
+
+#eh_popup_ask_domain_message {
+  font-size: 16px;
+  line-height: 26px;
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+#eh_popup_ask_domain_message strong {
+  font-weight: 600;
+}
+
+#eh_popup_ask_domain_message a {
+  color: #333;
+  border-bottom: 1px dotted #333;
+}
+
+#eh_popup_ask_domain_message a:hover {
+ text-decoration: none;
+}
+
+#eh_popup_ask_domain input[type="text"] {
+  font-size: 16px;
+}
+
+#eh_popup_ask_domain_field {
+  width: 250px;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #ccc;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+  -webkit-transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s;
+}
+
+#eh_popup_ask_domain_field:focus, #eh_popup_ask_domain_field:active {
+  outline: none;
+  border: 1px solid #e86240;
+}
+
+#eh_popup_ask_domain button {
+  border: 0;
+  margin-left: 5px;
+}
+
+#eh_popup_ask_domain button:focus, #eh_popup_ask_domain button:active {
+  border: 0;
+  margin-left: 5px;
+}
+
+#eh_popup_results_link_container,
+#eh_popup_results_show {
+  display: none;
+}
+
+#eh_popup_results_show hr {
+  border: 0;
+  height: 1px;
+  background: #eee;
+  display: block;
+  margin: 30px 0 0 0;
+}
+
+#eh_popup_results_show p {
+  font-size: 15px;
+  margin: 30px 0 0 0;
+  color: #999;
+}
+
+#eh_popup_results_show p strong {
+  font-weight: 600;
+  color: #555;
+}
+
+.eh_popup_email_list .eh_popup_ask_domain,
+.eh_popup_email_list .eh_popup_results_link {
+  display: inline-block;
+  margin: 10px 0 0 0;
+}
+
+.eh_popup_email_list {
+  margin: 10px 0 0 0;
+}
+
+.eh_popup_ask_domain {
+  color: #999;
+  border-bottom: 1px dotted #999;
+  display: inline-block;
+  height: 19px;
+}
+
+.eh_popup_ask_domain:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.eh_popup_separator {
+  margin: 0 5px;
+  color: #aaa;
+}
+
+.eh_popup_confidence {
+  margin-top: 15px;
+  color: #333;
+}
+
+.eh_popup_confidence_bar {
+  width: 200px;
+  height: 5px;
+  background-color: #eee;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.eh_popup_confidence_level {
+  background-color: #e86240;
+  height: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.eh_popup_signin_link {
+  color: #888 !important;
+  margin-left: 15px;
+  border-bottom: 1px dotted #888;
+  text-decoration: none;
+}
+
+.eh_popup_signin_link:hover {
+  color: #888 !important;
+  text-decoration: none;
+}
+
+#eh_copy_email_button, #eh_save_email_button {
+  float: right;
+  cursor: pointer;
+  color: #888;
+}
+
+#eh_copy_email_button:hover,
+#eh_save_email_button:hover {
+  color: #555;
+}
+
+#eh_save_email_button {
+  margin-right: 10px;
+}
+
+.eh_save_lead_loader {
+  color: #aaa;
+  float: right;
+  margin-right: 10px;
+}
+
+#eh_email_action_message {
+  font-weight: 500;
+  font-size: 12px;
+  color: #888;
+  float: right;
+  margin-right: 15px;
+}
+
+
+/**
+ * Linkedin account popup
+ **/
+
+#eh_account_popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #fff;
+  z-index: 11001;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.eh_leads_link {
+  display: inline-block;
+  float: left;
+  padding: 13px 16px;
+  font-size: 13px;
+  border-right: 1px solid #eee;
+  color: #333 !important;
+  -webkit-border-radius: 5px 0 0 5px;
+  -moz-border-radius: 5px 0 0 5px;
+  -ms-border-radius: 5px 0 0 5px;
+  -o-border-radius: 5px 0 0 5px;
+  border-radius: 5px 0 0 5px;
+}
+
+.eh_leads_link:hover,
+.eh_leads_link:focus,
+.eh_leads_link:active {
+  background-color: #f5f5f5;
+  text-decoration: none;
+}
+
+.eh_deploy_account_information {
+  float: left;
+  padding: 13px 16px;
+  text-align: left;
+  font-size: 13px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.eh_deploy_account_information:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.eh_deploy_account_information .fa {
+  margin-left: 5px;
+}
+
+.eh_account_information_detail {
+  display: none;
+  font-size: 13px;
+  line-height: 18px;
+  padding: 13px 16px;
+  color: #aaa;
+  border-top: 1px solid #eee;
+}
+
+.eh_account_information_detail .clear_cta {
+  margin-top: 10px;
+}
+
+.eh_plan_name {
+  color: #e86240;
+  font-weight: bold;
+}
+
+.eh_account_not_logged {
+  font-size: 13px;
+  padding: 13px 16px;
+  color: #aaa;
+}
+
+.eh_account_not_logged a {
+  color: #aaa !important;
+  border-bottom: 1px dotted #aaa;
+}
+
+.eh_account_not_logged a:hover {
+  color: #aaa !important;
+  text-decoration: none !important;
+}

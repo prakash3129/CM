@@ -55,12 +55,12 @@ namespace GCC
         void Load()
         {
             itemContainerEmonitor.SubItems.Clear();
-            dtEmonitorUsers = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM EMonitor_Users WHERE EMPLOYEID = '" + GV.sEmployeeNo + "';");
+            dtEmonitorUsers = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM RM..EMonitor_Users WHERE EMPLOYEID = '" + GV.sEmployeeNo + "';");
             lblNoUsers.Visible = false;
             if (dtEmonitorUsers.Rows.Count > 0)
             {
                 sEmonitorUsersID = GM.ColumnToQString("EMONITORID", dtEmonitorUsers, "Int");                
-                dtEmoniter = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM EMoniter WHERE ID IN (" + sEmonitorUsersID + ")");
+                dtEmoniter = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM RM..EMoniter with (nolock) WHERE ID IN (" + sEmonitorUsersID + ")");
                 sMoniterUsersEmpID = GM.ColumnToQString("EMPLOYE_ID", dtEmoniter, "String");
                 int iMoniterCount = dtEmoniter.Rows.Count;
                 //            return;
@@ -280,7 +280,7 @@ namespace GCC
 
             if (iTimer % 5 == 0)
             {
-                dtEmoniter = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM EMoniter WHERE ID IN ("+ sEmonitorUsersID + ")");
+                dtEmoniter = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM RM..EMoniter with (nolock) WHERE ID IN (" + sEmonitorUsersID + ")");
                 foreach (MetroTileItem mTile in lstTileControls)
                 {
                     DataRow[] drrMoniter = dtEmoniter.Select("ID = '" + mTile.Name + "'");
@@ -341,8 +341,8 @@ namespace GCC
                     if (DialogResult.Yes == MessageBoxEx.Show("Are you sure to add these selected users to watchlist ?", "e-Monitor", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                     {
                         string sEMPs = GM.ColumnToQString("EMPLOYEENO", drrSelectedUsers.CopyToDataTable(), "String");
-                        GV.MSSQL.BAL_ExecuteQuery("INSERT INTO EMoniter (EMPLOYE_NAME, EMPLOYE_ID) SELECT Fullname, EmployeeNo FROM Timesheet..Users WHERE Active = 'Y' AND EmployeeNo IN(" + sEMPs + ") AND EmployeeNo NOT in (SELECT EMPLOYE_ID from Emoniter);");
-                        GV.MSSQL.BAL_ExecuteQuery("INSERT into EMonitor_Users (EMPLOYEID, EMONITORID) Select '" + GV.sEmployeeNo + "', ID from EMoniter WHERE EMPLOYE_ID IN(" + sEMPs + ") AND ID NOT IN(SELECT EMONITORID FROM EMonitor_Users WHERE EMPLOYEID = '" + GV.sEmployeeNo + "')");
+                        GV.MSSQL1.BAL_ExecuteQuery("INSERT INTO RM..EMoniter (EMPLOYE_NAME, EMPLOYE_ID) SELECT Fullname, EmployeeNo FROM CH1020BD02.Timesheet.dbo.Users WHERE Active = 'Y' AND EmployeeNo IN(" + sEMPs + ") AND EmployeeNo NOT in (SELECT EMPLOYE_ID from RM..Emoniter);");
+                        GV.MSSQL1.BAL_ExecuteQuery("INSERT into RM..EMonitor_Users (EMPLOYEID, EMONITORID) Select '" + GV.sEmployeeNo + "', ID from RM..EMoniter WHERE EMPLOYE_ID IN(" + sEMPs + ") AND ID NOT IN(SELECT EMONITORID FROM RM..EMonitor_Users WHERE EMPLOYEID = '" + GV.sEmployeeNo + "')");
                         ToastNotification.Show(this, "Users added to watch list.", eToastPosition.TopRight);
                         //DataTable dtDuplicateUsers = GV.MSSQL.BAL_ExecuteQuery("Select * from Emoniter where EMPLOYEID IN (" + sEMPs + ")");
                         //if(dtDuplicateUsers.Rows.Count > 0)
@@ -391,7 +391,7 @@ namespace GCC
             {
                 if (DialogResult.Yes == MessageBoxEx.Show("Are you sure to remove these selected users from watchlist ?", "e-Monitor", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
-                    GV.MSSQL.BAL_ExecuteQuery("DELETE FROM EMonitor_Users WHERE EMPLOYEID = '" + GV.sEmployeeNo + "' AND EMONITORID IN (" + sMoniterID + ");");
+                    GV.MSSQL1.BAL_ExecuteQuery("DELETE FROM RM..EMonitor_Users WHERE EMPLOYEID = '" + GV.sEmployeeNo + "' AND EMONITORID IN (" + sMoniterID + ");");
                     ToastNotification.Show(this, "Users removed from watch list.", eToastPosition.TopRight);
                     Load();
                 }

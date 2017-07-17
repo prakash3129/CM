@@ -15,7 +15,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>\\172.27.137.180\Merit Software Deployment\Voice\Campaign Manager Alpha\</PublishUrl>
+    <PublishUrl>\\CH1021SF01\Merit Software Deployment\Voice\Campaign Manager\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -25,14 +25,14 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>\\172.27.137.180\Merit Software Deployment\Voice\Campaign Manager Alpha\</InstallUrl>
-    <UpdateUrl>\\172.27.137.180\Merit Software Deployment\Voice\Campaign Manager Alpha\</UpdateUrl>
+    <InstallUrl>\\CH1021SF01\Merit Software Deployment\Voice\Campaign Manager\</InstallUrl>
+    <UpdateUrl>\\CH1021SF01\Merit Software Deployment\Voice\Campaign Manager\</UpdateUrl>
     <SupportUrl>http://www.meritgroup.co.uk</SupportUrl>
     <ProductName>Campaign Manager</ProductName>
     <PublisherName>Merit Software</PublisherName>
     <SuiteName>Campaign Manager</SuiteName>
-    <MinimumRequiredVersion>3.1.2.63</MinimumRequiredVersion>
-    <ApplicationRevision>64</ApplicationRevision>
+    <MinimumRequiredVersion>3.1.2.98</MinimumRequiredVersion>
+    <ApplicationRevision>99</ApplicationRevision>
     <ApplicationVersion>3.1.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -109,7 +109,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CM PlugIns\Auto Complete\AutocompleteMenu.dll</HintPath>
     </Reference>
-    <Reference Include="Connection">
+    <Reference Include="Connection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Connection\Connection\Connection\bin\Debug\Connection.dll</HintPath>
     </Reference>
     <Reference Include="CustomText, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -264,7 +265,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="VortexDial, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Campaign Manager\CM PlugIns\Dialer Library\MeritDailer\MeritDailer\bin\Debug\VortexDial.dll</HintPath>
+      <HintPath>..\CM PlugIns\Dialer Library\MeritDailer\MeritDailer\bin\Debug\VortexDial.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
@@ -273,15 +274,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BAL\BAL_GlobalMSSQL_RM.cs" />
     <Compile Include="BAL\BAL_GlobalMSSQL1.cs" />
     <Compile Include="CancellableQuery.cs" />
     <Compile Include="ChromeConnect.cs" />
     <Compile Include="CustomLabel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DAL\DAL_GlobalMSSQL_RM.cs" />
     <Compile Include="DAL\DAL_GlobalMSSQL1.cs" />
     <Compile Include="ELV.cs" />
     <Compile Include="ESpeechServer.cs" />
+    <Compile Include="frmExceptionMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmExceptionMonitor.Designer.cs">
+      <DependentUpon>frmExceptionMonitor.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmEmailHunter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -605,6 +614,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StateControl.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="frmExceptionMonitor.resx">
+      <DependentUpon>frmExceptionMonitor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmEmailHunter.resx">
       <DependentUpon>frmEmailHunter.cs</DependentUpon>
     </EmbeddedResource>

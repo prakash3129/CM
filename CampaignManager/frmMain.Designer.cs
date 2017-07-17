@@ -197,6 +197,7 @@
             this.timerNotification = new System.Windows.Forms.Timer(this.components);
             this.bWorkerEmailValidation = new System.ComponentModel.BackgroundWorker();
             this.bWorkerRDP = new System.ComponentModel.BackgroundWorker();
+            this.btnException = new DevComponents.DotNetBar.ButtonItem();
             this.ribbonMain.SuspendLayout();
             this.ribbonPanelLogin.SuspendLayout();
             this.rbnBarSwitchProject.SuspendLayout();
@@ -356,7 +357,8 @@
             this.btnProjectSettings,
             this.btnFieldSettings,
             this.btnValidation,
-            this.btnRemote});
+            this.btnRemote,
+            this.btnException});
             this.btnProjectControl.SubItemsExpandWidth = 14;
             this.btnProjectControl.Text = "Project Control";
             this.btnProjectControl.Click += new System.EventHandler(this.btnProjectControl_Click);
@@ -2593,6 +2595,12 @@
             // 
             this.bWorkerRDP.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bWorkerRDP_DoWork);
             // 
+            // btnException
+            // 
+            this.btnException.Name = "btnException";
+            this.btnException.Text = "Exception Monitor";
+            this.btnException.Click += new System.EventHandler(this.btnException_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2806,5 +2814,6 @@
         private DevComponents.DotNetBar.ButtonItem btnRemote;
         private DevComponents.Editors.ComboItem comboItem3;
         public DevComponents.DotNetBar.ButtonItem btnHunter;
+        private DevComponents.DotNetBar.ButtonItem btnException;
     }
 }

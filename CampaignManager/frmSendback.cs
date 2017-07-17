@@ -40,9 +40,9 @@ namespace GCC
                 if (IsLastMonth)
                 {
                     if(GM.GetDateTime().Month == 1)
-                        sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = 12 AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(GETDATE() -1) ";
+                        sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = 12 AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(GETDATE())-1 ";
                     else
-                        sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = MONTH(getdate()-1) AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(getdate()) ";
+                        sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = MONTH(getdate())-1 AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(getdate()) ";
                 }
                 else                
                     sDateCondition = " MONTH(cm." + GV.sAccessTo + "_UPDATED_DATE) = MONTH(getdate()) AND YEAR(cm." + GV.sAccessTo + "_UPDATED_DATE) = YEAR(getdate()) ";                

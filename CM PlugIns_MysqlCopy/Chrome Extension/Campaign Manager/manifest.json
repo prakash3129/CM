@@ -1,0 +1,65 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+	"name":"Campaign Manager",
+	"version":"1.3.0",
+	"manifest_version" : 2,
+
+	"description":"Extension for sending web content directly to Campaign Manager",
+	"homepage_url" : "http://www.meritgroup.co.uk/",
+	"icons":{
+		"16":"icons/icon16.png",
+		"48":"icons/icon48.png",
+		"128":"icons/icon128.png"
+	},
+
+	"background": {
+    	"page": "src/bg/background.html",
+		"persistent": true
+  	},
+	
+	"content_scripts": [{
+	"css": [ "src/inject/linkedin-button.css"],
+      "js": ["src/shared/jquery.min.js", "src/shared/jquery-ui.min.js", "src/shared/jquery.highlight-5.js", "src/inject/cs.js"],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+
+	"options_page":"src/options/index.html",
+
+	"browser_action":{
+		"default_icon":"icons/icon19.png",
+		"default_title":"Campaign Manager",
+		"default_popup":"src/browser_action/browser_action.html"
+	},
+
+
+	"permissions":[
+		"http://*.google.com/",
+		"http://*/",
+		"https://*/",		
+		"bookmarks",
+		"chrome://favicon/",
+		"clipboardRead",
+		"clipboardWrite",
+		"contextMenus",
+		"storage",
+		"cookies",
+		"geolocation",
+		"history",
+		"idle",
+		"management",
+		"notifications",
+		"tabs",
+		"tts",
+		"ttsEngine",
+		"nativeMessaging",		
+		"unlimitedStorage",
+		"*://*.emailhunter.co/*", 
+		"*://*.linkedin.com/*" 
+	],	
+
+	"omnibox":{
+		"keyword":"extensionizr"
+	},
+	"web_accessible_resources": [ "icons/*"]
+}

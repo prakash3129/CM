@@ -78,14 +78,14 @@ namespace GCC
                                 if (IsExisting)
                                 {
                                     sAudioID = lstRecived[3];
-                                    GV.MSSQL.BAL_ExecuteQuery("UPDATE NameSayer SET HitCount = HitCount + 1, LastHitDate = GETDATE() WHERE AudioID = '" + sAudioID + "'");
+                                    GV.MSSQL1.BAL_ExecuteQuery("UPDATE RM..NameSayer SET HitCount = HitCount + 1, LastHitDate = GETDATE() WHERE AudioID = '" + sAudioID + "'");
                                 }
                                 else
                                 {
-                                    sAudioID = GV.MSSQL.BAL_InsertAndGetIdentity("INSERT INTO NameSayer (Name, Phonetics, HitCount, LastHitDate) VALUES ('" + GM.HandleBackSlash(sName.Replace("'", "''")) + "', '" + sPhonetics.Replace("'", "''") + "', 1, GETDATE());");
+                                    sAudioID = GV.MSSQL1.BAL_InsertAndGetIdentity("INSERT INTO RM..NameSayer (Name, Phonetics, HitCount, LastHitDate) VALUES ('" + GM.HandleBackSlash(sName.Replace("'", "''")) + "', '" + sPhonetics.Replace("'", "''") + "', 1, GETDATE());");
                                 }
                                 if (sAudioID.Length > 0)
-                                    wClient.DownloadFile("https://www.espeech.com/" + sResponse.Substring(sResponse.IndexOf("ttsspeech")).Replace("</html>", string.Empty).Replace("\n", string.Empty), @"\\172.27.137.182\Campaign Manager\NameSayer\" + sAudioID + ".wav");
+                                    wClient.DownloadFile("https://www.espeech.com/" + sResponse.Substring(sResponse.IndexOf("ttsspeech")).Replace("</html>", string.Empty).Replace("\n", string.Empty), @"\\CH1031SF02\Campaign Manager\NameSayer\" + sAudioID + ".wav");
                             }
                         }
                         string sDataToReturn = "ESResult[:|:]" + sAudioID + "[:|:]" + sPhonetics + "[:|:]" + sName;

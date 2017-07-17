@@ -1,0 +1,141 @@
+﻿// BrowserSpeak
+//
+// by Mark Gladding
+// Copyright 2009 Tumbywood Software
+// http://www.text2go.com
+//
+// You are free to reuse this code in any commercial or non-commercial work.
+//
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Speech.Synthesis;
+
+using BrowserSpeak.Speech;
+using HttpServer;
+
+namespace BrowserSpeak
+{
+    public partial class MainForm : Form
+    {
+        public MainForm()
+        {
+            InitializeComponent();
+            Icon = Properties.Resources.BrowserSpeak;
+
+            mShowHttpRequestDelegate = ShowHttpRequest;
+            mUpdateTextBoxDelegate = UpdateTextBoxContents;
+            SpeechController.Instance.StateChanged += new EventHandler<StateChangedEventArgs>(SpeechStateChanged);
+            TextBuffer.Instance.TextBufferChanged += new EventHandler(OnTextBufferChanged);
+            UpdateButtonStates();
+            StartHttpCommandDispatcher();
+        }
+
+        private void StartHttpCommandDispatcher()
+        {
+            mCmdDispatcher.AddResourceLocator(new ImageLocator(Properties.Resources.ResourceManager));
+            mCmdDispatcher.AddCommand(new SpeakTextCommand());
+            mCmdDispatcher.AddCommand(new StopSpeakingCommand());
+            mCmdDispatcher.AddCommand(new BufferTextCommand());
+            mCmdDispatcher.AddCommand(new PauseSpeakingCommand());
+            mCmdDispatcher.AddCommand(new ResumeSpeakingCommand());
+
+            mCmdDispatcher.RequestReceived += new HttpCommandDispatcher.RequestReceivedHandler(OnHttpRequestReceived);
+            mCmdDispatcher.Start("http://localhost:60024/");
+        }
+
+        private void SpeechStateChanged(object sender, StateChangedEventArgs e)
+        {
+            UpdateButtonStates();
+        }
+
+        private void UpdateButtonStates()
+        {
+            SynthesizerState state = SpeechController.Instance.State;
+            mButtonStop.Enabled = state != SynthesizerState.Ready;
+            mButtonPauseResume.Enabled = state != SynthesizerState.Ready;
+            mButtonPauseResume.Text = state == SynthesizerState.Paused ? "Resume" : "Pause";
+            mButtonPauseResume.Image = state == SynthesizerState.Paused ? Properties.Resources.resultset_next : Properties.Resources.pause_icon;
+        }
+
+        private void OnButtonSpeakClick(object sender, EventArgs e)
+        {
+            SpeechController.Instance.Speak(mTextBoxSpeak.Text);
+        }
+
+        private void OnButtonPauseResumeClick(object sender, EventArgs e)
+        {
+            if (SpeechController.Instance.State == SynthesizerState.Paused)
+            {
+                SpeechController.Instance.ResumeSpeaking();
+            }
+            else
+            {
+                SpeechController.Instance.PauseSpeaking();
+            }
+        }
+
+        private void OnButtonStopClick(object sender, EventArgs e)
+        {
+            SpeechController.Instance.StopSpeaking();
+        }
+
+        private void OnButtonClearRequestsClick(object sender, EventArgs e)
+        {
+            mTextBoxRequests.Text = string.Empty;
+        }
+
+        private void OnHttpRequestReceived(object source, RequestEventArgs e)
+        {
+            // A HttpRequest is processed by a thread from the thread pool,
+            // not the GUI thread. Therefore we need to switch back to the
+            // GUI thread before modifying any GUI controls.
+            BeginInvoke(mShowHttpRequestDelegate, e.Request);
+        }
+
+        private void OnTextBufferChanged(object sender, EventArgs e)
+        {
+            // The TextBuffer is modified by a thread from the thread pool,
+            // not the GUI thread. Therefore we need to switch back to the
+            // GUI thread before modifying any GUI controls.
+            BeginInvoke(mUpdateTextBoxDelegate, TextBuffer.Instance.Text);
+        }
+
+        private void UpdateTextBoxContents(string newContents)
+        {
+            mTextBoxSpeak.Text = newContents;
+            ScrollTextBoxToEnd(mTextBoxSpeak);
+        }
+
+        private void ScrollTextBoxToEnd(TextBox textBox)
+        {
+            textBox.Select(textBox.Text.Length, 0);
+            textBox.ScrollToCaret();
+        }
+
+        private void ShowHttpRequest(string request)
+        {
+            mTextBoxRequests.Text += request + "\r\n";
+            ScrollTextBoxToEnd(mTextBoxRequests);
+        }
+
+        private delegate void ShowHttpRequestDelgate(string request);
+        ShowHttpRequestDelgate mShowHttpRequestDelegate;
+
+        private delegate void UpdateTextBoxDelgate(string newContents);
+        UpdateTextBoxDelgate mUpdateTextBoxDelegate;
+
+        private HttpCommandDispatcher mCmdDispatcher = new HttpCommandDispatcher(Properties.Resources.dummy);
+
+        private void OnButtonAboutClick(object sender, EventArgs e)
+        {
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
+        }
+    }
+}

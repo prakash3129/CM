@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Data;
 using System.IO;
+using System.IO.Compression;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
@@ -19,6 +20,7 @@ using System.Xml;
 using System.Runtime.InteropServices;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System.Security.Cryptography;
 //using Google.Apis.CloudSpeechAPI.v1beta1;
 //using Google.Apis.Auth.OAuth2;
 //using Google.Apis.Services;
@@ -185,32 +187,32 @@ namespace GCC
 
         public static void Moniter()//This method will be replaced by [Moniter(bool IsLoggedIn, string DummyVariable)] over a period of time. 
         {
-            string sQuery = @"MERGE INTO EMoniter AS TARGET USING(SELECT '" + GV.sEmployeeNo + "' as EMPLOYE_ID, '" + GV.sEmployeeActualName.Replace("'", "''") + "' as EMPLOYE_NAME, GETDATE() as LAST_UPDATED_ON, '" + GV.sProjectName + "' AS PROJECT_NAME) AS SOURCE ";
+            string sQuery = @"MERGE INTO RM..EMoniter AS TARGET USING(SELECT '" + GV.sEmployeeNo + "' as EMPLOYE_ID, '" + GV.sEmployeeActualName.Replace("'", "''") + "' as EMPLOYE_NAME, GETDATE() as LAST_UPDATED_ON, '" + GV.sProjectName + "' AS PROJECT_NAME) AS SOURCE ";
             sQuery += " on(Source.EMPLOYE_ID = Target.EMPLOYE_ID) WHEN MATCHED THEN UPDATE SET EMPLOYE_NAME = SOURCE.EMPLOYE_NAME, LAST_UPDATED_ON = SOURCE.LAST_UPDATED_ON, PROJECT_NAME = SOURCE.PROJECT_NAME ";
             sQuery += " WHEN NOT MATCHED BY TARGET THEN INSERT(EMPLOYE_NAME, EMPLOYE_ID, LAST_UPDATED_ON, PROJECT_NAME) VALUES(SOURCE.EMPLOYE_NAME, SOURCE.EMPLOYE_ID, SOURCE.LAST_UPDATED_ON, SOURCE.PROJECT_NAME);";
-            GV.MSSQL.BAL_ExecuteQuery(sQuery);
+            GV.MSSQL1.BAL_ExecuteQuery(sQuery);
         }
 
         public static void Moniter(bool IsLoggedIn, string DummyVariable)
         {
             if (IsLoggedIn)
-                GV.MSSQL.BAL_ExecuteQuery("UPDATE EMoniter SET PROJECT_NAME = '" + GV.sProjectName + "', CALL_STATUS = '', LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
+                GV.MSSQL1.BAL_ExecuteQuery("UPDATE RM..EMoniter SET PROJECT_NAME = '" + GV.sProjectName + "', CALL_STATUS = '', LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
             else
-                GV.MSSQL.BAL_ExecuteQuery("UPDATE EMoniter SET PROJECT_NAME = '', CALL_STATUS = '', LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
+                GV.MSSQL1.BAL_ExecuteQuery("UPDATE RM..EMoniter SET PROJECT_NAME = '', CALL_STATUS = '', LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
         }
 
         public static void Moniter(string sCallStatus)
         {
             if (GV.sAccessTo == "TR")
-                GV.MSSQL.BAL_ExecuteQuery("UPDATE EMoniter SET CALL_STATUS = '" + sCallStatus + "', LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
+                GV.MSSQL1.BAL_ExecuteQuery("UPDATE RM..EMoniter SET CALL_STATUS = '" + sCallStatus + "', LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
         }
 
         public static void Moniter(bool IsCompanySaved)
         {
             if (GV.sAccessTo == "TR")
-                GV.MSSQL.BAL_ExecuteQuery("UPDATE EMoniter SET CALL_STATUS = '', COMPANY_LAST_SAVED = GETDATE() , LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
+                GV.MSSQL1.BAL_ExecuteQuery("UPDATE RM..EMoniter SET CALL_STATUS = '', COMPANY_LAST_SAVED = GETDATE() , LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
             else
-                GV.MSSQL.BAL_ExecuteQuery("UPDATE EMoniter SET COMPANY_LAST_SAVED = GETDATE() , LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
+                GV.MSSQL1.BAL_ExecuteQuery("UPDATE RM..EMoniter SET COMPANY_LAST_SAVED = GETDATE() , LAST_UPDATED_ON = GETDATE() WHERE EMPLOYE_ID='" + GV.sEmployeeNo + "'");
         }
 
 
@@ -797,7 +799,7 @@ namespace GCC
                 return string.Empty;
 
             string sTimeLoggerMessage = string.Empty;
-            if (GV.sUserType == "Agent")
+            if (GV.sUserType == "Agent" || GV.sUserType == "QC")
             {
 
                 Process[] runningProcesses = Process.GetProcesses();
@@ -974,38 +976,9 @@ namespace GCC
         public static void Error_Log(MethodBase mBase, Exception ex, bool IsHandeled, bool IsErrorAllowed, string sAdditionalInfo = "")
         {
 
-
-            //System.OperatingSystem osInfo = System.Environment.OSVersion;
-            //string sArchitecture = System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
-            //switch (osInfo.Version.Major)
-            //{
-            //    case 3:
-            //        Console.WriteLine("Windows NT 3.51");
-            //        break;
-            //    case 4:
-            //        Console.WriteLine("Windows NT 4.0");
-            //        break;
-            //    case 5:
-            //        if (osInfo.Version.Minor == 0)
-            //            Console.WriteLine("Windows 2000");
-            //        else
-            //            Console.WriteLine("Windows XP");
-            //        break;
-            //    case 6:
-            //        if (osInfo.Version.Minor == 0)
-            //            Console.WriteLine("Windows Vista");
-            //        else if (osInfo.Version.Minor == 1)
-            //            Console.WriteLine("Windows 7");
-            //        else if (osInfo.Version.Minor == 2)
-            //            Console.WriteLine("Windows 8");
-            //        break;
-            //}
-
-            //if (ex.Message.Contains("Invoke or BeginInvoke"))
-            //    return;
-
+            #region ScreenShot
             string sExceptionImageID = "Ex" + GV.IP.Replace(".", string.Empty).Reverse() + GM.GetDateTime().ToString("yyMMddHHmmssff");
-            string sShotPath = @"\\172.27.137.182\Campaign Manager\Exceptions\Shots\\" + sExceptionImageID + ".jpeg";
+            string sShotPath = @"\\CH1031SF02\Campaign Manager\Exceptions\Shots\\" + sExceptionImageID + ".jpeg";
 
             if (GM.MailSettings("AttachScreenShot").ToUpper() == "YES")
             {
@@ -1024,14 +997,18 @@ namespace GCC
                 catch (Exception exImage) { sExceptionImageID = string.Empty; sShotPath = string.Empty; }
             }
             else
-                sExceptionImageID = string.Empty;
+                sExceptionImageID = string.Empty; 
+            #endregion
+
+
+
+            #region Collect Internal Error Trace
 
             string sRowNumber = string.Empty;
             string sColNumber = string.Empty;
             string sMethod = string.Empty;
             //StackTrace trace = new StackTrace(ex, true);
             //StackFrame frame = trace.GetFrame(trace.FrameCount - 1);
-
             StackTrace trace = new StackTrace(ex, true);
             StackFrame sfFrame = null;
             for (int i = 0; i <= trace.FrameCount; i++)
@@ -1051,8 +1028,10 @@ namespace GCC
             }
             else if (mBase != null)
                 sMethod = "(StackFrame is Null)" + mBase.DeclaringType.Name + "." + mBase.ToString();
+            #endregion
 
 
+            #region Write Exception Log to path
 
             string sWriteError = Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
             sWriteError += "Error Date : " + GM.GetDateTime() + Environment.NewLine + Environment.NewLine;
@@ -1080,20 +1059,21 @@ namespace GCC
             {
                 if (GV.sEmployeeName.Length > 0)
                 {
-                    WriteLog(@"\\172.27.137.182\Campaign Manager\Exceptions\" + GV.sEmployeeName + ".txt", sWriteError, true);
-                    //StreamWriter sWrite = new StreamWriter(@"\\172.27.137.182\Campaign Manager\Exceptions\" + GV.sEmployeeName + ".txt", true);
+                    WriteLog(@"\\CH1031SF02\Campaign Manager\Exceptions\" + GV.sEmployeeName + ".txt", sWriteError, true);
+                    //StreamWriter sWrite = new StreamWriter(@"\\1sdfsd\Campaign Manager\Exceptions\" + GV.sEmployeeName + ".txt", true);
                     //sWrite.WriteLine(sWriteError);
                     //sWrite.Close();
                 }
                 else
                 {
-                    WriteLog(@"\\172.27.137.182\Campaign Manager\Exceptions\Unknown.txt", sWriteError, true);
-                    //StreamWriter sWrite = new StreamWriter(@"\\172.27.137.182\Campaign Manager\Exceptions\Unknown.txt", true);
+                    WriteLog(@"\\CH1031SF02\Campaign Manager\Exceptions\Unknown.txt", sWriteError, true);
+                    //StreamWriter sWrite = new StreamWriter(@"\\sdfsdf\Campaign Manager\Exceptions\Unknown.txt", true);
                     //sWrite.WriteLine(sWriteError);
                     //sWrite.Close();
                 }
             }
-            catch (Exception ex11) { }
+            catch (Exception ex11) { } 
+            #endregion
 
 
             string sExceptionHandeled = string.Empty;
@@ -1102,7 +1082,7 @@ namespace GCC
             else
                 sExceptionHandeled = "No";
             //BAL.BAL_GlobalMydSQL objBAL_Global = new BAL.BAL_GlobalMydSQL();
-            DataTable dtError = null;
+           // DataTable dtError = null;
             string sOS = JCS.OSVersionInfo.VersionString + " " + JCS.OSVersionInfo.Edition + " " + JCS.OSVersionInfo.OSBits;
 
             //Microsoft.VisualBasic.Devices.ComputerInfo cComputerInfo = new Microsoft.VisualBasic.Devices.ComputerInfo();                    
@@ -1112,6 +1092,7 @@ namespace GCC
             try
             {
 
+                #region Collect System Memory
                 using (ManagementObjectSearcher mPhysicalMemory = new ManagementObjectSearcher("SELECT Capacity FROM Win32_PhysicalMemory"))
                 {
                     UInt64 Capacity = 0;
@@ -1126,21 +1107,29 @@ namespace GCC
                     foreach (ManagementObject mAvailMem in mAvailMemory.Get())
                         sTotalAvailMemory = Convert.ToInt64(mAvailMem["FreePhysicalMemory"]) / 1024 + "MB";
                 }
-
                 string sMem = sTotalAvailMemory + " / " + sTotalPhysicalMemory;
-                List<Process> processlist = Process.GetProcesses().OrderByDescending(x => x.WorkingSet64).ToList();
-                string sProcessesTable = "<table border = 1>";
+                #endregion
+
+
+                #region Get System Processes
                 string sProcesses = string.Empty;
-                foreach (Process theprocess in processlist)
-                {
-                    sProcesses += theprocess.ProcessName + "\t" + theprocess.WorkingSet64 / (1048576) + Environment.NewLine;
-                    sProcessesTable += "<tr><td>" + theprocess.ProcessName + "</td><td>" + theprocess.WorkingSet64 / (1048576) + " MB</td></tr>";
-                }
-                sProcessesTable += "</table>";
+                string sProcessesTable = string.Empty;
+                // Process list is not that usefull. So disabling it.
+                //List<Process> processlist = Process.GetProcesses().OrderByDescending(x => x.WorkingSet64).ToList();
+                //sProcessesTable = "<table border = 1>";
+                //foreach (Process theprocess in processlist)
+                //{
+                //    sProcesses += theprocess.ProcessName + "\t" + theprocess.WorkingSet64 / (1048576) + Environment.NewLine;
+                //    sProcessesTable += "<tr><td>" + theprocess.ProcessName + "</td><td>" + theprocess.WorkingSet64 / (1048576) + " MB</td></tr>";
+                //}
+                //sProcessesTable += "</table>"; 
+                #endregion
+
+                #region Send Error Email
                 if (GM.MailSettings("SendEmail").ToUpper() == "YES")
                 {
-                    dtError = GV.MSSQL1.BAL_FetchTable("c_error_log", "ProjectID = '" + GV.sProjectID + "' AND ErrorTrace ='" + Regex.Replace(ex.StackTrace.Trim(), @"\\", @"\\") + "' AND CAST(Error_Date AS date) = CAST(GETDATE() AS date)");
-                    if (dtError == null || dtError.Rows.Count == 0)//Send Email
+                    //dtError = GV.MSSQL1.BAL_FetchTable("c_error_log", "ProjectID = '" + GV.sProjectID + "' AND ErrorTrace ='" + Regex.Replace(ex.StackTrace.Trim(), @"\\", @"\\") + "' AND CAST(Error_Date AS date) = CAST(GETDATE() AS date)");
+                    //if (dtError == null || dtError.Rows.Count == 0)//Send Email
                     {
                         using (MailMessage mMessage = new MailMessage())
                         {
@@ -1222,38 +1211,84 @@ namespace GCC
                         }
                     }
                 }
+                #endregion
+
+
+                
+
+                #region Log Error Information into DB
 
                 if (GM.MailSettings("LogToDB").ToUpper() == "YES")
                 {
-                    if (dtError == null)
-                        dtError = GV.MSSQL1.BAL_FetchTable("c_error_log", "1=0");
+                    DataTable dtExceptionID = GV.MSSQL1.BAL_ExecuteQuery("select ExceptionID from c_exceptions where ExceptionKey = '" + GM.SHA1Hash(ex.StackTrace.Trim()) + "'");
+                    if(dtExceptionID.Rows.Count > 0)
+                    {
+                        string sExceptionID = dtExceptionID.Rows[0][0].ToString();
+                        DataTable dtException_Log = GV.MSSQL1.BAL_FetchTable("c_exceptions_log", "1=0");
+                        DataRow drException_Log = dtException_Log.NewRow();
+                        drException_Log["ExceptionID"] = sExceptionID;
+                        drException_Log["SessionID"] = GV.sSessionID;
+                        drException_Log["CompanySessionID"] = GV.sCompanySessionID;
+                        drException_Log["ImageID"] = sExceptionImageID;
+                        drException_Log["CaptureID"] = GV.sErrorCaptureName;
+                        drException_Log["ProjectID"] = GV.sProjectID;
+                        drException_Log["UserType"] = GV.sUserType;
+                        drException_Log["UserAccess"] = GV.sAccessTo;
+                        drException_Log["Agent"] = GV.sEmployeeName;
+                        drException_Log["ErrorDate"] = GM.GetDateTime();
+                        drException_Log["OS"] = sOS;
+                        drException_Log["NTLogin"] = Environment.UserName;
+                        drException_Log["Machine"] = Environment.MachineName;
+                        drException_Log["Processes"] = sProcesses;
+                        drException_Log["Memory"] = sMem;
+                        drException_Log["SoftwareVersion"] = GV.sSoftwareVersion;
+                        drException_Log["AdditionalInfo"] = sAdditionalInfo;                                                
+                        dtException_Log.Rows.Add(drException_Log);
+                        GV.MSSQL1.BAL_SaveToTable(dtException_Log.GetChanges(DataRowState.Added), "c_exceptions_log", "New", false);
+                    }
+                    else
+                    {
+                        DataTable dtException = GV.MSSQL1.BAL_FetchTable("c_exceptions", "1=0");
+                        DataRow drException = dtException.NewRow();
+                        string sExceptionKey = GM.SHA1Hash(ex.StackTrace.Trim());
+                        drException["ExceptionKey"] = sExceptionKey;
+                        drException["TargetSite"] = ex.TargetSite.ToString().Trim();
+                        drException["StackTrace"] = Environment.StackTrace.Trim();
+                        drException["Message"] = ex.Message.Trim();
+                        drException["ErrorTrace"] = ex.StackTrace.Trim();
+                        drException["Handled"] = sExceptionHandeled;
+                        drException["LineNumber"] = sRowNumber + ":" + sColNumber;
+                        drException["ExceptionDate"] = GM.GetDateTime();
+                        dtException.Rows.Add(drException);
+                        GV.MSSQL1.BAL_SaveToTable(dtException.GetChanges(DataRowState.Added), "c_exceptions", "New", false);
 
-                    DataRow drNewError = dtError.NewRow();
-                    drNewError["ProjectID"] = GV.sProjectID;
-                    drNewError["SessionID"] = GV.sSessionID;
-                    drNewError["CompanySessionID"] = GV.sCompanySessionID;
-                    drNewError["ImageID"] = sExceptionImageID;
-                    drNewError["CaptureID"] = GV.sErrorCaptureName;
-                    drNewError["UserType"] = GV.sUserType;
-                    drNewError["UserAccess"] = GV.sAccessTo;
-                    drNewError["Error_Date"] = GM.GetDateTime();
-                    drNewError["Agent"] = GV.sEmployeeName;
-                    drNewError["Target_Site"] = ex.TargetSite.ToString().Trim();
-                    drNewError["ErrorTrace"] = ex.StackTrace.Trim();
-                    drNewError["StackTrace"] = Environment.StackTrace.Trim();
-                    drNewError["OS"] = sOS;
-                    drNewError["NTLogin"] = Environment.UserName;
-                    drNewError["Machine"] = Environment.MachineName;
-                    drNewError["Additional_Info"] = sAdditionalInfo;
-                    drNewError["Line_Number"] = sRowNumber + ":" + sColNumber;
-                    drNewError["Message"] = ex.Message.Trim();
-                    drNewError["Processes"] = sProcesses;
-                    drNewError["Memory"] = sMem;
-                    drNewError["Handled"] = sExceptionHandeled;
-                    drNewError["SoftwareVersion"] = GV.sSoftwareVersion;
-                    dtError.Rows.Add(drNewError);
-                    GV.MSSQL1.BAL_SaveToTable(dtError.GetChanges(DataRowState.Added), "c_error_log", "New", false);
-                }
+                        DataTable dtExceptionID1 = GV.MSSQL1.BAL_ExecuteQuery("select ExceptionID from c_exceptions where ExceptionKey = '" + sExceptionKey + "'");
+                        string sExceptionID1 = dtExceptionID1.Rows[0][0].ToString();
+
+                        DataTable dtException_Log = GV.MSSQL1.BAL_FetchTable("c_exceptions_log", "1=0");
+                        DataRow drException_Log = dtException_Log.NewRow();
+                        drException_Log["ExceptionID"] = sExceptionID1;
+                        drException_Log["SessionID"] = GV.sSessionID;
+                        drException_Log["CompanySessionID"] = GV.sCompanySessionID;
+                        drException_Log["ImageID"] = sExceptionImageID;
+                        drException_Log["CaptureID"] = GV.sErrorCaptureName;
+                        drException_Log["ProjectID"] = GV.sProjectID;
+                        drException_Log["UserType"] = GV.sUserType;
+                        drException_Log["UserAccess"] = GV.sAccessTo;
+                        drException_Log["Agent"] = GV.sEmployeeName;
+                        drException_Log["ErrorDate"] = GM.GetDateTime();
+                        drException_Log["OS"] = sOS;
+                        drException_Log["NTLogin"] = Environment.UserName;
+                        drException_Log["Machine"] = Environment.MachineName;
+                        drException_Log["Processes"] = sProcesses;
+                        drException_Log["Memory"] = sMem;
+                        drException_Log["SoftwareVersion"] = GV.sSoftwareVersion;
+                        drException_Log["AdditionalInfo"] = sAdditionalInfo;
+                        dtException_Log.Rows.Add(drException_Log);
+                        GV.MSSQL1.BAL_SaveToTable(dtException_Log.GetChanges(DataRowState.Added), "c_exceptions_log", "New", false);
+                    }                    
+                } 
+                #endregion
             }
             catch (Exception ex1)
             {
@@ -1265,11 +1300,11 @@ namespace GCC
                 //System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(Exception)).Serialize(Console.Out, new Exception());
                 //System.IO.MemoryStream s = new System.IO.MemoryStream();
                 //writer.Serialize(s, ex);  //Exception class not serilaizable
-                if (dtError != null)
-                {
-                    dtError.Dispose();
-                    dtError = null;
-                }
+                //if (dtError != null)
+                //{
+                //    dtError.Dispose();
+                //    dtError = null;
+                //}
             }
 
             if (IsErrorAllowed)
@@ -1278,6 +1313,73 @@ namespace GCC
                 //ErrorHandle(ex.Message.ToLower());
             }
         }
+
+        public static string CompressString(string text)
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes(text);
+            var memoryStream = new MemoryStream();
+            using (var gZipStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
+            {
+                gZipStream.Write(buffer, 0, buffer.Length);
+            }
+
+            memoryStream.Position = 0;
+
+            var compressedData = new byte[memoryStream.Length];
+            memoryStream.Read(compressedData, 0, compressedData.Length);
+
+            var gZipBuffer = new byte[compressedData.Length + 4];
+            Buffer.BlockCopy(compressedData, 0, gZipBuffer, 4, compressedData.Length);
+            Buffer.BlockCopy(BitConverter.GetBytes(buffer.Length), 0, gZipBuffer, 0, 4);
+            return Convert.ToBase64String(gZipBuffer);
+        }
+
+        public static string DecompressString(string compressedText)
+        {
+            byte[] gZipBuffer = Convert.FromBase64String(compressedText);
+            using (var memoryStream = new MemoryStream())
+            {
+                int dataLength = BitConverter.ToInt32(gZipBuffer, 0);
+                memoryStream.Write(gZipBuffer, 4, gZipBuffer.Length - 4);
+
+                var buffer = new byte[dataLength];
+
+                memoryStream.Position = 0;
+                using (var gZipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+                {
+                    gZipStream.Read(buffer, 0, buffer.Length);
+                }
+
+                return Encoding.UTF8.GetString(buffer);
+            }
+        }
+
+        //public static string HashCode(string str)
+        //{
+        //    System.Text.ASCIIEncoding encoder = new System.Text.ASCIIEncoding();
+        //    byte[] buffer = encoder.GetBytes(str);
+        //    System.Security.Cryptography.SHA1CryptoServiceProvider cryptoTransformSHA1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+        //    string hash = BitConverter.ToString(cryptoTransformSHA1.ComputeHash(buffer)).Replace("-", "");
+        //    return hash;
+        //}
+
+        public static string SHA1Hash(string sInput)
+        {
+            //create new instance of md5
+            SHA1 sha1 = SHA1.Create();
+            //convert the input text to array of bytes
+            byte[] hashData = sha1.ComputeHash(Encoding.Default.GetBytes(sInput));
+            //create new instance of StringBuilder to save hashed data
+            StringBuilder returnValue = new StringBuilder();
+            //loop for each byte and add it to StringBuilder
+            for (int i = 0; i < hashData.Length; i++)
+            {
+                returnValue.Append(hashData[i].ToString());
+            }
+            // return hexadecimal string
+            return returnValue.ToString();
+        }
+
 
         public static string RemoveNonXMLChars(string inString)
         {

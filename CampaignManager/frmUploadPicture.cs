@@ -175,16 +175,16 @@ namespace GCC
 
             if (GV.sEmployeeNo.Length > 0)
             {
-                DataTable dtImage = GV.MSSQL.BAL_FetchTable("EmployeeImage", "EmployeeID = '" + GV.sEmployeeNo + "'");
+                DataTable dtImage = GV.MSSQL1.BAL_FetchTable("RM..EmployeeImage", "EmployeeID = '" + GV.sEmployeeNo + "'");
                 string sSQLText  =string.Empty;
                 if (dtImage.Rows.Count > 0)
-                    sSQLText = "UPDATE dbo.EmployeeImage SET EmployeeImage = @Binary WHERE EmployeeID='" + GV.sEmployeeNo + "'";
+                    sSQLText = "UPDATE RM..EmployeeImage SET EmployeeImage = @Binary WHERE EmployeeID='" + GV.sEmployeeNo + "'";
                 else
-                    sSQLText = "INSERT INTO dbo.EmployeeImage( EmployeeID,EmployeeImage ) VALUES( '" + GV.sEmployeeNo + "',@Binary )";
+                    sSQLText = "INSERT INTO RM..EmployeeImage( EmployeeID,EmployeeImage ) VALUES( '" + GV.sEmployeeNo + "',@Binary )";
 
                 if (DialogResult.Yes == MessageBoxEx.Show("Are you sure to update this Image ?", "Campaign Manager", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
-                    SqlConnection connection = new SqlConnection(GV.sMSSQL);
+                    SqlConnection connection = new SqlConnection(GV.sMSSQL1);
                     SqlCommand command = new SqlCommand(sSQLText, connection);
                     if (connection.State != ConnectionState.Open)
                         connection.Open();

@@ -74,6 +74,11 @@
             this.lblFilterTRDate = new DevComponents.DotNetBar.LabelX();
             this.sdgvContacts = new DevComponents.DotNetBar.SuperGrid.SuperGridControl();
             this.tabControlContact = new DevComponents.DotNetBar.SuperTabControl();
+            this.sTabPanelContacts = new DevComponents.DotNetBar.SuperTabControlPanel();
+            this.btnNextContact = new DevComponents.DotNetBar.ButtonX();
+            this.btnPreviousContact = new DevComponents.DotNetBar.ButtonX();
+            this.btnAddNewContact = new DevComponents.DotNetBar.ButtonX();
+            this.tabContacts = new DevComponents.DotNetBar.SuperTabItem();
             this.sTabPanelTRDisposals = new DevComponents.DotNetBar.SuperTabControlPanel();
             this.splitTRDisposalMainParant = new System.Windows.Forms.SplitContainer();
             this.splitTRDisposals = new System.Windows.Forms.SplitContainer();
@@ -86,11 +91,6 @@
             this.btnGSpeechRecord = new DevComponents.DotNetBar.ButtonX();
             this.TR_Comments_Browser = new System.Windows.Forms.WebBrowser();
             this.tabTRDisposals = new DevComponents.DotNetBar.SuperTabItem();
-            this.sTabPanelContacts = new DevComponents.DotNetBar.SuperTabControlPanel();
-            this.btnNextContact = new DevComponents.DotNetBar.ButtonX();
-            this.btnPreviousContact = new DevComponents.DotNetBar.ButtonX();
-            this.btnAddNewContact = new DevComponents.DotNetBar.ButtonX();
-            this.tabContacts = new DevComponents.DotNetBar.SuperTabItem();
             this.sTabPanelQC = new DevComponents.DotNetBar.SuperTabControlPanel();
             this.switchButton1 = new DevComponents.DotNetBar.Controls.SwitchButton();
             this.labelX7 = new DevComponents.DotNetBar.LabelX();
@@ -286,6 +286,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Filter_TR_UPDATED_DATE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabControlContact)).BeginInit();
             this.tabControlContact.SuspendLayout();
+            this.sTabPanelContacts.SuspendLayout();
             this.sTabPanelTRDisposals.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitTRDisposalMainParant)).BeginInit();
             this.splitTRDisposalMainParant.Panel1.SuspendLayout();
@@ -299,7 +300,6 @@
             this.splitTRComment.Panel1.SuspendLayout();
             this.splitTRComment.Panel2.SuspendLayout();
             this.splitTRComment.SuspendLayout();
-            this.sTabPanelContacts.SuspendLayout();
             this.sTabPanelQC.SuspendLayout();
             this.sTabPanelRecordHistory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.advTreeRecordHistoryAgent)).BeginInit();
@@ -1101,6 +1101,68 @@
             this.tabControlContact.SelectedTabChanging += new System.EventHandler<DevComponents.DotNetBar.SuperTabStripSelectedTabChangingEventArgs>(this.tabControlContact_SelectedTabChanging);
             this.tabControlContact.SelectedTabChanged += new System.EventHandler<DevComponents.DotNetBar.SuperTabStripSelectedTabChangedEventArgs>(this.tabControlMain_SelectedTabChanged);
             // 
+            // sTabPanelContacts
+            // 
+            this.sTabPanelContacts.AutoScroll = true;
+            this.sTabPanelContacts.AutoSize = true;
+            this.sTabPanelContacts.Controls.Add(this.btnNextContact);
+            this.sTabPanelContacts.Controls.Add(this.btnPreviousContact);
+            this.sTabPanelContacts.Controls.Add(this.btnAddNewContact);
+            this.sTabPanelContacts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sTabPanelContacts.Location = new System.Drawing.Point(0, 74);
+            this.sTabPanelContacts.Name = "sTabPanelContacts";
+            this.sTabPanelContacts.Size = new System.Drawing.Size(429, 665);
+            this.sTabPanelContacts.TabIndex = 1;
+            this.sTabPanelContacts.TabItem = this.tabContacts;
+            // 
+            // btnNextContact
+            // 
+            this.btnNextContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnNextContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnNextContact.Location = new System.Drawing.Point(214, 11);
+            this.btnNextContact.Name = "btnNextContact";
+            this.btnNextContact.Size = new System.Drawing.Size(75, 23);
+            this.btnNextContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnNextContact.TabIndex = 2;
+            this.btnNextContact.TabStop = false;
+            this.btnNextContact.Text = "Next";
+            this.btnNextContact.Click += new System.EventHandler(this.btnNextContact_Click);
+            // 
+            // btnPreviousContact
+            // 
+            this.btnPreviousContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnPreviousContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnPreviousContact.Location = new System.Drawing.Point(11, 11);
+            this.btnPreviousContact.Name = "btnPreviousContact";
+            this.btnPreviousContact.Size = new System.Drawing.Size(75, 23);
+            this.btnPreviousContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.btnPreviousContact.TabIndex = 1;
+            this.btnPreviousContact.TabStop = false;
+            this.btnPreviousContact.Text = "Previous";
+            // 
+            // btnAddNewContact
+            // 
+            this.btnAddNewContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnAddNewContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnAddNewContact.Location = new System.Drawing.Point(92, 10);
+            this.btnAddNewContact.Name = "btnAddNewContact";
+            this.btnAddNewContact.Size = new System.Drawing.Size(116, 24);
+            this.btnAddNewContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.superTooltipContactScreen.SetSuperTooltip(this.btnAddNewContact, new DevComponents.DotNetBar.SuperTooltipInfo("Add New Contact", "Alt + A", "", null, null, DevComponents.DotNetBar.eTooltipColor.Teal));
+            this.btnAddNewContact.TabIndex = 0;
+            this.btnAddNewContact.Text = "&Add New Contact";
+            this.btnAddNewContact.Click += new System.EventHandler(this.btnAddNewGridRow_Click);
+            // 
+            // tabContacts
+            // 
+            this.tabContacts.AttachedControl = this.sTabPanelContacts;
+            this.tabContacts.GlobalItem = false;
+            this.tabContacts.Image = ((System.Drawing.Image)(resources.GetObject("tabContacts.Image")));
+            this.tabContacts.Name = "tabContacts";
+            this.tabContacts.Text = "Contacts";
+            this.tabContacts.TextAlignment = DevComponents.DotNetBar.eItemAlignment.Near;
+            this.tabContacts.Tooltip = "Displayes the selected Contact\'s information";
+            // 
             // sTabPanelTRDisposals
             // 
             this.sTabPanelTRDisposals.AutoScroll = true;
@@ -1131,7 +1193,7 @@
             this.splitTRDisposalMainParant.Panel2.AutoScroll = true;
             this.splitTRDisposalMainParant.Panel2.Controls.Add(this.splitTRComment);
             this.splitTRDisposalMainParant.Size = new System.Drawing.Size(429, 665);
-            this.splitTRDisposalMainParant.SplitterDistance = 349;
+            this.splitTRDisposalMainParant.SplitterDistance = 348;
             this.splitTRDisposalMainParant.TabIndex = 529;
             // 
             // splitTRDisposals
@@ -1150,7 +1212,7 @@
             // 
             this.splitTRDisposals.Panel2.Controls.Add(this.lblTRSecondaryDisposal);
             this.splitTRDisposals.Panel2.Controls.Add(this.TR_SECONDARY_DISPOSAL);
-            this.splitTRDisposals.Size = new System.Drawing.Size(429, 349);
+            this.splitTRDisposals.Size = new System.Drawing.Size(429, 348);
             this.splitTRDisposals.SplitterDistance = 228;
             this.splitTRDisposals.TabIndex = 536;
             this.splitTRDisposals.TabStop = false;
@@ -1222,7 +1284,7 @@
             // splitTRComment.Panel2
             // 
             this.splitTRComment.Panel2.Controls.Add(this.TR_Comments_Browser);
-            this.splitTRComment.Size = new System.Drawing.Size(429, 312);
+            this.splitTRComment.Size = new System.Drawing.Size(429, 313);
             this.splitTRComment.SplitterDistance = 80;
             this.splitTRComment.SplitterWidth = 5;
             this.splitTRComment.TabIndex = 525;
@@ -1277,7 +1339,7 @@
             this.TR_Comments_Browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.TR_Comments_Browser.Name = "TR_Comments_Browser";
             this.TR_Comments_Browser.ScriptErrorsSuppressed = true;
-            this.TR_Comments_Browser.Size = new System.Drawing.Size(427, 225);
+            this.TR_Comments_Browser.Size = new System.Drawing.Size(427, 226);
             this.TR_Comments_Browser.TabIndex = 525;
             this.TR_Comments_Browser.TabStop = false;
             this.TR_Comments_Browser.WebBrowserShortcutsEnabled = false;
@@ -1289,68 +1351,6 @@
             this.tabTRDisposals.Image = ((System.Drawing.Image)(resources.GetObject("tabTRDisposals.Image")));
             this.tabTRDisposals.Name = "tabTRDisposals";
             this.tabTRDisposals.Text = "Disposals";
-            // 
-            // sTabPanelContacts
-            // 
-            this.sTabPanelContacts.AutoScroll = true;
-            this.sTabPanelContacts.AutoSize = true;
-            this.sTabPanelContacts.Controls.Add(this.btnNextContact);
-            this.sTabPanelContacts.Controls.Add(this.btnPreviousContact);
-            this.sTabPanelContacts.Controls.Add(this.btnAddNewContact);
-            this.sTabPanelContacts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sTabPanelContacts.Location = new System.Drawing.Point(0, 74);
-            this.sTabPanelContacts.Name = "sTabPanelContacts";
-            this.sTabPanelContacts.Size = new System.Drawing.Size(429, 665);
-            this.sTabPanelContacts.TabIndex = 1;
-            this.sTabPanelContacts.TabItem = this.tabContacts;
-            // 
-            // btnNextContact
-            // 
-            this.btnNextContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnNextContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnNextContact.Location = new System.Drawing.Point(214, 11);
-            this.btnNextContact.Name = "btnNextContact";
-            this.btnNextContact.Size = new System.Drawing.Size(75, 23);
-            this.btnNextContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnNextContact.TabIndex = 2;
-            this.btnNextContact.TabStop = false;
-            this.btnNextContact.Text = "Next";
-            this.btnNextContact.Click += new System.EventHandler(this.btnNextContact_Click);
-            // 
-            // btnPreviousContact
-            // 
-            this.btnPreviousContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnPreviousContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnPreviousContact.Location = new System.Drawing.Point(11, 11);
-            this.btnPreviousContact.Name = "btnPreviousContact";
-            this.btnPreviousContact.Size = new System.Drawing.Size(75, 23);
-            this.btnPreviousContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.btnPreviousContact.TabIndex = 1;
-            this.btnPreviousContact.TabStop = false;
-            this.btnPreviousContact.Text = "Previous";
-            // 
-            // btnAddNewContact
-            // 
-            this.btnAddNewContact.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnAddNewContact.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnAddNewContact.Location = new System.Drawing.Point(92, 10);
-            this.btnAddNewContact.Name = "btnAddNewContact";
-            this.btnAddNewContact.Size = new System.Drawing.Size(116, 24);
-            this.btnAddNewContact.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.superTooltipContactScreen.SetSuperTooltip(this.btnAddNewContact, new DevComponents.DotNetBar.SuperTooltipInfo("Add New Contact", "Alt + A", "", null, null, DevComponents.DotNetBar.eTooltipColor.Teal));
-            this.btnAddNewContact.TabIndex = 0;
-            this.btnAddNewContact.Text = "&Add New Contact";
-            this.btnAddNewContact.Click += new System.EventHandler(this.btnAddNewGridRow_Click);
-            // 
-            // tabContacts
-            // 
-            this.tabContacts.AttachedControl = this.sTabPanelContacts;
-            this.tabContacts.GlobalItem = false;
-            this.tabContacts.Image = ((System.Drawing.Image)(resources.GetObject("tabContacts.Image")));
-            this.tabContacts.Name = "tabContacts";
-            this.tabContacts.Text = "Contacts";
-            this.tabContacts.TextAlignment = DevComponents.DotNetBar.eItemAlignment.Near;
-            this.tabContacts.Tooltip = "Displayes the selected Contact\'s information";
             // 
             // sTabPanelQC
             // 
@@ -3721,6 +3721,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tabControlContact)).EndInit();
             this.tabControlContact.ResumeLayout(false);
             this.tabControlContact.PerformLayout();
+            this.sTabPanelContacts.ResumeLayout(false);
             this.sTabPanelTRDisposals.ResumeLayout(false);
             this.splitTRDisposalMainParant.Panel1.ResumeLayout(false);
             this.splitTRDisposalMainParant.Panel2.ResumeLayout(false);
@@ -3736,7 +3737,6 @@
             this.splitTRComment.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitTRComment)).EndInit();
             this.splitTRComment.ResumeLayout(false);
-            this.sTabPanelContacts.ResumeLayout(false);
             this.sTabPanelQC.ResumeLayout(false);
             this.sTabPanelQC.PerformLayout();
             this.sTabPanelRecordHistory.ResumeLayout(false);

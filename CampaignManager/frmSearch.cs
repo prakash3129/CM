@@ -447,9 +447,9 @@ namespace GCC
                                     sTelephone = sTelephone.Substring(sTelephone.Length - 8);
 
                                     if (IsChecked)
-                                        lstAND.Add("RIGHT(regex_replace('[^0-9]', '', Company.SWITCHBOARD),8) ='" + sTelephone + "'");
+                                        lstAND.Add("RIGHT(dbo.udf_C_ExtractNumbers(Company.SWITCHBOARD),8) ='" + sTelephone + "'");
                                     else
-                                        lstOR.Add("RIGHT(regex_replace('[^0-9]', '', Company.SWITCHBOARD),8) ='" + sTelephone + "'");
+                                        lstOR.Add("RIGHT(dbo.udf_C_ExtractNumbers(Company.SWITCHBOARD),8) ='" + sTelephone + "'");
                                 }
                                 else
                                 {
@@ -615,9 +615,9 @@ namespace GCC
                             sEmailName = sSearchText.Substring(0, sSearchText.IndexOf("@")).Trim();
 
                             if (IsChecked)
-                                lstAND.Add("SUBSTRING_INDEX(Contact.CONTACT_EMAIL, '@', 1) =  '" + sEmailName.Replace("'", "''") + "'");
+                                lstAND.Add("REPLACE(SUBSTRING(CONTACT.CONTACT_EMAIL,1,CHARINDEX('@',CONTACT.CONTACT_EMAIL)),'@','') =  '" + sEmailName.Replace("'", "''") + "'");
                             else
-                                lstOR.Add("SUBSTRING_INDEX(Contact.CONTACT_EMAIL, '@', 1) =  '" + sEmailName.Replace("'", "''") + "'");
+                                lstOR.Add("REPLACE(SUBSTRING(CONTACT.CONTACT_EMAIL,1,CHARINDEX('@',CONTACT.CONTACT_EMAIL)),'@','') =  '" + sEmailName.Replace("'", "''") + "'");
                         }
                         else
                         {
@@ -664,9 +664,9 @@ namespace GCC
                                 sTelephone = sTelephone.Substring(sTelephone.Length - 8);
 
                                 if (IsChecked)
-                                    lstAND.Add("RIGHT(regex_replace('[^0-9]', '', Contact.CONTACT_TELEPHONE),8) ='" + sTelephone + "'");
+                                    lstAND.Add("RIGHT(dbo.udf_C_ExtractNumbers(Contact.CONTACT_TELEPHONE),8) ='" + sTelephone + "'");
                                 else
-                                    lstOR.Add("RIGHT(regex_replace('[^0-9]', '', Contact.CONTACT_TELEPHONE),8) ='" + sTelephone + "'");
+                                    lstOR.Add("RIGHT(dbo.udf_C_ExtractNumbers(Contact.CONTACT_TELEPHONE),8) ='" + sTelephone + "'");
                             }
                             else
                             {

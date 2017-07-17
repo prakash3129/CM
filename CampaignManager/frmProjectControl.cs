@@ -127,7 +127,7 @@ namespace GCC
                 btnNext.Text = "&Update Project";
                 dtProjectMaster = GV.MSSQL.BAL_FetchTable("Timesheet.dbo.ProjectMaster", "PROJECTID = '" + GV.sProjectID + "'");
 
-                dtDashboard = GV.MSSQL.BAL_FetchTable("MVC.dbo.DASHBOARD", "PROJECT_ID = '" + GV.sProjectID + "'");
+                dtDashboard = GV.MSSQL_RM.BAL_FetchTable("DASHBOARD", "PROJECT_ID = '" + GV.sProjectID + "'");
                 if (dtDashboard.Rows.Count == 0)//(Can occure if project is created under Time Logger Admin)
                 {
                     DataRow drNewRow = dtDashboard.NewRow();
@@ -135,8 +135,8 @@ namespace GCC
                     drNewRow["PROJECT_ID"] = dtProjectMaster.Rows[0]["ProjectID"];
                     drNewRow["ACTIVE"] = "Y";
                     dtDashboard.Rows.Add(drNewRow);
-                    GV.MSSQL.BAL_SaveToTable(dtDashboard, "DASHBOARD", "New", true);
-                    dtDashboard = GV.MSSQL.BAL_FetchTable("MVC.dbo.DASHBOARD", "PROJECT_ID = '" + GV.sProjectID + "'");
+                    GV.MSSQL_RM.BAL_SaveToTable(dtDashboard, "DASHBOARD", "New", true);
+                    dtDashboard = GV.MSSQL_RM.BAL_FetchTable("DASHBOARD", "PROJECT_ID = '" + GV.sProjectID + "'");
                 }
 
                 lstProjectControls = GetAllControls(panelstep0ProjectCreation);
@@ -197,14 +197,14 @@ namespace GCC
             //}
             //else
             //{
-                dtFieldCompany = GV.MSSQL1.BAL_FetchTable("c_field_master", "PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME = 'Master' AND FIELD_TYPE = 'UserDefined'");
-                dtFieldContact = GV.MSSQL1.BAL_FetchTable("c_field_master", "PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME = 'MasterContacts' AND FIELD_TYPE = 'UserDefined'");
+                dtFieldCompany = GV.MSSQL1.BAL_FetchTable("c_field_master", "PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME = 'Master' AND FIELD_TYPE = 'UserDefined' ORDER BY FieldID");
+                dtFieldContact = GV.MSSQL1.BAL_FetchTable("c_field_master", "PROJECT_ID = '" + GV.sProjectID + "' AND TABLE_NAME = 'MasterContacts' AND FIELD_TYPE = 'UserDefined' ORDER BY FieldID");
             //}
             //dtValidations = 
             dtPickList = GV.MSSQL1.BAL_FetchTable(GV.sProjectID+"_picklists", "1=1");
             dtProjectMaster = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM Timesheet..ProjectMaster WHERE Active = 'Y'");
             dtCM_FieldConfig = GV.MSSQL1.BAL_FetchTable("c_fieldconfig", "1=1");
-            dtFieldMasterAllProjects = GV.MSSQL1.BAL_FetchTable("c_field_master", "FIELD_TYPE = 'UserDefined'");
+            dtFieldMasterAllProjects = GV.MSSQL1.BAL_FetchTable("c_field_master", "FIELD_TYPE = 'UserDefined' ORDER BY FieldID");
             dtValidationsCompany = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_validations", "Table_Name='" + GV.sProjectID + "_Mastercompanies'");
             dtValidationsContact = GV.MSSQL1.BAL_FetchTable(GV.sProjectID + "_validations", "Table_Name='" + GV.sProjectID + "_Mastercontacts'");
           
@@ -723,7 +723,7 @@ namespace GCC
                             dtProjectMaster.Rows.Add(drNewProject);
 
 
-                            dtDashboard = GV.MSSQL.BAL_FetchTable("MVC.dbo.DASHBOARD", "PROJECT_ID = '" + sProjectID + "'");
+                            dtDashboard = GV.MSSQL_RM.BAL_FetchTable("DASHBOARD", "PROJECT_ID = '" + sProjectID + "'");
                             if (dtDashboard.Rows.Count == 0)
                             {
                                 DataRow drNewRow = dtDashboard.NewRow();
@@ -760,11 +760,11 @@ namespace GCC
 
 
                                 if(dtDashboard.GetChanges(DataRowState.Modified) != null)
-                                    GV.MSSQL.BAL_SaveToTable(dtDashboard, "DASHBOARD", "Update", true);
+                                    GV.MSSQL_RM.BAL_SaveToTable(dtDashboard, "DASHBOARD", "Update", true);
                                 else if(dtDashboard.GetChanges(DataRowState.Added) != null)
-                                    GV.MSSQL.BAL_SaveToTable(dtDashboard, "DASHBOARD", "New", true);
+                                    GV.MSSQL_RM.BAL_SaveToTable(dtDashboard, "DASHBOARD", "New", true);
 
-                                dtDashboard = GV.MSSQL.BAL_FetchTable("MVC.dbo.DASHBOARD", "PROJECT_ID = '" + GV.sProjectID + "'");
+                                dtDashboard = GV.MSSQL_RM.BAL_FetchTable("DASHBOARD", "PROJECT_ID = '" + GV.sProjectID + "'");
 
                                 GV.sProjectID = sProjectID;
                                 GV.sProjectName = txtProjectName.Text;
@@ -816,7 +816,7 @@ namespace GCC
                             dtDashboard.Rows[0]["UPDATED_BY"] = GV.sEmployeeName;
                             dtDashboard.Rows[0]["UPDATED_DATE"] = GM.GetDateTime();
 
-                            GV.MSSQL.BAL_SaveToTable(dtDashboard.GetChanges(DataRowState.Modified), "DASHBOARD", "Update", true);
+                            GV.MSSQL_RM.BAL_SaveToTable(dtDashboard.GetChanges(DataRowState.Modified), "DASHBOARD", "Update", true);
                             ToastNotification.Show(this, "Project Updated", eToastPosition.TopRight);
                         }
                     }
@@ -1414,7 +1414,7 @@ namespace GCC
             {
                 if (File.Exists(sPath) && GV.sProjectID.Length > 0)
                 {
-                    DataTable dtBlob = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM dbo.PROJECT_FILES WHERE ProjectID = '"+GV.sProjectID+"' AND FileType ='"+sFileType+"'");
+                    DataTable dtBlob = GV.MSSQL_RM.BAL_ExecuteQuery("SELECT * FROM RM..PROJECT_FILES WHERE ProjectID = '"+GV.sProjectID+"' AND FileType ='"+sFileType+"'");
                     string sSQLText = string.Empty;
                     byte[] bStream = File.ReadAllBytes(sPath);
                     string sExtension = Path.GetExtension(sPath).Replace(".", string.Empty);
@@ -1425,13 +1425,13 @@ namespace GCC
                         if (bStream.Length > 0)
                         {
                             if (dtBlob.Rows.Count > 0)
-                                sSQLText = "UPDATE dbo.PROJECT_FILES SET Blob = @Binary WHERE ProjectID='" + GV.sProjectID + "' AND FileType='" + sFileType + "'";
+                                sSQLText = "UPDATE PROJECT_FILES SET Blob = @Binary WHERE ProjectID='" + GV.sProjectID + "' AND FileType='" + sFileType + "'";
                             else
-                                sSQLText = "INSERT INTO dbo.PROJECT_FILES( ProjectID, FileName, FileType,Extension,Blob ) VALUES( '" + GV.sProjectID + "','" + sFileName + "','" + sFileType + "','" + sExtension + "',@Binary )";
+                                sSQLText = "INSERT INTO PROJECT_FILES( ProjectID, FileName, FileType,Extension,Blob ) VALUES( '" + GV.sProjectID + "','" + sFileName + "','" + sFileType + "','" + sExtension + "',@Binary )";
 
                             if (DialogResult.Yes == MessageBoxEx.Show("Are you sure to update " + sFileType + " ?", "Campaign Manager", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                             {
-                                SqlConnection connection = new SqlConnection(GV.sMSSQL);
+                                SqlConnection connection = new SqlConnection(GV.sMSSQL_RM);
                                 SqlCommand command = new SqlCommand(sSQLText, connection);
                                 if (connection.State != ConnectionState.Open)
                                     connection.Open();

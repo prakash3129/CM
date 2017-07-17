@@ -37,16 +37,26 @@ namespace GCC
         
         void Reload()
         {
-            string sQuery = @"SELECT A.ID,A.PROCESS_SERVER_ID,A.BATCH_NAME,A.STARTED_DATE,A.COMPLETED_DATE,A.FILE_NAME,A.LOADED_DATE,A.LOADED_BY,A.EXPORTED_DATE,A.EXPORTED_BY, COUNT(*) [Loaded],(SELECT COUNT(*) FROM c_email_checks C WHERE C.PROJECT_ID = '0' AND C.CONTACT_ID = 0 AND C.EMAIL_SOURCE = B.EMAIL_SOURCE AND C.DESCRIPTION IS NOT NULL) [Processed]
-                            FROM c_email_batch_setting A INNER JOIN c_email_checks B ON A.ID = B.EMAIL_SOURCE WHERE A.ID > 0 AND B.PROJECT_ID='0' AND B.CONTACT_ID = 0 AND MONTH(LOADED_DATE) = '" + dTimeMonthRange.Value.Month +"' AND YEAR(LOADED_DATE) = '"+ dTimeMonthRange.Value.Year + "' GROUP BY  A.ID, A.PROCESS_SERVER_ID, A.BATCH_NAME, A.STARTED_DATE, A.COMPLETED_DATE, A.FILE_NAME, A.LOADED_DATE, A.LOADED_BY, A.EXPORTED_DATE, A.EXPORTED_BY ORDER BY ISNULL(A.STARTED_DATE,'2099-01-01 00:00:00') DESC;";
+
+
+
+            string sQuery = @"with cte as (select EMAIL_SOURCE,count(case when DESCRIPTION IS NOT NULL  then b.ID end) PROCESSED,count(*) LOADED from c_email_checks b inner JOIN c_email_batch_setting A ON A.ID = B.EMAIL_SOURCE ";
+                   sQuery += " where  A.ID > 0 AND B.PROJECT_ID='0' AND B.CONTACT_ID = 0 AND MONTH(LOADED_DATE) = '" + dTimeMonthRange.Value.Month + "' AND YEAR(LOADED_DATE) = '" + dTimeMonthRange.Value.Year + "' group by EMAIL_SOURCE) ";
+                   sQuery += @" Select A.ID, A.PROCESS_SERVER_ID, A.BATCH_NAME, A.STARTED_DATE, A.COMPLETED_DATE, A.FILE_NAME, A.LOADED_DATE, A.LOADED_BY, A.EXPORTED_DATE, A.EXPORTED_BY,loaded,processed 
+                        From  cte B inner JOIN c_email_batch_setting A ON A.ID = B.EMAIL_SOURCE";
+
+            //string sQuery = @"SELECT A.ID,A.PROCESS_SERVER_ID,A.BATCH_NAME,A.STARTED_DATE,A.COMPLETED_DATE,A.FILE_NAME,A.LOADED_DATE,A.LOADED_BY,A.EXPORTED_DATE,A.EXPORTED_BY, COUNT(*) [Loaded],(SELECT COUNT(*) FROM c_email_checks C WHERE C.PROJECT_ID = '0' AND C.CONTACT_ID = 0 AND C.EMAIL_SOURCE = B.EMAIL_SOURCE AND C.DESCRIPTION IS NOT NULL) [Processed]
+            //                FROM c_email_batch_setting A INNER JOIN c_email_checks B ON A.ID = B.EMAIL_SOURCE WHERE A.ID > 0 AND B.PROJECT_ID='0' AND B.CONTACT_ID = 0 AND MONTH(LOADED_DATE) = '" + dTimeMonthRange.Value.Month +"' AND YEAR(LOADED_DATE) = '"+ dTimeMonthRange.Value.Year + "' GROUP BY  A.ID, A.PROCESS_SERVER_ID, A.BATCH_NAME, A.STARTED_DATE, A.COMPLETED_DATE, A.FILE_NAME, A.LOADED_DATE, A.LOADED_BY, A.EXPORTED_DATE, A.EXPORTED_BY ORDER BY ISNULL(A.STARTED_DATE,'2099-01-01 00:00:00') DESC;";
 
             dtBatch = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
             sdgvManualChecks.PrimaryGrid.DataSource = dtBatch;
 
-            DataTable dtServerLoad = GV.MSSQL1.BAL_ExecuteQuery(@"SELECT CONVERT(CONCAT('Server', PROCESS_SERVER_ID,' : ', SUM(PENDING)),char) AS [Load] FROM (                                                                    
-                                                                    SELECT * FROM (SELECT C1.PROCESS_SERVER_ID, C1.ID,(SELECT COUNT(*) FROM c_email_checks C2 WHERE C2.PROJECT_ID='0' AND C2.CONTACT_ID = 0 AND C1.ID=C2.EMAIL_SOURCE AND C2.DESCRIPTION IS NULL) PENDING                                                                       
-                                                                    FROM c_email_batch_setting C1 UNION SELECT '3' AS PROCESS_SERVER_ID, 'X' AS ID, COUNT(*) FROM c_email_checks C3 WHERE C3.DESCRIPTION IS NULL AND C3.EMAIL_SOURCE > 0) AS X 
-                                                                    GROUP BY X.PROCESS_SERVER_ID,X.ID) T GROUP BY PROCESS_SERVER_ID;");
+            //DataTable dtServerLoad = GV.MSSQL1.BAL_ExecuteQuery(@"SELECT CONVERT(CONCAT('Server', PROCESS_SERVER_ID,' : ', SUM(PENDING)),char) AS [Load] FROM (                                                                    
+            //                                                        SELECT * FROM (SELECT C1.PROCESS_SERVER_ID, C1.ID,(SELECT COUNT(*) FROM c_email_checks C2 WHERE C2.PROJECT_ID='0' AND C2.CONTACT_ID = 0 AND C1.ID=C2.EMAIL_SOURCE AND C2.DESCRIPTION IS NULL) PENDING                                                                       
+            //                                                        FROM c_email_batch_setting C1 UNION SELECT '3' AS PROCESS_SERVER_ID, 'X' AS ID, COUNT(*) FROM c_email_checks C3 WHERE C3.DESCRIPTION IS NULL AND C3.EMAIL_SOURCE > 0) AS X 
+            //                                                        GROUP BY X.PROCESS_SERVER_ID,X.ID) T GROUP BY PROCESS_SERVER_ID;");
+
+            DataTable dtServerLoad = GV.MSSQL1.BAL_ExecuteQuery(@"select cast(CONCAT('Server 3',' : ', Count(*))as char) AS [Load] from c_email_checks where DESCRIPTION is null");
 
             lstServerList.ValueMember = "Load";
             lstServerList.DisplayMember = "Load";
@@ -136,8 +146,10 @@ namespace GCC
                                 if (drImport["EMAIL"].ToString().Trim().Length > 0 && GM.Email_Check(drImport["EMAIL"].ToString().Trim()))
                                     sInsertString += ",('0',0,'" + sBatchID + "', '" + drImport["EMAIL"].ToString().Trim().Replace("'", "''").Replace("..", ".").Replace("__", "_").Replace("--", "-") + "','" + GV.sEmployeeName + "', GETDATE())";
                             }
+
                             
-                            sInsertString = "INSERT INTO c_email_checks (PROJECT_ID, CONTACT_ID, EMAIL_SOURCE, EMAIL, CREATED_BY, CREATED_DATE) Values " + sInsertString.Substring(1);
+                            sInsertString = "select PROJECT_ID, CONTACT_ID, EMAIL_SOURCE, EMAIL, CREATED_BY, CREATED_DATE from (values " + sInsertString.Substring(1) + ") A(PROJECT_ID, CONTACT_ID, EMAIL_SOURCE, EMAIL, CREATED_BY, CREATED_DATE)";
+                            sInsertString = "INSERT INTO c_email_checks (PROJECT_ID, CONTACT_ID, EMAIL_SOURCE, EMAIL, CREATED_BY, CREATED_DATE) " + sInsertString + ";";
                             GV.MSSQL1.BAL_ExecuteNonReturnQuery(sInsertString);
 
                             dtBatch = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM c_email_batch_setting");

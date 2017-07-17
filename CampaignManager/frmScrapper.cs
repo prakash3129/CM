@@ -611,10 +611,7 @@ namespace GCC
                         {
                             sInsertValues += "'" + drImport[sCols].ToString().Replace("'", "''") + "',";
                         }
-                        sInsertValues += " '" + drImport["COMPANY_NAME_ALPHA"] + "'," +
-                                         (drImport["SWITCHBOARD_TRIMMED"].ToString().Length > 0
-                                             ? drImport["SWITCHBOARD_TRIMMED"].ToString()
-                                             : "NULL") + ", GETDATE(), '" + GV.sEmployeeName + "' ,'" + GV.sEmployeeName +
+                        sInsertValues += " '" + drImport["COMPANY_NAME_ALPHA"] + "'," + (drImport["SWITCHBOARD_TRIMMED"].ToString().Length > 0 ? "'" + drImport["SWITCHBOARD_TRIMMED"].ToString() + "'" : "NULL") + ", GETDATE(), '" + GV.sEmployeeName + "' ,'" + GV.sEmployeeName +
                                          "', '" + GV.sAccessTo + "', GETDATE(), '" + GV.sEmployeeName + "', 1,'NEW'," +
                                          dtCountry.Select("CountryName = '" + drImport["COUNTRY"] + "'")[0][
                                              "HoursFromGMT"] + " , 'L_COMPANY','L_COMPANY','L_COMPANY','L_COMPANY')";
@@ -1079,24 +1076,19 @@ namespace GCC
                                             {
                                                 if (IsArchiveEnabled)
                                                     sInsertValues += "'" + GV.sProjectID + "', '" + sCompanyAlphaNumeric +
-                                                                     "'," + sSwitchBoardTrim +
-                                                                     ",'ARCHIVED', NULL , GETDATE(), GETDATE(), '" +
+                                                                     "','" + sSwitchBoardTrim + "','ARCHIVED', NULL , GETDATE(), GETDATE(), '" +
                                                                      GV.sEmployeeName + "')";
                                                 else
                                                 {
                                                     sInsertValues += "'" + GV.sProjectID + "', '" + sCompanyAlphaNumeric +
-                                                                 "'," +
-                                                                 sSwitchBoardTrim +
-                                                                 ",'IMPORTPROGRESS', NULL , GETDATE(), GETDATE(), '" +
+                                                                 "','" + sSwitchBoardTrim + "','IMPORTPROGRESS', NULL , GETDATE(), GETDATE(), '" +
                                                                  GV.sEmployeeName + "')";
                                                     break;
                                                 }
                                             }
                                             else
                                                 sInsertValues += "'" + GV.sProjectID + "', '" + sCompanyAlphaNumeric +
-                                                                 "'," +
-                                                                 sSwitchBoardTrim +
-                                                                 ",'IMPORTPROGRESS', NULL , GETDATE(), GETDATE(), '" +
+                                                                 "','" +sSwitchBoardTrim + "','IMPORTPROGRESS', NULL , GETDATE(), GETDATE(), '" +
                                                                  GV.sEmployeeName + "')";
                                         }
 

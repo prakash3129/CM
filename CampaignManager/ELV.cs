@@ -43,7 +43,7 @@ namespace GCC
                             string sProjectTables_Update = string.Empty;
                             try
                             {
-                                using (SqlCommand cmdEmails = new SqlCommand("Exec MVC_latest..ELV '" + GV.sSessionID + "',"+ GV.ibg_BatchExpiry + ","+ GV.ibg_LoadCount, con1))
+                                using (SqlCommand cmdEmails = new SqlCommand("Exec CM..ELV '" + GV.sSessionID + "',"+ GV.ibg_BatchExpiry + ","+ GV.ibg_LoadCount, con1))
                                 //using (MySqlCommand cmdEmails = new MySqlCommand("ELV", con1))
                                 {
                                     if (con1.State != ConnectionState.Open)

@@ -1,0 +1,2 @@
+#LWP-Cookies-1.0
+Set-Cookie3: laravel_session=eyJpdiI6IjdJb1MzQjJWQlN4WU1cL1JESVZoZ1A5N3pNbGVvTWVFK1JaS1hPeG94ZzZVPSIsInZhbHVlIjoiWk8ySmMrTExYUG1KUDJzMXN3andyK3FVR0xmRHpcL0g3cUhlWUZNQlwvZmpxY3VoXC9yTzFxejNGK05ObGw3V2pcL2Iwa0NkZ2NqdytpWW05T1p4NWFrSGhBPT0iLCJtYWMiOiI4ODUzOTRkZTE4YmY4YTIwMDJkNjk4ZjNkNDhlOGZkZmYwNGMyZTI4MTQwNmU3NDcxOGExNDIxNDJkNDU2NGExIn0%3D; path="/"; domain=api.genderize.io; path_spec; expires="2016-02-25 07:43:59Z"; httponly; version=0

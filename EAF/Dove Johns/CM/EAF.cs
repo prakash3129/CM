@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
+
 
 namespace EAF
 {
     public class EAF
     {
         //As of [2014 - 07 - 15] by Prakash
-        
+
         //**************************************************************************************Value Reference***********************************************************************************************************************************************************************************************************
         //****************************************************************************************************************************************************************************************************************************************************************************************************************
         //ProjectName                               : CRU_Copper                : String
@@ -62,8 +63,8 @@ namespace EAF
         //TRContactstatusTobeValidated              : 'VERIFIED AND COMPLETE','UPDATE AND COMPLETE','REPLACEMENT AND COMPLETE','NEW AND COMPLETE' : String
         //WRContactstatusTobeValidated              : 'VERIFIED AND COMPLETE','UPDATE AND COMPLETE','REPLACEMENT AND COMPLETE','NEW AND COMPLETE','WEBRESEARCH' : String
         //SortableContactColumn                     : TR_UPDATED_DATE~WR_UPDATED_DATE~FIRST_NAME~CONTACT_EMAIL~TR_CONTACT_STATUS : List
-        //MSSQLConString                            : user id=user1;password=M3r1t1n6i#;data source=172.27.137.181;initial catalog=MVC : String
-        //MYSQLConString                            : user id=user1;password=M3r1t1n6i#;data source=172.27.137.181;initial catalog=MVC : String
+        //MSSQLConString_TimeSheet                            : user id=user1;password=M3r1t1n6i#;data source=172.27.137.181;initial catalog=MVC : String
+        //MSSQLConString_CM                            : user id=user1;password=M3r1t1n6i#;data source=172.27.137.181;initial catalog=MVC : String
         //ContactRowIndex                           : 2                         : Int
         //FieldName                                 : Job_Title                 : String
         //FreezedContactIDs                         :                           : List
@@ -85,7 +86,7 @@ namespace EAF
         //****************************************************************************************************************************************************************************************************************************************************************************************************************
         //****************************************************************************************************************************************************************************************************************************************************************************************************************
 
-        
+
         Exception objEX;
        
         //EAF()
@@ -174,10 +175,10 @@ namespace EAF
                 dtMessage.Columns.Add("Message");
                 dtMessage.Rows.Add("ER", string.Empty);
                 dtMessage.Rows.Add("EX", string.Empty);
-                using (MySqlConnection conMYSQL = new MySqlConnection(sConstring))
+                using (SqlConnection conMYSQL = new SqlConnection(sConstring))
                 {                    
-                    sSQLText += " SELECT LAST_INSERT_ID();";
-                    using (MySqlCommand cmd = new MySqlCommand(sSQLText, conMYSQL))
+                    sSQLText += " SELECT @@IDENTITY";
+                    using (SqlCommand cmd = new SqlCommand(sSQLText, conMYSQL))
                     {
                         cmd.CommandTimeout = 600;
                         conMYSQL.Open();
@@ -185,8 +186,8 @@ namespace EAF
                         if (sMasterID.Length > 0)
                         {
                             using (
-                                MySqlCommand cmd1 =
-                                    new MySqlCommand(
+                                SqlCommand cmd1 =
+                                    new SqlCommand(
                                         "UPDATE " + sProjectID + "_mastercompanies SET Group_ID = MASTER_ID WHERE MASTER_ID = '" +
                                         sMasterID + "'", conMYSQL))
                             {
@@ -251,7 +252,7 @@ namespace EAF
                     DataTable dtPickList = Table(lstDatable, "PickList");
                     string sAccessType = dtProjectInfo.Select("Key = 'AccessTo'")[0]["Value"].ToString();
                     string sProjectID = dtProjectInfo.Select("Key = 'ProjectID'")[0]["Value"].ToString().ToUpper();
-                    string sConstring = dtProjectInfo.Select("Key = 'MYSQLConString'")[0]["Value"].ToString();
+                    string sConstring = dtProjectInfo.Select("Key = 'MSSQLConString_CM'")[0]["Value"].ToString();
 
                     DataRow[] drrColumnsToinsert = dtPickList.Select("PicklistCategory = 'CopyColumn'");
 
@@ -282,7 +283,7 @@ namespace EAF
 
                         if (sInsertColumns.Length > 0)
                         {
-                            string sQuery = "INSERT INTO " + sProjectID + "_mastercompanies(" + sInsertColumns + " , COMPANY_ID,CREATED_BY , CREATED_DATE) VALUES (" + sInsertValues + ",'" + dtMasterCompanies.Rows[0]["MASTER_ID"] + "','" + sEmpName + "',NOW());";
+                            string sQuery = "INSERT INTO " + sProjectID + "_mastercompanies(" + sInsertColumns + " , COMPANY_ID,CREATED_BY , CREATED_DATE) VALUES (" + sInsertValues + ",'" + dtMasterCompanies.Rows[0]["MASTER_ID"] + "','" + sEmpName + "',GETDATE());";
 
                            string replay =  ExecuteQueryMySQL(sQuery,sConstring,sProjectID);
                            dtMasterCompanies.Rows[0]["Add_Location"] = replay;

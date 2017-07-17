@@ -252,6 +252,7 @@ namespace GCC
         string sRequestType = string.Empty;        
 
         string sNAudioPath = string.Empty;
+        //string sGTextOut = string.Empty;
 
         string sCheckingEmail = string.Empty;
         //DataTable dtTelephoneFormat = new DataTable();
@@ -269,9 +270,9 @@ namespace GCC
         private frmCompanyList CL;
 
 
-        //bool bNAudioStarted = false;
-        //public WaveIn waveSource;
-        //public WaveFileWriter waveFile = null;
+        bool bNAudioStarted = false;
+        public WaveIn waveSource;
+        public WaveFileWriter waveFile = null;
 
         bool GRecording = false;
         NAudio.Wave.WaveInEvent waveIn = null;
@@ -323,16 +324,17 @@ namespace GCC
 
                 ReloadChart();//Loads or reloads the performance charts and Images                
 
+                sTimeLoggerMessage = GM.IsTimeLoggerHasProject();
+                if (sTimeLoggerMessage.Length > 0)
+                {
+                    IsRecordFetchedFlag = false;
+                    return false;
+                }
+
                 if (GV.sUserType == "Agent")
                 {
                     #region Agent Open
-                    sTimeLoggerMessage = GM.IsTimeLoggerHasProject();
-                    if (sTimeLoggerMessage.Length > 0)
-                    {
-                        IsRecordFetchedFlag = false;
-                        return false;
-                    }
-
+                    
                     sMaster_ID = string.Empty;
                     string sUserTypeName = string.Empty;
                     string sEliminateCompanyCompletes = string.Empty;
@@ -371,8 +373,15 @@ namespace GCC
                     {
                         string sQuery = "SELECT TOP 1 c.GROUP_ID FROM " + GV.sCompanyTable + " c";
                         sQuery += " INNER JOIN " + GV.sContactTable + " a ON c.MASTER_ID = a.MASTER_ID";
-                        sQuery += " INNER JOIN " + GV.sQCTable + " b ON ((b.TableName = 'Contact' AND a.CONTACT_ID_P = b.RecordID) OR (b.TableName='Company' AND c.MASTER_ID = b.RecordID))";
-                        sQuery += " WHERE ((b.TableName ='Company' AND c." + GV.sAccessTo + "_AGENTNAME ='" + GV.sEmployeeName + "') OR (b.TableName ='Contact' AND a." + GV.sAccessTo + "_AGENT_NAME ='" + GV.sEmployeeName + "'))  AND b.QC_Status = 'SendBack' AND b.ResearchType = '" + GV.sAccessTo + "';";
+                        sQuery += " INNER JOIN " + GV.sQCTable + " b ON a.CONTACT_ID_P = b.RecordID";
+                        sQuery += " WHERE  b.TableName ='Contact' AND a." + GV.sAccessTo + "_AGENT_NAME ='" + GV.sEmployeeName + "'  AND b.QC_Status = 'SendBack' AND b.ResearchType = '" + GV.sAccessTo + "';";
+
+
+                        //string sQuery = "SELECT TOP 1 c.GROUP_ID FROM " + GV.sCompanyTable + " c";
+                        //sQuery += " INNER JOIN " + GV.sContactTable + " a ON c.MASTER_ID = a.MASTER_ID";
+                        //sQuery += " INNER JOIN " + GV.sQCTable + " b ON ((b.TableName = 'Contact' AND a.CONTACT_ID_P = b.RecordID) OR (b.TableName='Company' AND c.MASTER_ID = b.RecordID))";
+                        //sQuery += " WHERE ((b.TableName ='Company' AND c." + GV.sAccessTo + "_AGENTNAME ='" + GV.sEmployeeName + "') OR (b.TableName ='Contact' AND a." + GV.sAccessTo + "_AGENT_NAME ='" + GV.sEmployeeName + "'))  AND b.QC_Status = 'SendBack' AND b.ResearchType = '" + GV.sAccessTo + "';";
+
 
                         ((frmMain)frmMDI).txtQuery.Text = sQuery;
                         DataTable dtSendBackID = GV.MSSQL1.BAL_ExecuteQuery(sQuery);
@@ -859,7 +868,7 @@ namespace GCC
                     #region Initialize EAF
                     GV.sPerformance += "EAF : " + GV.PerformanceWatch.Elapsed.TotalSeconds + Environment.NewLine;
                     //#if debug
-                    if (GV.sEmployeeName == "THANGAPRAKASH" && Environment.MachineName.ToUpper() == "MSSPLDET281")
+                    if (GV.sEmployeeName == "THANGAPRAKASH" && Environment.MachineName.ToUpper() == "MSSPLDET281" && false)
                     {
                         string sEAFLibararyPath = @"D:\E\SVN\Campaign Manager\EAF\SHA256 Encryption\CM\bin\Debug\CM.dll";
                         EAF = Assembly.Load(File.ReadAllBytes(sEAFLibararyPath));
@@ -1955,8 +1964,8 @@ namespace GCC
 
             sMTDRank += @";WITH CTE AS (
                                 SELECT  D2.DATECALLED,D2.AGENTNAME, D3.Fullname AgentFullName,ISNULL(NO_OF_CONTACTS_VALIDATED - (ISNULL(EMAIL_REJECTION,0)+ISNULL(JOB_TITLE_REJECTION,0)+ISNULL(INCORRECT_DISPOSAL,0)+ISNULL(MATCHED_WITH_EXCLUSION,0)+ISNULL(MATCHED_WITH_PREVIOUS_SET,0)+ISNULL(OTHERS_REJECTION,0)) ,0) AchievedContacts,POINTS POINTS ,Tenure,D3.EmployeeNo
-                                FROM DAILY_AGENT_PERFORMANCE_V1 D2
-                                INNER JOIN Timesheet..Users D3
+                                FROM RM..DAILY_AGENT_PERFORMANCE_V1 D2
+                                INNER JOIN CH1020BD02.Timesheet.dbo.Users D3
                                 ON D3.UserName=D2.AGENTNAME
                                 WHERE  DATECALLED BETWEEN @FromDate AND @ToDate
                                 AND D3.ACTIVE='Y' AND d2.FLAG = '" + GV.sAccessTo + "'),CTECONSOLIDATE AS (SELECT AGENTNAME,SUM(POINTS) MTDPOINTS,SUM( AchievedContacts) AchievedContacts FROM CTE  GROUP BY AGENTNAME),";
@@ -1971,8 +1980,8 @@ namespace GCC
                                 D3.Fullname AgentFullName ,
                                 ISNULL(NO_OF_CONTACTS_VALIDATED - (ISNULL(EMAIL_REJECTION,0)+ISNULL(JOB_TITLE_REJECTION,0)+ISNULL(INCORRECT_DISPOSAL,0)+ISNULL(MATCHED_WITH_EXCLUSION,0)+ISNULL(MATCHED_WITH_PREVIOUS_SET,0)+ISNULL(OTHERS_REJECTION,0)) ,0) AchievedContacts ,
                                 LastSeen LastSeen ,POINTS ,SELF_TARGET ,Project_rank ,Tenure,average
-                                FROM    DASHBOARD D1 INNER JOIN DAILY_AGENT_PERFORMANCE_V1 D2 ON D2.DASHBOARD_ID = D1.ID
-                                AND D2.DASHBOARD_ID = " + GV.sDashBoardID + " AND D2.DATECALLED = CONVERT(DATE, GETDATE()) AND D2.FLAG = '" + GV.sAccessTo + "'INNER JOIN Timesheet..Users D3 ON D3.UserName = D2.AGENTNAME order by PROJECT_RANK";
+                                FROM RM..DASHBOARD D1 INNER JOIN RM..DAILY_AGENT_PERFORMANCE_V1 D2 ON D2.DASHBOARD_ID = D1.ID
+                                AND D2.DASHBOARD_ID = " + GV.sDashBoardID + " AND D2.DATECALLED = CONVERT(DATE, GETDATE()) AND D2.FLAG = '" + GV.sAccessTo + "'INNER JOIN CH1020BD02.Timesheet.dbo.Users D3 ON D3.UserName = D2.AGENTNAME order by PROJECT_RANK";
 
             ChartItemTarget.DataPoints.Clear();
             ChartItemTarget.DataPointTooltips.Clear();
@@ -1981,8 +1990,8 @@ namespace GCC
             ChartItemTarget.PieChartStyle.SliceColors.Add(Color.Green);
 
 
-            DataTable dtCurrentMTD = GV.MSSQL.BAL_ExecuteQuery(sMTDRank);
-            DataTable dtProject = GV.MSSQL.BAL_ExecuteQuery(sProject);
+            DataTable dtCurrentMTD = GV.MSSQL1.BAL_ExecuteQuery(sMTDRank);
+            DataTable dtProject = GV.MSSQL1.BAL_ExecuteQuery(sProject);
 
             lblMTDRank.Text = "MTD Rank :";
             lblMTDTopper.Text = string.Empty;
@@ -2037,7 +2046,7 @@ namespace GCC
             pictureCurrentEmp.SizeMode = PictureBoxSizeMode.Zoom;
             pictureCurrentEmp.Image = GV.imgEmployeeImage;
 
-            DataTable dtImage = GV.MSSQL.BAL_FetchTable("EmployeeImage", "EmployeeID IN ('" + sProjectTopperID + "','" + sMTDTopperID + "')");
+            DataTable dtImage = GV.MSSQL1.BAL_FetchTable("RM..EmployeeImage", "EmployeeID IN ('" + sProjectTopperID + "','" + sMTDTopperID + "')");
             if (dtImage.Rows.Count > 0)
             {
                 foreach (DataRow dr in dtImage.Rows)
@@ -4332,7 +4341,7 @@ namespace GCC
                             break;
 
 
-                        case "CONTACTADDRESSTEXTBOX":
+                        case "COMPANYADDRESSTEXTBOX":
                             ctrl = AddLabelControl(dr["FIELD_NAME_CAPTION"].ToString(), dr["FIELD_NAME_TABLE"].ToString(), ctrl);//Add label to Every Control
                             DevComponents.DotNetBar.Controls.TextBoxX txtAddress = new DevComponents.DotNetBar.Controls.TextBoxX() { Name = dr["FIELD_NAME_TABLE"].ToString(), Tag = sTableName, TabIndex = Convert.ToInt32(dr["SEQUENCE_NO"].ToString()), Width = 200, Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top) };
                             txtAddress.Font = new Font(txtAddress.Font.FontFamily, 10);
@@ -5028,7 +5037,7 @@ namespace GCC
                 }
 
                 if (sQString.Length > 0)
-                    dtNameSayer = GV.MSSQL.BAL_ExecuteQuery("SELECT AudioID,Name, Phonetics FROM NameSayer WHERE Name IN (" + sQString + ");");
+                    dtNameSayer = GV.MSSQL1.BAL_ExecuteQuery("SELECT AudioID,Name, Phonetics FROM RM..NameSayer WHERE Name IN (" + sQString + ");");
                 else
                 {
                     dtNameSayer.Columns.Add("AudioID", typeof(int));
@@ -5041,40 +5050,48 @@ namespace GCC
 
         List<string> SplitAddress(List<string> lstAddress)
         {
+           
             List<string> lstReturn = new List<string>();
-            if (lstAddress.Count > 0)
+            try
             {
-                foreach (string sAddress in lstAddress)
+                if (lstAddress.Count > 0)
                 {
-                    List<string> lstSpaceSplit = sAddress.Split(' ').ToList();
-                    string sFullLengthWord = string.Empty;
-                    string sQString = GM.ListToQueryString(lstSpaceSplit, "String");
-                    bool IsFullWord = dtPicklist.Select("PicklistCategory = 'ESpeech' AND PickListField = 'FullAddress' AND PicklistValue IN (" + sQString + ")").Length > 0;
-
-                    if (IsFullWord)
+                    foreach (string sAddress in lstAddress)
                     {
-                        foreach (string sWords in lstSpaceSplit)
+                        List<string> lstSpaceSplit = sAddress.Split(' ').ToList();
+                        string sFullLengthWord = string.Empty;
+                        string sQString = GM.ListToQueryString(lstSpaceSplit, "String");
+                        bool IsFullWord = dtPicklist.Select("PicklistCategory = 'ESpeech' AND PickListField = 'FullAddress' AND PicklistValue IN (" + GM.HandleBackSlash(sQString) + ")").Length > 0;
+
+                        if (IsFullWord)
                         {
-                            string sAddr = Regex.Replace(sWords.Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
-                            if (sFullLengthWord.Length > 0)
-                                sFullLengthWord += " " + sAddr;
-                            else
-                                sFullLengthWord = sAddr;
+                            foreach (string sWords in lstSpaceSplit)
+                            {
+                                string sAddr = Regex.Replace(sWords.Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+                                if (sFullLengthWord.Length > 0)
+                                    sFullLengthWord += " " + sAddr;
+                                else
+                                    sFullLengthWord = sAddr;
+                            }
+
+                            if (sFullLengthWord.Trim().Length > 0)
+                                lstReturn.Add(sFullLengthWord);
                         }
-
-                        if (sFullLengthWord.Trim().Length > 0)
-                            lstReturn.Add(sFullLengthWord);
-                    }
-                    else
-                    {
-                        foreach (string sWords in lstSpaceSplit)
+                        else
                         {
-                            string sAddr = Regex.Replace(sWords.Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
-                            if (sAddr.Length > 1)
-                                lstReturn.Add(sAddr);
+                            foreach (string sWords in lstSpaceSplit)
+                            {
+                                string sAddr = Regex.Replace(sWords.Replace("''", "'").ConvertDiacritics(), @"[^a-zA-Z\s\']", " ").Replace("  ", " ").Trim();
+                                if (sAddr.Length > 1)
+                                    lstReturn.Add(sAddr);
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {                
+                GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, false);
             }
             return lstReturn;
         }
@@ -5146,7 +5163,7 @@ namespace GCC
                             sQString += ",'" + GM.HandleBackSlash(sName.Replace("'", "''")) + "'";
                     }
 
-                    DataTable dtExistingNameList = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM NameSayer WHERE Name IN (" + sQString + ");");
+                    DataTable dtExistingNameList = GV.MSSQL1.BAL_ExecuteQuery("SELECT * FROM RM..NameSayer WHERE Name IN (" + sQString + ");");
 
                     //dtNameSayer.Columns.Add("AudioID", typeof(string));
                     //dtNameSayer.Columns.Add("Name", typeof(string));
@@ -5156,14 +5173,14 @@ namespace GCC
                     foreach (string sName in lstWords)
                     {
                         DataRow[] drrExistingNameList = dtExistingNameList.Select("Name = '" + GM.RemoveEndBackSlash(sName.Replace("'", "''")) + "'");
-                        DataRow drNameSayer = dtNameSayer.Select("Name = '" + sName.Replace("'", "''") + "'")[0];
+                        DataRow drNameSayer = dtNameSayer.Select("Name = '" + GM.RemoveEndBackSlash(sName.Replace("'", "''")) + "'")[0];
                         if (drrExistingNameList.Length > 0)
                         {
                             drNameSayer["AudioID"] = drrExistingNameList[0]["AudioID"].ToString();
                             drNameSayer["Phonetics"] = drrExistingNameList[0]["Phonetics"].ToString();
 
-                            if (File.Exists(@"\\172.27.137.182\Campaign Manager\NameSayer\" + drrExistingNameList[0]["AudioID"] + ".wav"))
-                                GV.MSSQL.BAL_ExecuteQuery("UPDATE NameSayer SET HitCount = HitCount + 1, LastHitDate = GETDATE() WHERE AudioID = '" + drrExistingNameList[0]["AudioID"] + "'");
+                            if (File.Exists(@"\\CH1031SF02\Campaign Manager\NameSayer\" + drrExistingNameList[0]["AudioID"] + ".wav"))
+                                GV.MSSQL1.BAL_ExecuteQuery("UPDATE RM..NameSayer SET HitCount = HitCount + 1, LastHitDate = GETDATE() WHERE AudioID = '" + drrExistingNameList[0]["AudioID"] + "'");
                             else
                             {
                                 NameSayer_Download(drNameSayer, true);
@@ -5280,24 +5297,24 @@ namespace GCC
                             if (IsExisting)
                             {
                                 sInsertID = drNameSayer["AudioID"].ToString();
-                                GV.MSSQL.BAL_ExecuteQuery("UPDATE NameSayer SET HitCount = HitCount + 1, LastHitDate = GETDATE() WHERE AudioID = '" + sInsertID + "'");
+                                GV.MSSQL1.BAL_ExecuteQuery("UPDATE RM..NameSayer SET HitCount = HitCount + 1, LastHitDate = GETDATE() WHERE AudioID = '" + sInsertID + "'");
                             }
                             else
                             {
-                                sInsertID = GV.MSSQL.BAL_InsertAndGetIdentity("INSERT INTO NameSayer (Name, Phonetics, HitCount, LastHitDate,Type) VALUES ('" + GM.HandleBackSlash(drNameSayer["Name"].ToString().Replace("'", "''")) + "', '" + drNameSayer["Phonetics"].ToString().Replace("'", "''") + "', 1, GETDATE(),'" + sESpeechOrigin + "');");
+                                sInsertID = GV.MSSQL1.BAL_InsertAndGetIdentity("INSERT INTO RM..NameSayer (Name, Phonetics, HitCount, LastHitDate,Type) VALUES ('" + GM.HandleBackSlash(drNameSayer["Name"].ToString().Replace("'", "''")) + "', '" + drNameSayer["Phonetics"].ToString().Replace("'", "''") + "', 1, GETDATE(),'" + sESpeechOrigin + "');");
                                 drNameSayer["AudioID"] = sInsertID;
                             }
                             sAdditionalInfo += "AudioID:" + sInsertID + "|";
                             if (sInsertID.Length > 0)
                             {                                
-                                wClient.DownloadFile("https://www.espeech.com/" + sResponse.Substring(sResponse.IndexOf("ttsspeech")).Replace("</html>", string.Empty).Replace("\n", string.Empty), @"\\172.27.137.182\Campaign Manager\NameSayer\" + sInsertID + ".wav");
+                                wClient.DownloadFile("https://www.espeech.com/" + sResponse.Substring(sResponse.IndexOf("ttsspeech")).Replace("</html>", string.Empty).Replace("\n", string.Empty), @"\\CH1031SF02\Campaign Manager\NameSayer\" + sInsertID + ".wav");
                             }
                         }
                     }
                 }
             }
             catch (Exception ex)
-            {
+            {                
                 GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, false, sAdditionalInfo);
             }
         }
@@ -5308,9 +5325,9 @@ namespace GCC
             {
                 if (sAudioID.Length > 0)
                 {
-                    if (File.Exists(@"\\172.27.137.182\Campaign Manager\NameSayer\" + sAudioID + ".wav"))
+                    if (File.Exists(@"\\CH1031SF02\Campaign Manager\NameSayer\" + sAudioID + ".wav"))
                     {
-                        using (System.Media.SoundPlayer sPlayer = new System.Media.SoundPlayer(@"\\172.27.137.182\Campaign Manager\NameSayer\" + sAudioID + ".wav"))
+                        using (System.Media.SoundPlayer sPlayer = new System.Media.SoundPlayer(@"\\CH1031SF02\Campaign Manager\NameSayer\" + sAudioID + ".wav"))
                         {                            
                             sPlayer.PlaySync();
                         }
@@ -5750,10 +5767,10 @@ namespace GCC
         {
             if (GV.sAccessTo == "TR")
             {
-                //if (dtMasterCompanies.Rows[0]["SWITCHBOARD_TRIMMED"].ToString().Replace(" ", "").Length > 7)
+                //if (dtMasterCompanies.Rows[0]["SWITCHhBOARD_TRIMMED"].ToString().Replace(" ", "").Length > 7)
                 //{
-                //    sSwitchboard_Trimmed = dtMasterCompanies.Rows[0]["SWITCHBOARD_TRIMMED"].ToString().Replace(" ", "");
-                //    sSwitchboard_Trimmed = sSwitchboard_Trimmed.Substring(sSwitchboard_Trimmed.Length - 8);
+                //    sSwithchboard_Trimmed = dtMasterCompanies.Rows[0]["SWITCHBOAhRD_TRIMMED"].ToString().Replace(" ", "");
+                //    sSwitchhboard_Trimmed = sSwitchbhoard_Trimmed.Substring(sSwitchbohard_Trimmed.Length - 8);
                 if (lstMasterIDs.Count > 1)
 
                     dtDialLogger = GV.MSSQL.BAL_ExecuteQuery("SELECT * FROM Call_Timesheet..AspectDialerLogger WHERE Company_ID IN (" + GM.ListToQueryString(lstMasterIDs, "Int") + ") AND ProjectName='" + GV.sProjectName + "';");
@@ -8708,8 +8725,8 @@ namespace GCC
                             if (!GM.Email_Check(lstPrimaryValues[0]))
                                 AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "INVALID", sPrimaryCol, lstPrimaryValues[0], IsDynamic, iErrorArea, txt);
                         }
-                        else
-                            AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "EMPTY", sPrimaryCol, lstPrimaryValues[0], IsDynamic, iErrorArea, txt);
+                        //else
+                        //    AddValidationResults(sTableName, iRowNumber, iCompanyID, iContactID, "", "EMPTY", sPrimaryCol, string.Empty, IsDynamic, iErrorArea, txt);
                         break;
 
                     case "EMAILDUPECHECK":
@@ -9443,7 +9460,8 @@ namespace GCC
                     if (dtValidNumbers.Rows.Count > 0)
                     {
                         DataTable dtDistinctTele = dtValidNumbers.DefaultView.ToTable(true, "SWITCHBOARD");
-                        string sTeleQuery = GM.ColumnToQString("SWITCHBOARD", dtDistinctTele, "Int");
+                        string sTeleQuery = GM.ColumnToQString("SWITCHBOARD", dtDistinctTele, "String");
+                        //string sTeleQuery = GM.ColumnToQString("SWITCHBOARD", dtDistinctTele, "Int");
 
                         RecordTime("Switchboard DB Operation Start");
                         DataTable dtCompanySwitchboard = GV.MSSQL1.BAL_ExecuteQuery("SELECT Master_ID,Company_Name,COUNTRY,SWITCHBOARD FROM " + GV.sCompanyTable + "  WHERE SWITCHBOARD_TRIMMED IN (" + sTeleQuery + ") AND GROUP_ID <> " + sGroup_ID + ";");
@@ -12869,8 +12887,8 @@ namespace GCC
             dtProjectInfo.Rows.Add("TRContactstatusTobeValidated", GV.sTRContactstatusTobeValidated, "String");
             dtProjectInfo.Rows.Add("WRContactstatusTobeValidated", GV.sWRContactstatusTobeValidated, "String");
             dtProjectInfo.Rows.Add("SortableContactColumn", string.Join("~", GV.lstSortableContactColumn.ToArray()), "List");
-            dtProjectInfo.Rows.Add("MSSQLConString", GV.sMSSQL, "String");
-            dtProjectInfo.Rows.Add("MSSQL1ConString", GV.sMSSQL1, "String");
+            dtProjectInfo.Rows.Add("MSSQLConString_TimeSheet", GV.sMSSQL, "String");
+            dtProjectInfo.Rows.Add("MSSQLConString_CM", GV.sMSSQL1, "String");
             //dtProjectInfo.Rows.Add("ContactRowIndex", iContactRowIndex, "Int");
             dtProjectInfo.Rows.Add("FieldName", sFieldName, "String");
             dtProjectInfo.Rows.Add("FreezedContactIDs", string.Join("~", lstFreezedContactIDs.ToArray()), "List");
@@ -13605,6 +13623,13 @@ namespace GCC
 
                 if (IsDynamic)
                 {
+
+
+                    
+                 
+
+                    dtValidationResultsDynamic = dtValidationResultsDynamic.DefaultView.ToTable(true, "TableName", "RowIndex", "CompanyID", "ContactID", "Message", "Validation", "TargetField", "TargetValue", "ConditionField", "ConditionValue", "Status");
+
                     foreach (DataRow dr in dtValidationResultsDynamic.Rows)//Row index to Row Number
                     {
                         if (Convert.ToInt32(dr["RowIndex"]) >= 0)
@@ -13653,6 +13678,7 @@ namespace GCC
                     //}
                 }
 
+                dtValidationResults = dtValidationResults.DefaultView.ToTable(true, "TableName", "RowIndex", "CompanyID", "ContactID", "Message", "Validation", "TargetField", "TargetValue", "ConditionField", "ConditionValue", "Status");
                 foreach (DataRow dr in dtValidationResults.Rows)//Row index to Row Number
                 {
                     if (Convert.ToInt32(dr["RowIndex"]) >= 0)
@@ -14036,7 +14062,7 @@ namespace GCC
             {
                 if (sWatch.Elapsed.TotalSeconds > 1)
                 {
-                    StreamWriter sWrite = new StreamWriter(@"\\172.27.137.182\Campaign Manager\PerformanceLog\" + sStaticName, true);
+                    StreamWriter sWrite = new StreamWriter(@"\\CH1031SF02\Campaign Manager\PerformanceLog\" + sStaticName, true);
                     sWrite.WriteLine(sStatistics);
                     sWrite.Close();
                     sStatistics.Clear();
@@ -15038,56 +15064,49 @@ namespace GCC
 
         #region Google Speech
 
-        //void waveSource_DataAvailable(object sender, WaveInEventArgs e)
-        //{
-        //    if (waveFile != null)
-        //    {
-        //        waveFile.Write(e.Buffer, 0, e.BytesRecorded);
-        //        waveFile.Flush();
-        //    }
-        //}
+        void waveSource_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (waveFile != null)
+            {
+                waveFile.Write(e.Buffer, 0, e.BytesRecorded);
+                waveFile.Flush();
+            }
+        }
 
-        //void waveSource_RecordingStopped(object sender, NAudio.Wave.StoppedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (bNAudioStarted)
-        //        {
-        //            if (waveSource != null)
-        //            {
-        //                waveSource.Dispose();
-        //                waveSource = null;
-        //            }
+        void waveSource_RecordingStopped(object sender, NAudio.Wave.StoppedEventArgs e)
+        {
+            try
+            {
+                if (bNAudioStarted)
+                {
+                    if (waveSource != null)
+                    {
+                        waveSource.Dispose();
+                        waveSource = null;
+                    }
 
-        //            if (waveFile != null)
-        //            {
-        //                waveFile.Dispose();
-        //                waveFile = null;
-        //            }
+                    if (waveFile != null)
+                    {
+                        waveFile.Dispose();
+                        waveFile = null;
+                    }
+                    bNAudioStarted = false;
 
-        //            // System.Threading.Thread.Sleep(3000);
+                    string sNAudioNetworkPath = string.Empty;
+                    if (File.Exists(sNAudioPath))
+                    {
+                        sNAudioNetworkPath = @"\\CH1031SF02\Campaign Manager\GSpeech\" + Path.GetFileName(sNAudioPath);
+                        File.Copy(sNAudioPath, sNAudioNetworkPath);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, false);
+            }
+        }
 
-        //            if (bWorkerNameSayer.IsBusy)
-        //                this.Invoke((MethodInvoker)delegate { ToastNotification.Show(this, "Busy processing previous request.", eToastPosition.TopRight); });
-        //            else
-        //            {
-        //                sRequestType = "GS";
-        //                iRequestWaitTime = 60;
-        //                iESPTimertick = 0;
-        //                timerESRequest.Start();
-        //                bWorkerNameSayer.RunWorkerAsync();
-        //            }
-
-        //                //bWorkerGSpeech.RunWorkerAsync();
-        //            //StartBtn.Enabled = true;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, true);
-        //    }
-        //}
-
+        #region GSpeech Non Streaming
         //void GSpeechTranscribe()
         //{
         //    try
@@ -15097,7 +15116,7 @@ namespace GCC
         //            string sNAudioNetworkPath = string.Empty;
         //            if (File.Exists(sNAudioPath))
         //            {
-        //                sNAudioNetworkPath = @"\\172.27.137.182\Campaign Manager\GSpeech\" + Path.GetFileName(sNAudioPath);
+        //                sNAudioNetworkPath = @"\\adfsdf\Campaign Manager\GSpeech\" + Path.GetFileName(sNAudioPath);
         //                File.Copy(sNAudioPath, sNAudioNetworkPath);                        
         //            }
         //            if (File.Exists(sNAudioNetworkPath))
@@ -15184,7 +15203,8 @@ namespace GCC
         //        MessageBox.Show("Google : " + ex.Message);
         //        ToastNotification.Show(this, "Speech recognition error.", eToastPosition.TopRight);
         //    }
-        //}
+        //} 
+        #endregion
 
         //private void bWorkerGSpeech_DoWork(object sender, DoWorkEventArgs e)
         //{            
@@ -15205,12 +15225,36 @@ namespace GCC
         private void btnGSpeechRecord_MouseUp(object sender, MouseEventArgs e)
         {
             GRecording = false;
+            
         }
 
         async Task<object> StreamingMicRecognizeAsync(int seconds)
         {
 
-            
+            try
+            {
+                sNAudioPath = string.Empty;
+                bNAudioStarted = false;
+                waveSource = new WaveIn();
+                waveSource.WaveFormat = new WaveFormat(16000, 1);
+                waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
+                waveSource.RecordingStopped += new EventHandler<NAudio.Wave.StoppedEventArgs>(waveSource_RecordingStopped);
+                sNAudioPath = AppDomain.CurrentDomain.BaseDirectory + "GSpeech\\" + GV.sProjectID + "_" + GV.sEmployeeNo + "_" + sMaster_ID + "_" + GV.IP.Replace(".", string.Empty).Reverse().Replace("'", "").Replace("-", "") + GM.GetDateTime().ToString("yyMMddHHmmssff") + ".wav";
+                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "GSpeech"))
+                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "GSpeech");
+                waveFile = new WaveFileWriter(sNAudioPath, waveSource.WaveFormat);
+                waveSource.StartRecording();
+                bNAudioStarted = true;
+
+                
+            }
+            catch (Exception ex)
+            {               
+                GM.Error_Log(System.Reflection.MethodBase.GetCurrentMethod(), ex, true, false);
+            }
+
+
+
             var speech = SpeechClient.Create();
             var streamingCall = speech.StreamingRecognize();
             // Write the initial request with the config.
@@ -15229,7 +15273,7 @@ namespace GCC
             });
 
             string sOldtxt = TR_COMMENTS.Text;
-
+            string sGTextOut = string.Empty;
             // Print responses as they arrive.
             Task printResponses = Task.Run(async () =>
             {
@@ -15240,8 +15284,8 @@ namespace GCC
                         foreach (var alternative in result.Alternatives)
                         {
                             //Console.WriteLine(alternative.Transcript);
-
-                            this.Invoke((MethodInvoker)delegate { TR_COMMENTS.Text = sOldtxt + " " + alternative.Transcript; });
+                            sGTextOut = alternative.Transcript;
+                            this.Invoke((MethodInvoker)delegate { TR_COMMENTS.Text = sOldtxt + " " + sGTextOut; });
 
                         }
                     }
@@ -15258,7 +15302,7 @@ namespace GCC
                 lock (writeLock)
                 {
                     if (!writeMore) return;
-                    streamingCall.WriteAsync(new StreamingRecognizeRequest() { AudioContent = Google.Protobuf.ByteString.CopyFrom(args.Buffer, 0, args.BytesRecorded) }).Wait();
+                    streamingCall.WriteAsync(new StreamingRecognizeRequest() { AudioContent = Google.Protobuf.ByteString.CopyFrom(args.Buffer, 0, args.BytesRecorded) }).Wait();                    
                 }
             };
 
@@ -15272,11 +15316,10 @@ namespace GCC
                 await Task.Delay(TimeSpan.FromSeconds(1));
             }
             // Stop recording and shut down.
-            waveIn.StopRecording();
-            // waveIn.
-
-
-           // this.Invoke((MethodInvoker)delegate { btnGSpeechRecord.Image = GCC.Properties.Resources.voice_search_icon___idle; });
+            waveIn.StopRecording();//Google Audio            
+            waveSource.StopRecording();//Local Audio            
+            
+            try{ GV.MSSQL1.BAL_ExecuteNonReturnQuery("INSERT INTO c_gspeech_log (SessionID,CompanySessionID,ProjectID,AudioFileName,RecognitionText,Who,[When]) VALUES('" + GV.sSessionID + "','" + GV.sCompanySessionID + "','" + GV.sProjectID + "','" + Path.GetFileName(sNAudioPath) + "','" + sGTextOut.Replace("'", "''") + "','" + GV.sEmployeeName.Replace("'", "''") + "',GETDATE());");}catch (Exception ex) { }
 
             lock (writeLock) writeMore = false;
             await streamingCall.WriteCompleteAsync();

@@ -1,0 +1,37 @@
+{
+   "background": {
+      "scripts": [ "shared/js/jquery.min.js", "background/install-check.js", "background/current-tab.js" ]
+   },
+   "browser_action": {
+      "default_icon": {
+         "19": "shared/img/icon19.png",
+         "38": "shared/img/icon38.png"
+      },
+      "default_popup": "browser_action/popup.html",
+      "default_title": "Find email addresses"
+   },
+   "content_scripts": [{
+		"css": [ "shared/css/fonts.css", "shared/css/font-awesome.min.css", "shared/css/bootstrap-tooltip.min.css", "content_script/linkedin-button.css", "content_script/linkedin-popup.css" ],
+      "js": [ "shared/js/jquery.min.js", "shared/js/jquery-ui.min.js", "content_script/linkedin-version.js", "content_script/linkedin-dom.js", "content_script/linkedin-button.js"],
+      "matches": [ "*://*.linkedin.com/*" ]
+   } ],
+   "default_locale": "en",
+   "description": "Email Hunter is the easiest way to find email addresses from anywhere on the web, with just one click.",
+   "externally_connectable": {
+      "matches": [ "*://*.emailhunter.co/*" ]
+   },
+   "homepage_url": "https://emailhunter.co",
+   "icons": {
+      "128": "shared/img/icon128.png",
+      "16": "shared/img/icon16.png",
+      "48": "shared/img/icon48.png"
+   },
+   "key": "MIIBIjANBgkqahkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArUcK6Im3LeDTh5wdDcu60BvofKgQNc18mFS8ytaBxxYVz5Xwysp87n9MGHc3ALOeP2lymbtaK/cmMe5PBJ/yE6EjwFQxE3hGEAIw/Me/CdtzBl23qC/0xfhLvRkU85bzTTLC04QZb7dA4mBYVVkr40v5SJyvoCOI8ApVuJYywoHjn2o3pmRNUBDNz7w09es6BvxDncybivNa7KXMIXJEY0PF3obBmbYH92wdan4co6s31DuiZlsHCVwvp4pW3R/oKa0CgjrK+gWaNNTJ9w00vRmyW+gAcYNEB4W9sKqUsw/CDVLeuVUL3w1Y1sU/wL6V94Ut5P7xLAvKCMMv5ziM7QIDAQAB",
+   "manifest_version": 2,
+   "name": "Campaign Manager Test",
+   "permissions": [ "tabs", "storage", "clipboardWrite", "*://*.emailhunter.co/*", "*://*.linkedin.com/*" ],
+   "short_name": "Emaail Hunter",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.2.8",
+   "web_accessible_resources": [ "shared/img/*", "shared/fonts/*" ]
+}
